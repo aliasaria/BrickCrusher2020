@@ -1,0 +1,5 @@
+name=Brickbreaker2020
+author=Ali Asaria
+description=Brickbreaker for Playdate
+bundleID=ca.aliasaria.Brickbreaker2020
+imagePath=system/
