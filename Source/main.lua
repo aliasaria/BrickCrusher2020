@@ -13,6 +13,8 @@ math.randomseed(ms,s)
 
 local font = gfx.font.new('images/font/blocky')
 
+hitSound = playdate.sound.sampleplayer.new('sounds/Wall_Light_Double_Switch_Off-004.wav')
+
 local SCREEN_WIDTH = 320
 local SCREEN_HEIGHT = 240
 
@@ -47,14 +49,40 @@ SpriteTypes = {
 -- end
 
 local brickImages = {}
-for i = 1, 5 do
-	brickImages[i] = gfx.image.new('images/brick'..i)
+for i = 1, 6 do
+	brickImages[i] = gfx.image.new('images/brick/brick'..i)
 end
 
 -- Side Panel
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 local PANEL_START = 320
+
+local currentLevel = 1
+
+-- All Levels
+local levels = {}
+
+-- Level 1
+levels[1] = {}
+levels[1][1] = { 1, 2, 3, 4, 1, 1, 1, 1, 1 }
+levels[1][2] = { 1, 1, 0, 0, 0, 1, 1, 1, 1 }
+levels[1][3] = { 1, 2, 3, 4, 5, 6, 6, 4, 4 }
+levels[1][4] = { 1, 2, 3, 4, 5, 6, 6, 1, 1 }
+levels[1][5] = { 1, 1, 0, 0, 0, 1, 1, 0, 0 }
+levels[1][6] = { 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+levels[1][7] = { 1, 2, 3, 4, 5, 1, 1, 0, 0 }
+levels[1][8] = { 1, 1, 0, 0, 0, 1, 1, 0, 0 }
+levels[1][9] = { 1, 1, 1, 1, 1, 1, 1, 0, 0 }
+levels[1][10]= { 1, 2, 3, 4, 5, 1, 1, 1, 1 }
+
+-- Level 2
+levels[2] = {}
+levels[2][1] = { 1, 1, 1, 1, 1, 1, 1 }
+levels[2][2] = { 1, 1, 0, 0, 0, 1, 1 }
+levels[2][3] = { 1, 0, 1, 1, 1, 0, 1 }
+levels[2][4] = { 1, 1, 1, 1, 1, 1, 1 }
+
 
 local function drawSidePanel()
 
@@ -74,39 +102,37 @@ local function drawSidePanel()
 	heartImgFilled:draw(PANEL_START + paddingLeft + pad * 2,paddingTop)
 	heartImgEmpty:draw(PANEL_START + paddingLeft + pad * 3,paddingTop)
 
+	gfx.drawText('LEVEL: '..currentLevel, PANEL_START + 10, 32)
 
-	gfx.drawText('SCORE: '..score, PANEL_START + 10, 32)
-
-
-
+	gfx.drawText('SCORE: '..score, PANEL_START + 10, 50)
 end
 
--- Background
-local function createBackgroundSprite()
+-- -- Background
+-- local function createBackgroundSprite()
 
-	local bg = gfx.sprite.new()
-	local bgImg = gfx.image.new('images/background.png')
-	local w, h = bgImg:getSize()
-	bgH = h
-	bg:setBounds(0, 0, 400, 240)
+-- 	local bg = gfx.sprite.new()
+-- 	local bgImg = gfx.image.new('images/background.png')
+-- 	local w, h = bgImg:getSize()
+-- 	bgH = h
+-- 	bg:setBounds(0, 0, 400, 240)
 
-	function bg:draw(x, y, width, height)
-		bgImg:draw(0, bgY)
-		bgImg:draw(0, bgY-bgH)
+-- 	function bg:draw(x, y, width, height)
+-- 		bgImg:draw(0, bgY)
+-- 		bgImg:draw(0, bgY-bgH)
 
-	end
+-- 	end
 
-	function bg:update()
-		bgY += 1
-		if bgY > bgH then
-			bgY = 0
-		end
-		self:markDirty()
-	end
+-- 	function bg:update()
+-- 		bgY += 1
+-- 		if bgY > bgH then
+-- 			bgY = 0
+-- 		end
+-- 		self:markDirty()
+-- 	end
 
-	bg:setZIndex(0)
-	bg:add()
-end
+-- 	bg:setZIndex(0)
+-- 	bg:add()
+-- end
 
 
 
@@ -134,11 +160,19 @@ local function createExplosion(x, y)
 end
 
 
-local function destroyEnemyPlane(plane)
+local function hitBrick(brick)
+	-- createExplosion(brick.x, brick.y)
+	
+	brick.brickType -= 1
 
-	createExplosion(plane.x, plane.y)
-	plane:remove()
-	enemyCount -= 1
+	if brick.brickType < 1 then
+		brick:remove()
+		enemyCount -= 1
+	end
+
+	if math.random(6) == 1 then
+		createPill(brick.x, brick.y)
+	end
 
 end
 
@@ -151,11 +185,16 @@ local function createPlayer(x, y)
 
 	paddle.spriteType = SpriteTypes.PADDLE
 
-	
 	paddle:setCollideRect(0, 0, w, h)
 	paddle:moveTo(x, y)
 	paddle:add()
 
+	function paddle:grow()
+		playerImage = gfx.image.new('images/paddle_long')
+		paddle:setImage(playerImage)
+		w, h = playerImage:getSize()
+		self:setCollideRect(0, 0, w, h)
+	end
 
 	function paddle:collisionResponse(other)
 		return gfx.sprite.kCollisionTypeBounce
@@ -167,9 +206,9 @@ local function createPlayer(x, y)
 		local dy = 0
 
 		if playdate.buttonIsPressed("UP") then
-			dy = -4
+			-- dy = -4
 		elseif playdate.buttonIsPressed("DOWN") then
-			dy = 4
+			-- dy = 4
 		end
 		if playdate.buttonIsPressed("LEFT") then
 			dx = -4
@@ -193,7 +232,7 @@ local function createPlayer(x, y)
 		-- for i = 1, length do
 		-- 	local collision = collisions[i]
 		-- 	if collision.other.isEnemy == true then	-- crashed into enemy plane
-		-- 		destroyEnemyPlane(collision.other)
+		-- 		hitBrick(collision.other)
 		-- 		collision.other:remove()
 		-- 		score -= 1
 		-- 	end
@@ -229,7 +268,11 @@ local function createBall(x, y)
 	function ball:collisionResponse(other)
 		local collisionType = playdate.graphics.sprite.kCollisionTypeOverlap
 
-		if other.spriteType == SpriteTypes.PADDLE or other.spriteType == SpriteTypes.BRICK then
+		if other.spriteType == SpriteTypes.PADDLE then
+			collisionType = gfx.sprite.kCollisionTypeBounce
+		end
+
+		if other.spriteType == SpriteTypes.BRICK then
 			collisionType = gfx.sprite.kCollisionTypeBounce
 		end
 
@@ -272,38 +315,41 @@ local function createBall(x, y)
 			local collision = collisions[i]
 
 			if (collision.other.spriteType == SpriteTypes.BRICK) then
-				--dy = -dy
-				-- print(collision.normal)
-
 				-- This isn't the perfect collision detection
 				-- with understanding walls, etc, but it's simple for now
-
 				local n = collision.normal
 
 				if n.x ~= 0.0 then dx = -dx end
 				if n.y ~= 0.0 then dy = -dy end
 				score += 1
 
-				destroyEnemyPlane(collision.other)
-				collision.other:remove()
+				hitSound:play()
 
+				hitBrick(collision.other)
 			end
 
 			if (collision.other.spriteType == SpriteTypes.PADDLE) then
-				local whereOnPaddle = (collision.touch.x - collision.otherRect.x - collision.other.width)
+				local whereOnPaddle = ( (ball.x - collision.otherRect.x) / collision.other.width)
+				-- whereOnPaddle is between 0 and 1 which is a percent of the position on the paddle
+				-- where 0 is fully to the left, and 1.0 is fully to the right. It can be less than 0
+				-- or more than 1 if it hits the far edge.
 				-- print (whereOnPaddle)
-				if     whereOnPaddle < -15 then dx -= 8
-				elseif whereOnPaddle < -8  then dx -= 4
-				elseif whereOnPaddle < 4   then dx -= 0
-				elseif whereOnPaddle < 8   then dx += 4
-				else   						    dx += 8
+
+				--      .2 .4 .5 .6 .8
+				--      |  |  |  |  |
+				--    <===============>
+				if     whereOnPaddle < 0.2 	then dx = -8
+				elseif whereOnPaddle < 0.4  then dx = -4
+				elseif whereOnPaddle < 0.6  then dx = 2
+				elseif whereOnPaddle < 0.8  then dx = 4
+				else   						     dx = 8
 				end
 
-				dy = -dy
+				dy = -math.abs(dy)
 			end
 
 			-- if collision.other.isEnemy == true then	-- crashed into enemy plane
-			-- 	destroyEnemyPlane(collision.other)
+			-- 	hitBrick(collision.other)
 			-- 	collision.other:remove()
 			-- 	score += 1
 			-- end
@@ -323,7 +369,7 @@ local function playerFire()
 	local img = gfx.image.new('images/doubleBullet')
 	local imgw, imgh = img:getSize()
 	s:setImage(img)
-	s:moveTo(player.x, player.y)
+	s:moveTo(paddle.x, paddle.y)
 	s:setCollideRect(0, 0, imgw, imgh)
 
 	function s:collisionResponse(other)
@@ -344,7 +390,7 @@ local function playerFire()
 				-- print (collision.other.spriteType)
 
 				if collision.other.spriteType == SpriteTypes.BRICK then
-					destroyEnemyPlane(collision.other)
+					hitBrick(collision.other)
 					s:remove()
 					score += 1
 				end
@@ -408,18 +454,20 @@ local function createEnemyPlane(x, y)
 	return plane
 end
 
-local function createBrick(x, y)
+local function createBrick(x, y, brickType)
 
 	local brick = gfx.sprite.new()
 
 	local brickImg
 
-	brickImg = gfx.image.new('images/brick')
+	brickImg = brickImages[1]
 
 	local w, h = brickImg:getSize()
 	brick:setImage(brickImg)
 	brick:setCollideRect(0, 0, w, h)
-	brick:moveTo(math.random( math.floor(SCREEN_WIDTH / w) )*w - 4, math.random(10)*h)
+	-- brick:moveTo(math.random( math.floor(SCREEN_WIDTH / w) )*w - 4, math.random(10)*h)
+	brick:setBounds(0, 0, w, h)
+	brick:moveTo(x * w, y * h)
 	brick:add()
 	
 	ball:setTag(SpriteTypes.BRICK)
@@ -427,11 +475,14 @@ local function createBrick(x, y)
 	brick.isEnemy = true
 
 	brick.spriteType = SpriteTypes.BRICK
-	brick.brickType = math.random(5)
+	brick.brickType = brickType
 	-- print(brick.brickType)
 
 	enemyCount += 1
 
+	-- function brick:draw(x, y, width, height)
+	-- 	brickImg:drawFaded(0, 0, math.random(0,10) / 10, playdate.graphics.image.kDitherTypeScreen)
+	-- end
 
 	function brick:collisionResponse(other)
 		return gfx.sprite.kCollisionTypeBounce
@@ -453,6 +504,8 @@ local function createBrick(x, y)
 		-- print(brick.brickType)
 		-- print(brickImages[brick.brickType])
 		brick:setImage(brickImages[brick.brickType])
+		-- brick:setImage( gfx.image.new('images/brick/brick3') )
+
 	end
 
 
@@ -466,14 +519,14 @@ local function spawnEnemyIfNeeded()
 	if enemyCount < maxEnemies then
 		if math.random(math.ceil(120/maxEnemies)) == 1 then
 			-- createEnemyPlane()
-			createBrick()
+			-- createBrick()
 		end
 	end
 end
 
 
 
-local function createPill()
+function createPill(x, y)
 
 	local pill = gfx.sprite.new()
 
@@ -486,29 +539,40 @@ local function createPill()
 
 	local w, h = pill:getImage():getSize()
 
+	pill:setCollideRect(0, 0, w, h)
+
 	-- plane:setImage(planeImg)
-	pill:moveTo(math.random(400), -math.random(30))
+	pill:moveTo(x, y)
 	pill:add()
 
-	-- function s:update()
-	-- 	s.frame += 1
-	-- 	if s.frame > 11 then
-	-- 		s:remove()
-	-- 	else
-	-- 		local img = gfx.image.new('images/explosion/'..s.frame)
-	-- 		s:setImage(img)
-	-- 	end
-	-- end
+
+	function pill:collisionResponse(other)
+		if (other.spriteType == SpriteTypes.PADDLE) then
+			return gfx.sprite.kCollisionTypeFreeze
+		else
+			return gfx.sprite.kCollisionTypeOverlap
+		end
+	end
 
 	function pill:update()
 		pill:setImage(pillAnimation:getImage( math.floor(pill.frame) ))
 
-		local newY = pill.y + 2
+		local newY = pill.y + 1
 
 		if newY > 400 + h then
 			pill:remove()
 		else
-			pill:moveTo(pill.x, newY)
+			-- pill:moveTo(pill.x, newY)
+			local actualX, actualY, collisions, length = pill:moveWithCollisions(pill.x, newY)
+
+			for i = 1, length do
+				local collision = collisions[i]
+	
+				if (collision.other.spriteType == SpriteTypes.PADDLE) then
+					powerUp("LONG")
+					pill:remove()
+				end
+			end
 		end
 		
 		pill.frame += 0.3
@@ -523,12 +587,26 @@ local function createPill()
 end
 
 
+function powerUp( type )
+	paddle:grow()
+end
 
-local function spawnBackgroundPlaneIfNeeded()
-	if backgroundPlaneCount < maxBackgroundPlanes then
-		if math.random(math.floor(200/maxBackgroundPlanes)) == 1 then
-			createPill()
+local function initializeLevel( n )
+	for col, v in ipairs(levels[n]) do
+		for row, brickVal in ipairs(v) do
+			-- print(i2, v2)
+			if brickVal ~= 0 then
+				createBrick(row, col, brickVal)
+			end
 		end
+	end
+end
+
+local levelStart = true
+local function createBricksIfNeeded()
+	if (levelStart == true) then
+		levelStart = false
+		initializeLevel(1)
 	end
 end
 
@@ -545,12 +623,18 @@ end
 
 function playdate.update()
 
-	if playdate.buttonJustPressed("B") or playdate.buttonJustPressed("A") then
+	if playdate.buttonJustPressed("A") then
 		playerFire()
 	end
 
-	spawnEnemyIfNeeded()
-	spawnBackgroundPlaneIfNeeded()
+	if playdate.buttonJustPressed("B") then
+		-- playerFire()
+	end
+
+	createBricksIfNeeded()
+
+	-- spawnEnemyIfNeeded()
+	-- spawnBackgroundPlaneIfNeeded()
 
 	gfx.sprite.update()
 	
@@ -573,5 +657,11 @@ end
 -- ------------------
 playdate.display.setRefreshRate(30)
 -- createBackgroundSprite()
-player = createPlayer(200, 230)
+paddle = createPlayer(200, 233)
 ball = createBall(0,0)
+
+
+local startMusic = playdate.sound.sampleplayer.new('sounds/8BitRetroSFXPack1_Traditional_GameStarting08.wav')
+startMusic:play()
+
+
