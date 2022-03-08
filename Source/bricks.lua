@@ -15,8 +15,10 @@ lastComboTime = nil
 comboCounter = 0
 longestCombo = 0
 lastComboSize = 0
-lastComboPositionX = nil
-lastComboPositionY = nil
+lastComboPositionX = 0
+lastComboPositionY = 0
+comboPositionX = 0
+comboPositionY = 0
 
 function hitBrick(brick)
 	-- createExplosion(brick.x, brick.y)
@@ -34,11 +36,14 @@ function hitBrick(brick)
     local hitTime = playdate.getCurrentTimeMilliseconds()
     if (hitTime - lastHitTime) < 250 then
         comboCounter += 1
+		comboPositionX = brick.x
+		comboPositionY = brick.y
     else 
         if (comboCounter > 1) then
             score += comboCounter*5
             lastComboPositionX = brick.x
             lastComboPositionY = brick.y
+			print(brick.x .. ", " .. brick.y)
             lastComboTime = hitTime
             lastComboSize = comboCounter
             if (comboCounter > longestCombo) then
@@ -67,7 +72,7 @@ function shootBrick(brick)
 	if (type(brick.brickType) ~= "number") then
 		return
 	end
-    hitSound:play()
+    -- hitSound:play()
 	brick.brickType -= 1
 	score += 1
     brick:setImage(brickImages[brick.brickType])

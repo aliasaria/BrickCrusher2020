@@ -8,7 +8,7 @@ function createPaddle(x, y)
 
 	paddle.spriteType = SpriteTypes.PADDLE
 
-	paddle:setCollideRect(0, 5, w, h)
+	paddle:setCollideRect(0, 4, w, h-3)
 	paddle:moveTo(x, y)
 	paddle:add()
 
@@ -16,13 +16,15 @@ function createPaddle(x, y)
 		playerImage = gfx.image.new('images/paddle_long')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
-		self:setCollideRect(0, 0, w, h)
+		paddle:setCollideRect(0, 4, w, h-3)
 	end
 
 	function paddle:addGun()
 		local gunImage = gfx.image.new('images/paddle_w_gun')
 		paddle:moveTo(self.x,y)
 		paddle:setImage(gunImage)
+		w, h = gunImage:getSize()
+		paddle:setCollideRect(0, 4, w, h-3)
 	end
 
 	function paddle:collisionResponse(other)

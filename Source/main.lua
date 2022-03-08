@@ -44,6 +44,10 @@ local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 local PANEL_START = 320
 
+
+
+holdComboPositionX = nil
+holdComboPositionY = nil
 local function drawSidePanel()
 	gfx.setFont(font)
 
@@ -76,7 +80,15 @@ local function drawSidePanel()
 
 	local now = playdate.getCurrentTimeMilliseconds()
 	-- gfx.setFont(minimonofont)
-	if (lastComboPositionX ~= nil and (now - lastComboTime) < 750) then
+
+	-- if (now - lastHitTime) > 250 and (comboCounter > 1) then
+	-- 	holdComboPositionX = comboPositionX
+	-- 	holdComboPositionY = comboPositionY
+	-- 	-- print(comboCounter)
+	-- 	gfx.drawText(comboCounter .. ' COMBO!', comboPositionX, comboPositionY)
+	-- end
+
+	if (lastComboPositionX ~= 0 and (now - lastComboTime) < 750) then
 		gfx.drawText(lastComboSize .. ' COMBO!', lastComboPositionX, lastComboPositionY)
 	end
 
@@ -158,10 +170,10 @@ end
 -- Let's do this! ...
 -- ------------------
 -- ------------------
-playdate.display.setRefreshRate(30)
+playdate.display.setRefreshRate(50)
 paddle = createPaddle(130, 231)
-ball = createBall(130,220,1,-2)
-
+-- ball = createBall(130,220,1,-2)
+ball = createBall(0,0,12,2)
 local startMusic = playdate.sound.sampleplayer.new('sounds/8BitRetroSFXPack1_Traditional_GameStarting08.wav')
 startMusic:play()
 
