@@ -77,7 +77,6 @@ function createBall(x, y)
 				if n.x ~= 0.0 then dx = -dx end
 				if n.y ~= 0.0 then dy = -dy end
 
-				hitSound:play()
 				hitBrick(collision.other)
 			end
 
@@ -91,12 +90,21 @@ function createBall(x, y)
 				--      .2 .4 .5 .6 .8
 				--      |  |  |  |  |
 				--    <===============>
-				if     whereOnPaddle < 0.2 	then dx = -8
-				elseif whereOnPaddle < 0.4  then dx = -4
-				elseif whereOnPaddle < 0.6  then dx = 2
-				elseif whereOnPaddle < 0.8  then dx = 4
-				else   						     dx = 8
-				end
+				-- if     whereOnPaddle < 0.2 	then dx = -8
+				-- elseif whereOnPaddle < 0.4  then dx = -4
+				-- elseif whereOnPaddle < 0.6  then dx = 2
+				-- elseif whereOnPaddle < 0.8  then dx = 4
+				-- else   						     dx = 8
+				-- end
+
+                dx = (whereOnPaddle - 0.5) * 16
+
+                if (dx > 0) 
+                then dx = math.floor(dx)
+                else dx = math.ceil(dx)
+                end
+                
+                if (dx == 0) then dx = 0.5 end
 
 				dy = -math.abs(dy)
 			end

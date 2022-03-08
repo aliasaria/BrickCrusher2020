@@ -7,15 +7,20 @@ for i = 1, 6 do
 end
 
 
+hitSound = playdate.sound.sampleplayer.new('sounds/Wall_Light_Double_Switch_Off-004.wav')
+thudSound = playdate.sound.sampleplayer.new('sounds/PUNCH_PERCUSSIVE_HEAVY_06.wav')
+
 
 function hitBrick(brick)
 	-- createExplosion(brick.x, brick.y)
 
 	-- If the type is not a number, this is a metal brick
 	if (type(brick.brickType) ~= "number") then
+        -- thudSound:play()
 		return
 	end
 	
+    hitSound:play()
 	brick.brickType -= 1
 	score += 1
 

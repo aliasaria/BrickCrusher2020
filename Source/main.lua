@@ -20,21 +20,14 @@ math.randomseed(ms,s)
 
 local font = gfx.font.new('images/font/blocky')
 
-hitSound = playdate.sound.sampleplayer.new('sounds/Wall_Light_Double_Switch_Off-004.wav')
-
 SCREEN_WIDTH = 320
 SCREEN_HEIGHT = 240
-
-local enemyCount = 0
 
 paddle = nil
 ball = nil
 
 score = 0
 currentLevel = 1
-
-local bgY = 0
-local bgH = 0
 
 SpriteTypes = {
 	PADDLE = 1,
@@ -48,7 +41,6 @@ SpriteTypes = {
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 local PANEL_START = 320
-
 
 local function drawSidePanel()
 
@@ -69,36 +61,11 @@ local function drawSidePanel()
 	gfx.drawText('LEVEL: '..currentLevel, PANEL_START + 10, 32)
 
 	gfx.drawText('SCORE: '..score, PANEL_START + 10, 50)
+
+	gfx.drawText('SPRITES: '..#gfx.sprite.getAllSprites(), PANEL_START + 10, 150+2)
+	playdate.drawFPS(PANEL_START + 10, 170+2)
+
 end
-
--- -- Background
--- local function createBackgroundSprite()
-
--- 	local bg = gfx.sprite.new()
--- 	local bgImg = gfx.image.new('images/background.png')
--- 	local w, h = bgImg:getSize()
--- 	bgH = h
--- 	bg:setBounds(0, 0, 400, 240)
-
--- 	function bg:draw(x, y, width, height)
--- 		bgImg:draw(0, bgY)
--- 		bgImg:draw(0, bgY-bgH)
-
--- 	end
-
--- 	function bg:update()
--- 		bgY += 1
--- 		if bgY > bgH then
--- 			bgY = 0
--- 		end
--- 		self:markDirty()
--- 	end
-
--- 	bg:setZIndex(0)
--- 	bg:add()
--- end
-
-
 
 local function createExplosion(x, y)
 
@@ -121,12 +88,6 @@ local function createExplosion(x, y)
 	s:setZIndex(2000)
 	s:add()
 
-end
-
-
-
-function powerUp( type )
-	paddle:grow()
 end
 
 local function initializeLevel( n )
@@ -160,7 +121,6 @@ end
 
 
 function playdate.update()
-
 	if playdate.buttonJustPressed("A") then
 		playerFire()
 	end
@@ -171,20 +131,11 @@ function playdate.update()
 
 	createBricksIfNeeded()
 
-	-- spawnBackgroundPlaneIfNeeded()
-
 	gfx.sprite.update()
 	
-
 	drawSidePanel()
 
 	gfx.setFont(font)
-	-- gfx.drawText('sprite count: '..#gfx.sprite.getAllSprites(), 2, 150+2)
-	-- gfx.drawText('max bricks: '..maxEnemies, 2, 150+16)
-	-- gfx.drawText('score: '..score, 2, 150+30)
-
-	playdate.drawFPS(2, 224)
-
 end
 
 -- ------------------
@@ -193,10 +144,8 @@ end
 -- ------------------
 -- ------------------
 playdate.display.setRefreshRate(30)
--- createBackgroundSprite()
 paddle = createPaddle(200, 233)
 ball = createBall(0,0)
-
 
 local startMusic = playdate.sound.sampleplayer.new('sounds/8BitRetroSFXPack1_Traditional_GameStarting08.wav')
 startMusic:play()

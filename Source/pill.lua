@@ -50,7 +50,7 @@ function createPill(x, y)
 			end
 		end
 		
-		pill.frame += 0.3
+		pill.frame += 0.2
 		if pill.frame > animationLength then
 			pill.frame = 1
 		end
@@ -59,4 +59,10 @@ function createPill(x, y)
 
 	pill:setZIndex(100)
 	return pill
+end
+
+local powerUpSound = playdate.sound.sampleplayer.new('sounds/MenuSound_DDM23.1_Wav.wav')
+function powerUp( type )
+	paddle:grow()
+    powerUpSound:play()
 end
