@@ -1,0 +1,90 @@
+
+local gfx = playdate.graphics
+
+local brickImages = {}
+for i = 1, 6 do
+	brickImages[i] = gfx.image.new('images/brick/brick'..i)
+end
+
+
+
+function hitBrick(brick)
+	-- createExplosion(brick.x, brick.y)
+
+	-- If the type is not a number, this is a metal brick
+	if (type(brick.brickType) ~= "number") then
+		return
+	end
+	
+	brick.brickType -= 1
+	score += 1
+
+	if brick.brickType < 1 then
+		brick:remove()
+	end
+
+	brick:setImage(brickImages[brick.brickType])
+
+	if math.random(6) == 1 then
+		createPill(brick.x, brick.y)
+	end
+
+end
+
+
+function createBrick(x, y, brickType)
+
+	local brick = gfx.sprite.new()
+
+	local brickImg
+
+	if (type(brickType) == "number") then
+		brickImg = brickImages[brickType]
+	else
+		brickImg = gfx.image.new('images/brick/brick-metal')
+	end
+
+	local w, h = brickImg:getSize()
+	brick:setImage(brickImg)
+	brick:setCollideRect(0, 0, w, h)
+	-- brick:moveTo(math.random( math.floor(SCREEN_WIDTH / w) )*w - 4, math.random(10)*h)
+	brick:setBounds(0, 0, w, h)
+	brick:moveTo(x * (w-1), y * (h-1))
+	brick:add()
+	
+	ball:setTag(SpriteTypes.BRICK)
+
+	brick.isEnemy = true
+
+	brick.spriteType = SpriteTypes.BRICK
+	brick.brickType = brickType
+	-- print(brick.brickType)
+
+	-- function brick:draw(x, y, width, height)
+	-- 	brickImg:drawFaded(0, 0, math.random(0,10) / 10, playdate.graphics.image.kDitherTypeScreen)
+	-- end
+
+	function brick:collisionResponse(other)
+		return gfx.sprite.kCollisionTypeBounce
+	end
+
+
+	function brick:update()
+
+		-- local newY = brick.y
+
+		-- if newY > 400 + h then
+		-- 	brick:remove()
+		-- 	enemyCount -= 1
+		-- else
+
+		-- 	brick:moveTo(brick.x, newY)
+
+		-- end
+
+		-- brick:setImage(brickImages[brick.brickType])
+	end
+
+	brick:setZIndex(500)
+	return brick
+end
