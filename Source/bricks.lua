@@ -10,6 +10,13 @@ end
 hitSound = playdate.sound.sampleplayer.new('sounds/Wall_Light_Double_Switch_Off-004.wav')
 thudSound = playdate.sound.sampleplayer.new('sounds/PUNCH_PERCUSSIVE_HEAVY_06.wav')
 
+lastHitTime = playdate.getCurrentTimeMilliseconds()
+lastComboTime = nil
+comboCounter = 0
+longestCombo = 0
+lastComboSize = 0
+lastComboPositionX = nil
+lastComboPositionY = nil
 
 function hitBrick(brick)
 	-- createExplosion(brick.x, brick.y)
@@ -24,16 +31,50 @@ function hitBrick(brick)
 	brick.brickType -= 1
 	score += 1
 
+    local hitTime = playdate.getCurrentTimeMilliseconds()
+    if (hitTime - lastHitTime) < 250 then
+        comboCounter += 1
+    else 
+        if (comboCounter > 1) then
+            score += comboCounter*5
+            lastComboPositionX = brick.x
+            lastComboPositionY = brick.y
+            lastComboTime = hitTime
+            lastComboSize = comboCounter
+            if (comboCounter > longestCombo) then
+                longestCombo = comboCounter
+            end
+        end
+        comboCounter = 0
+    end
+    lastHitTime = hitTime
+
+	brick:setImage(brickImages[brick.brickType])
+
 	if brick.brickType < 1 then
 		brick:remove()
 	end
 
-	brick:setImage(brickImages[brick.brickType])
 
 	if math.random(6) == 1 then
 		createPill(brick.x, brick.y)
 	end
 
+end
+
+function shootBrick(brick)
+    -- If the type is not a number, this is a metal brick
+	if (type(brick.brickType) ~= "number") then
+		return
+	end
+    hitSound:play()
+	brick.brickType -= 1
+	score += 1
+    brick:setImage(brickImages[brick.brickType])
+
+    if brick.brickType < 1 then
+		brick:remove()
+	end
 end
 
 

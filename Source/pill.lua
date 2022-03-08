@@ -44,7 +44,13 @@ function createPill(x, y)
 				local collision = collisions[i]
 	
 				if (collision.other.spriteType == SpriteTypes.PADDLE) then
-					powerUp("LONG")
+					if math.random(2) == 1 then
+						powerUp("GUN")
+					else
+						powerUp("LONG")
+					end
+
+
 					pill:remove()
 				end
 			end
@@ -63,6 +69,14 @@ end
 
 local powerUpSound = playdate.sound.sampleplayer.new('sounds/MenuSound_DDM23.1_Wav.wav')
 function powerUp( type )
-	paddle:grow()
+	currentPowerUP = type
+
+	if (type == "LONG") then
+		paddle:grow()
+	elseif (type == "GUN") then
+		paddle:addGun()
+	end
+	
     powerUpSound:play()
+    score += 12
 end

@@ -1,8 +1,8 @@
 
 local gfx = playdate.graphics
 
-function createBall(x, y)
-	dx, dy = 2, 2
+function createBall(x, y, dx_in, dy_in)
+	dx, dy = dx_in, dy_in
 	local ball = gfx.sprite.new()
 	local ballImage = gfx.image.new('images/ball9x9')
 	local w, h = ballImage:getSize()
@@ -43,17 +43,6 @@ function createBall(x, y)
 
 
 	function ball:update()
-
-		-- if playdate.buttonIsPressed("UP") then
-		-- 	dy = -4
-		-- elseif playdate.buttonIsPressed("DOWN") then
-		-- 	dy = 4
-		-- end
-		-- if playdate.buttonIsPressed("LEFT") then
-		-- 	dx = -4
-		-- elseif playdate.buttonIsPressed("RIGHT") then
-		-- 	dx = 4
-		-- end
 		ball.oldX = ball.x
 		ball.oldY = ball.y
 
@@ -108,12 +97,6 @@ function createBall(x, y)
 
 				dy = -math.abs(dy)
 			end
-
-			-- if collision.other.isEnemy == true then	-- crashed into enemy plane
-			-- 	hitBrick(collision.other)
-			-- 	collision.other:remove()
-			-- 	score += 1
-			-- end
 		end
 
 	end

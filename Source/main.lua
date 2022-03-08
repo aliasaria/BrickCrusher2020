@@ -19,6 +19,7 @@ local s, ms = playdate.getSecondsSinceEpoch()
 math.randomseed(ms,s)
 
 local font = gfx.font.new('images/font/blocky')
+local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
 SCREEN_WIDTH = 320
 SCREEN_HEIGHT = 240
@@ -28,6 +29,7 @@ ball = nil
 
 score = 0
 currentLevel = 1
+currentPowerUP = "NONE"
 
 SpriteTypes = {
 	PADDLE = 1,
@@ -43,6 +45,7 @@ local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 local PANEL_START = 320
 
 local function drawSidePanel()
+	gfx.setFont(font)
 
 	-- Draw Border
 	gfx.setLineWidth(3)
@@ -52,6 +55,7 @@ local function drawSidePanel()
 	local pad = heartImgFilled.width + 1
 	local paddingTop = 6
 	local paddingLeft = 10
+	local linespacing = 16
 
 	heartImgFilled:draw(PANEL_START + paddingLeft,paddingTop)
 	heartImgFilled:draw(PANEL_START + paddingLeft + pad,paddingTop)
@@ -60,10 +64,21 @@ local function drawSidePanel()
 
 	gfx.drawText('LEVEL: '..currentLevel, PANEL_START + 10, 32)
 
-	gfx.drawText('SCORE: '..score, PANEL_START + 10, 50)
+	gfx.drawText('SCORE: '..score, PANEL_START + 10, 32 + linespacing)
+
+	gfx.drawText('BEST', PANEL_START + 10, 32 + linespacing * 2)
+	gfx.drawText('COMBO: ' .. longestCombo, PANEL_START + 10, 32 + linespacing * 2 + 10)
+
+	gfx.drawText('POW: '..currentPowerUP, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 2)
 
 	gfx.drawText('SPRITES: '..#gfx.sprite.getAllSprites(), PANEL_START + 10, 150+2)
 	playdate.drawFPS(PANEL_START + 10, 170+2)
+
+	local now = playdate.getCurrentTimeMilliseconds()
+	-- gfx.setFont(minimonofont)
+	if (lastComboPositionX ~= nil and (now - lastComboTime) < 750) then
+		gfx.drawText(lastComboSize .. ' COMBO!', lastComboPositionX, lastComboPositionY)
+	end
 
 end
 
@@ -122,7 +137,9 @@ end
 
 function playdate.update()
 	if playdate.buttonJustPressed("A") then
-		playerFire()
+		if (currentPowerUP == "GUN") then
+			playerFire()
+		end
 	end
 
 	if playdate.buttonJustPressed("B") then
@@ -134,8 +151,6 @@ function playdate.update()
 	gfx.sprite.update()
 	
 	drawSidePanel()
-
-	gfx.setFont(font)
 end
 
 -- ------------------
@@ -144,8 +159,8 @@ end
 -- ------------------
 -- ------------------
 playdate.display.setRefreshRate(30)
-paddle = createPaddle(200, 233)
-ball = createBall(0,0)
+paddle = createPaddle(130, 231)
+ball = createBall(130,220,1,-2)
 
 local startMusic = playdate.sound.sampleplayer.new('sounds/8BitRetroSFXPack1_Traditional_GameStarting08.wav')
 startMusic:play()

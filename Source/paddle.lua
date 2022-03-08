@@ -8,7 +8,7 @@ function createPaddle(x, y)
 
 	paddle.spriteType = SpriteTypes.PADDLE
 
-	paddle:setCollideRect(0, 0, w, h)
+	paddle:setCollideRect(0, 5, w, h)
 	paddle:moveTo(x, y)
 	paddle:add()
 
@@ -17,6 +17,12 @@ function createPaddle(x, y)
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
 		self:setCollideRect(0, 0, w, h)
+	end
+
+	function paddle:addGun()
+		local gunImage = gfx.image.new('images/paddle_w_gun')
+		paddle:moveTo(self.x,y)
+		paddle:setImage(gunImage)
 	end
 
 	function paddle:collisionResponse(other)
@@ -68,7 +74,7 @@ function createPaddle(x, y)
 end
 
 
-local function playerFire()
+function playerFire()
 	local s = gfx.sprite.new()
 	local img = gfx.image.new('images/doubleBullet')
 	local imgw, imgh = img:getSize()
@@ -94,7 +100,7 @@ local function playerFire()
 				-- print (collision.other.spriteType)
 
 				if collision.other.spriteType == SpriteTypes.BRICK then
-					hitBrick(collision.other)
+					shootBrick(collision.other)
 					s:remove()
 				end
 
