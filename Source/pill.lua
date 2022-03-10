@@ -44,10 +44,24 @@ function createPill(x, y)
 				local collision = collisions[i]
 	
 				if (collision.other.spriteType == SpriteTypes.PADDLE) then
-					if math.random(2) == 1 then
+					local r = math.random(100)
+					
+					if 		r < 20 then
 						powerUp("GUN")
-					else
+					elseif 	r < 40 then
 						powerUp("LONG")
+					elseif 	r < 45 then
+						powerUp("SHORT")
+					elseif  r < 50 then
+						powerUp("1UP")
+					elseif 	r < 55 then
+						powerUp("FLIP")
+					elseif 	r < 70 then
+						powerUp("SLOW")
+					elseif r < 80 then
+						powerUp("MLTI")
+					elseif r < 90 then
+						powerUp("STKY")
 					end
 
 
@@ -74,9 +88,46 @@ function powerUp( type )
 	if (type == "LONG") then
 		paddle:grow()
 	elseif (type == "GUN") then
+		paddle:removeAllPowerUps()
 		paddle:addGun()
+	elseif (type == "1UP") then
+		paddle:removeAllPowerUps()
+		if (lives < 4) then lives = lives + 1 end
+	elseif (type == "FLIP") then
+		paddle:flip()
+	elseif (type == "SLOW") then
+		gameSpeedReset()
+	elseif (type == "STKY") then
+		paddle.isSticky = true
+	elseif (type == "MLTI") then
+		activeBalls = MAX_NUMBER_OF_BALLS
+
+		local hi = balls:highestBallIndex()
+		if hi == nil then
+			hix = paddle.x
+			hiy = TOP_OF_PADDLE_Y
+		else
+			hix  = balls[hi].x
+			hiy  = balls[hi].y
+		end
+
+		for i=1,MAX_NUMBER_OF_BALLS do
+			balls[i]:moveTo(hix,hiy)
+
+			balls[i]:setVisible(true)
+			balls[i]:setUpdatesEnabled(true)
+			balls[i].isAlive = true
+			-- balls[i].x = hix
+			-- balls[i].y = hiy
+			p = i - (MAX_NUMBER_OF_BALLS+1)/2 --position with zero at center
+			balls[i].dx = p
+			balls[i].dy = -2 + math.abs(p)/2
+		end
+	else
+		paddle:removeAllPowerUps()
 	end
 	
+	powerUpMessageFadeTimer = 30
     powerUpSound:play()
-    score += 12
+    score = score + 12
 end

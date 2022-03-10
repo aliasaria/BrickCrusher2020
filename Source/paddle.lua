@@ -4,6 +4,10 @@ function createPaddle(x, y)
 	local paddle = gfx.sprite.new()
 	local playerImage = gfx.image.new('images/paddle1')
 	local w, h = playerImage:getSize()
+	paddle.isSticky = false
+	paddle.isStuck = true
+	paddle.movementFlip = 1   --if this is -1 then the motion flips
+
 	paddle:setImage(playerImage)
 
 	paddle.spriteType = SpriteTypes.PADDLE
@@ -13,6 +17,7 @@ function createPaddle(x, y)
 	paddle:add()
 
 	function paddle:grow()
+		self:removeAllPowerUps()
 		playerImage = gfx.image.new('images/paddle_long')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
@@ -20,12 +25,41 @@ function createPaddle(x, y)
 	end
 
 	function paddle:addGun()
+		self:removeAllPowerUps()
 		local gunImage = gfx.image.new('images/paddle_w_gun')
 		paddle:moveTo(self.x,y)
 		paddle:setImage(gunImage)
 		w, h = gunImage:getSize()
 		paddle:setCollideRect(0, 4, w, h-3)
 	end
+
+	function paddle:removeAllPowerUps()
+		local playerImage = gfx.image.new('images/paddle1')
+		paddle:setImage(playerImage)
+		w, h = playerImage:getSize()
+		paddle:setCollideRect(0, 4, w, h-3)
+		self.movementFlip = 1
+		paddle.isSticky = false
+	end
+
+	function paddle:flip()
+		self.movementFlip = -1
+	end
+
+
+	-- function paddle:shootBall()
+	-- 	if (paddle.isStuck) then
+	-- 		paddle.isStuck = false
+	-- 		ball.dy = -BALL_ORIGINAL_DY
+	-- 		if (ball.dx == 0) then ball.dx = 2 end
+	-- 	end
+
+	-- 	if (paddle.isSticky) then
+	-- 		ball.dy = -BALL_ORIGINAL_DY
+	-- 	end
+
+	-- 	ball:moveBy(0, -2) --if you don't move out a bit it gets stuck with collision again
+	-- end
 
 	function paddle:collisionResponse(other)
 		return gfx.sprite.kCollisionTypeBounce
@@ -42,17 +76,21 @@ function createPaddle(x, y)
 			-- dy = 4
 		end
 		if playdate.buttonIsPressed("LEFT") then
-			dx = -4
+			dx = -4 * self.movementFlip
 		elseif playdate.buttonIsPressed("RIGHT") then
-			dx = 4
+			dx = 4 * self.movementFlip
 		end
 
 		local change, acceleratedChange = playdate.getCrankChange()
 		-- print (acceleratedChange)
 
-		dx += acceleratedChange
+		dx += acceleratedChange * self.movementFlip
 
 		self:moveBy(dx, dy)
+		-- move ball with paddle if they are stuck together :)
+		if (paddle.isStuck) then
+			balls:moveBy(dx,0)
+		end
 
 		-- print('paddle pos: '..self.x..","..self.y)
 
@@ -117,5 +155,6 @@ function playerFire()
 
 	s:setZIndex(999)
 	s:add()
+	return s
 
 end

@@ -8,7 +8,6 @@ SDKBIN=$(SDK)/bin
 GAME=$(notdir $(CURDIR))
 SIM=Playdate Simulator
 
-
 build: clean compile run
 
 run: open

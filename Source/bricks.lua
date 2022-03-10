@@ -43,7 +43,7 @@ function hitBrick(brick)
             score += comboCounter*5
             lastComboPositionX = brick.x
             lastComboPositionY = brick.y
-			print(brick.x .. ", " .. brick.y)
+			-- print(brick.x .. ", " .. brick.y)
             lastComboTime = hitTime
             lastComboSize = comboCounter
             if (comboCounter > longestCombo) then
@@ -62,7 +62,8 @@ function hitBrick(brick)
 
 
 	if math.random(6) == 1 then
-		createPill(brick.x, brick.y)
+		local p = createPill(brick.x, brick.y)
+		table.insert( pills, p )
 	end
 
 end
@@ -73,8 +74,8 @@ function shootBrick(brick)
 		return
 	end
     -- hitSound:play()
-	brick.brickType -= 1
-	score += 1
+	brick.brickType = brick.brickType - 1
+	score = score + 1
     brick:setImage(brickImages[brick.brickType])
 
     if brick.brickType < 1 then
@@ -100,10 +101,10 @@ function createBrick(x, y, brickType)
 	brick:setCollideRect(0, 0, w, h)
 	-- brick:moveTo(math.random( math.floor(SCREEN_WIDTH / w) )*w - 4, math.random(10)*h)
 	brick:setBounds(0, 0, w, h)
-	brick:moveTo(x * (w-1), y * (h-1))
+	brick:moveTo(x * (w-1) - w/2, y * (h-1) - h/2)
 	brick:add()
 	
-	ball:setTag(SpriteTypes.BRICK)
+	brick:setTag(SpriteTypes.BRICK)
 
 	brick.isEnemy = true
 
