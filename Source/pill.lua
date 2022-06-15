@@ -100,8 +100,12 @@ function powerUp( type )
 	elseif (type == "STKY") then
 		paddle.isSticky = true
 	elseif (type == "MLTI") then
+		-- You can't be sticky with multi because that's too much to handle
+		paddle.isSticky = false
+
 		activeBalls = MAX_NUMBER_OF_BALLS
 
+		-- Split up the ball that is lowest (aka highest y value)
 		local hi = balls:highestBallIndex()
 		if hi == nil then
 			hix = paddle.x

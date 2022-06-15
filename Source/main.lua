@@ -30,25 +30,30 @@ TOP_OF_PADDLE_Y = 225
 
 MAX_NUMBER_OF_BALLS = 4
 
-
 -- Important global objects that are sprites
 paddle = nil
 -- ball = nil
 bricks = {}
 pills = {}
-bullets = {}
 
 activeBalls = 1
 balls = {}
 
 -- Important global states and variables
 score = 0
-currentLevel = 1
+currentLevel = 3
 currentPowerUP = "NONE"
 lives = 3
 -- Game goes faster and faster as time passes, but is limited
 gameSpeed = 1
 gameStartTime = 0  -- we do not use playdate.resetElapsedTime() for whatever reason
+playerHasBegunPlaying = false
+
+-- Manage the number of gun bullets on the screen
+bullets = {}
+bulletsOnScreenCount = 0
+timeWhenLastBulletWasShot = -99999
+-- This is the array of all active Bullets so we can track and remove them
 
 
 -- when this is greater than 0, it will tell the game
@@ -104,12 +109,16 @@ local function drawSidePanel()
 	gfx.drawText('COMBO: ' .. longestCombo, PANEL_START + 10, 32 + linespacing * 2 + 10)
 
 	-- gfx.drawText('POW: '..currentPowerUP, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 2)
-	gfx.drawText('ACT: '..activeBalls, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 2)
+	-- gfx.drawText('ACT: '..activeBalls, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 2)
 
 	-- gfx.drawText('LIVES: '..lives, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 3)
 
 	-- gfx.drawText('SPRITES: '..#gfx.sprite.getAllSprites(), PANEL_START + 10, 150+2)
 	-- playdate.drawFPS(PANEL_START + 10, 170+2)
+
+	-- gfx.drawText('BUL ON S: ' .. bulletsOnScreenCount, PANEL_START + 10, 32 + linespacing * 2 + 10  + linespacing * 2)
+	-- gfx.drawText('TICK ' .. gameStartTime, PANEL_START + 10, 32 + linespacing * 2 + 10  + linespacing * 2)
+
 
 	local now = playdate.getCurrentTimeMilliseconds()
 	-- gfx.setFont(minimonofont)
@@ -141,8 +150,12 @@ local function drawSidePanel()
 end
 
 local function gameSpeedSpeedUpIfNeeded()
-	gameStartTime = gameStartTime + 1
 
+	if (playerHasBegunPlaying) then
+		gameStartTime = gameStartTime + 1
+	end
+
+	-- Don't let the game go faster than the max speed of 5
 	if (gameSpeed > 5) then
 		gameSpeed = 5
 	else
@@ -156,6 +169,7 @@ end
 function gameSpeedReset()
 	gameSpeed = 1
 	gameStartTime = 0
+	playerHasBegunPlaying = false
 end
 
 
@@ -204,7 +218,7 @@ local levelStart = true
 local function createBricksIfNeeded()
 	if (levelStart == true) then
 		levelStart = false
-		initializeLevel(1)
+		initializeLevel(currentLevel)
 	end
 end
 
@@ -243,6 +257,15 @@ function restartGame()
 	end
 
 	gameSpeedReset()
+
+	bulletsOnScreenCount = 0
+	timeWhenLastBulletWasShot = -99999
+
+	-- delete all floating bullets
+	for i,v in ipairs(bullets) do
+		v:remove()
+	end
+	bullets = {}
 end
 
 function playdate.update()
@@ -252,10 +275,24 @@ function playdate.update()
 		return
 	end
 
+	-- Shoot bullets if you have the Gun
 	if playdate.buttonJustPressed("A") then
-		if (currentPowerUP == "GUN" and paddle.isStuck == false) then
+		-- Don't shoot if you have a ball stuck to you right now
+		if (paddle.hasGun and paddle.isStuck == false) then
+
+			local now = playdate.getCurrentTimeMilliseconds()
+
+			local delay = (now - timeWhenLastBulletWasShot)
+
+			if (bulletsOnScreenCount > 1 or delay < 550) then
+				return
+			end
+
 			local b = playerFire()
-			-- table.insert(bullets, b)
+
+			-- Add this bullet to the global list of bullets
+			-- WE don't know how to manage this table and remove so leave out for now ... @TODO table.insert(bullets, b)
+			
 		end
 	end
 
@@ -280,6 +317,10 @@ function playdate.keyPressed(key)
 		powerUp("GUN")
 	elseif (key =="e") then
 		powerUp("STKY")
+	elseif (key =="r") then
+		powerUp("SHORT")
+	elseif (key =="t") then
+		powerUp("SLOW")
 	end
 end
 

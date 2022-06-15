@@ -20,3 +20,11 @@ compile: Source/main.lua
 	
 open:
 	open -a '$(SDKBIN)/$(SIM).app/Contents/MacOS/$(SIM)' '$(GAME).pdx'
+
+
+.PHONY: build-production
+build-production: clean compile-production
+
+.PHONY: compile-production
+compile-production:
+	"$(SDKBIN)/pdc" '-s' 'Source' '$(GAME).pdx'

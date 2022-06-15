@@ -11,6 +11,7 @@ function createPaddle(x, y)
 	paddle:setImage(playerImage)
 
 	paddle.spriteType = SpriteTypes.PADDLE
+	paddle.hasGun = false
 
 	paddle:setCollideRect(0, 4, w, h-3)
 	paddle:moveTo(x, y)
@@ -26,6 +27,7 @@ function createPaddle(x, y)
 
 	function paddle:addGun()
 		self:removeAllPowerUps()
+		self.hasGun = true
 		local gunImage = gfx.image.new('images/paddle_w_gun')
 		paddle:moveTo(self.x,y)
 		paddle:setImage(gunImage)
@@ -40,6 +42,7 @@ function createPaddle(x, y)
 		paddle:setCollideRect(0, 4, w, h-3)
 		self.movementFlip = 1
 		paddle.isSticky = false
+		paddle.hasGun = false
 	end
 
 	function paddle:flip()
@@ -86,6 +89,12 @@ function createPaddle(x, y)
 
 		dx += acceleratedChange * self.movementFlip
 
+		-- If the player has moved at all, consider the game to be
+		-- started, and the game speed timer will start to tick
+		if (dx ~= 0) then
+			playerHasBegunPlaying = true
+		end
+
 		self:moveBy(dx, dy)
 		-- move ball with paddle if they are stuck together :)
 		if (paddle.isStuck) then
@@ -113,14 +122,19 @@ function createPaddle(x, y)
 	return paddle
 end
 
-
+-- function playerFire() creates a new bullet sprite
+-- and sets up its animation and collision properties
 function playerFire()
+	-- Create bullet sprite
 	local s = gfx.sprite.new()
 	local img = gfx.image.new('images/doubleBullet')
 	local imgw, imgh = img:getSize()
 	s:setImage(img)
 	s:moveTo(paddle.x, paddle.y)
 	s:setCollideRect(0, 0, imgw, imgh)
+	bulletsOnScreenCount += 1
+
+	timeWhenLastBulletWasShot = playdate.getCurrentTimeMilliseconds()
 
 	function s:collisionResponse(other)
 		return gfx.sprite.kCollisionTypeOverlap
@@ -128,10 +142,14 @@ function playerFire()
 
 	function s:update()
 
+		-- Move upwards at 20 pixel per frame
 		local newY = s.y - 20
+		local didCollisionHappen = false
 
+		-- If past the top of the screen, remove the bullet sprite
 		if newY < -imgh then
 			s:remove()
+			bulletsOnScreenCount -= 1
 		else
 			-- s:moveTo(s.x, newY)
 			local actualX, actualY, collisions, length = s:moveWithCollisions(s.x, newY)
@@ -140,8 +158,9 @@ function playerFire()
 				-- print (collision.other.spriteType)
 
 				if collision.other.spriteType == SpriteTypes.BRICK then
+					-- print("Collision with brick")
 					shootBrick(collision.other)
-					s:remove()
+					didCollisionHappen = true
 				end
 
 				if collision.other.spriteType == SpriteTypes.BALL then
@@ -149,6 +168,11 @@ function playerFire()
 					-- print("Bullet hit ball!")
 				end
 			end
+		end
+
+		if (didCollisionHappen) then
+			s:remove()
+			bulletsOnScreenCount -= 1
 		end
 
 	end

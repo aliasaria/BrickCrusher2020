@@ -67,10 +67,6 @@ function createBall(x, y, dx_in, dy_in)
 
 
 	function ball:update()
-		ball.oldX = ball.x
-		ball.oldY = ball.y
-
-
 		-- Bounce of edges of screen
 		--
 		-- Right
@@ -89,7 +85,7 @@ function createBall(x, y, dx_in, dy_in)
 			ball.y = 0 + ball.width/2
 		end
 		-- Bottom
-		if (ball.y >= SCREEN_HEIGHT) then
+		if (ball.y >= SCREEN_HEIGHT + 40) then
 			self:die()
 		end
 
@@ -146,6 +142,7 @@ function createBall(x, y, dx_in, dy_in)
 
 				if (paddle.isSticky) then
 					ball.dy = 0
+					ball:moveTo(ball.x, TOP_OF_PADDLE_Y)
 					paddle.isStuck = true
 				else
 					ball.dy = -math.abs(ball.dy)
@@ -218,6 +215,12 @@ function createBalls()
 
 
 	function balls:shootBalls()
+
+		-- Whenever we reset the speed we set this to false
+		-- and we wait until the player moves or shoots to
+		-- "start the timer"
+		playerHasBegunPlaying = true
+
 		for i,ball in ipairs(balls) do
 			if ball.isAlive then
 				if (paddle.isStuck) then
