@@ -3,16 +3,15 @@
 - Sticky -- if you keep moving to edge it goes off teh edge and weird stuff happens
 - Change collision on paddle to manual -- just look at y of ball and if it collided (for pills and ball -- you can then remove collisions on pill entirely)
 - probably need to split bullet into two bullets
-
+- Say something on death
+- Show speed somehow in a guage
 - Powerups:
 
     - Bomb
      - Laser (can go through metal?)
 
-
-
-- Home Splash Screen, start timer?
 - Create 5 Levels and screens between them
+- Create 25 levels
 - Better end game
 
 - Bricks come down as time passes (only goes so far)
@@ -21,7 +20,6 @@
 
 - Test speed up timer at highest speeds. Is it too fast?
 
-- Remove ball and replace entirely with multiball array
 
 
 Considerations:
@@ -49,3 +47,5 @@ DONE
 ✅- Speed up timer happens right away, but shoudl start when you first shoot the ball
 ✅- Gun bullet sprite is ugly
 - Different name
+- Home Splash Screen
+- Remove ball and replace entirely with multiball array
