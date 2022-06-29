@@ -284,7 +284,7 @@ function playdate.update()
 
 			local delay = (now - timeWhenLastBulletWasShot)
 
-			if (bulletsOnScreenCount > 1 or delay < 550) then
+			if (bulletsOnScreenCount > 1 or delay < 350) then
 				return
 			end
 

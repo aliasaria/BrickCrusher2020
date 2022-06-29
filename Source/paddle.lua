@@ -143,7 +143,7 @@ function playerFire()
 	function s:update()
 
 		-- Move upwards at 20 pixel per frame
-		local newY = s.y - 20
+		local newY = s.y - 10
 		local didCollisionHappen = false
 
 		-- If past the top of the screen, remove the bullet sprite

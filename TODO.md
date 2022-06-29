@@ -1,9 +1,7 @@
 =TODO=
 
-- Gun bullet sprite is ugly
 - Sticky -- if you keep moving to edge it goes off teh edge and weird stuff happens
 - Change collision on paddle to manual -- just look at y of ball and if it collided (for pills and ball -- you can then remove collisions on pill entirely)
-- Different name
 - probably need to split bullet into two bullets
 
 - Powerups:
@@ -33,7 +31,7 @@ Considerations:
 
 
 
-
+DONE
 ✅- Remove life if ball falls too low
 ✅- Start with ball stuck to paddle and button press to release
 ✅- Limit number of gun shots at any time -- it's too easy to shoot fast
@@ -49,3 +47,5 @@ Considerations:
 ✅- Spreading from the highest ball isn't working. Height is in inverse. Are we doing it right?
 ✅- Sticky doesn't work with multiball, and sometimes gets stuck on edge -- just turned it off blah
 ✅- Speed up timer happens right away, but shoudl start when you first shoot the ball
+✅- Gun bullet sprite is ugly
+- Different name
