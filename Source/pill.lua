@@ -10,13 +10,10 @@ function createPill(x, y)
 	pill.frame = 1.0
 	pill:setImage(pillAnimation:getImage( math.floor(pill.frame) ))
 
-	-- print ( pillAnimation:getLength() )
-
 	local w, h = pill:getImage():getSize()
 
 	pill:setCollideRect(0, 0, w, h)
 
-	-- plane:setImage(planeImg)
 	pill:moveTo(x, y)
 	pill:add()
 

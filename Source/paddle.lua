@@ -165,10 +165,10 @@ function playerFire()
 					didCollisionHappen = true
 				end
 
-				if collision.other.spriteType == SpriteTypes.BALL then
-					-- Do nothing
-					-- print("Bullet hit ball!")
-				end
+				-- if collision.other.spriteType == SpriteTypes.BALL then
+				-- 	-- Do nothing
+				-- 	-- print("Bullet hit ball!")
+				-- end
 			end
 		end
 

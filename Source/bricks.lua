@@ -123,18 +123,6 @@ function createBrick(x, y, brickType)
 
 	function brick:update()
 
-		-- local newY = brick.y
-
-		-- if newY > 400 + h then
-		-- 	brick:remove()
-		-- 	enemyCount -= 1
-		-- else
-
-		-- 	brick:moveTo(brick.x, newY)
-
-		-- end
-
-		-- brick:setImage(brickImages[brick.brickType])
 	end
 
 	brick:setZIndex(500)
