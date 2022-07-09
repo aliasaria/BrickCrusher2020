@@ -1,35 +1,43 @@
-=TODO=
+== TODO ==
 
-- Sticky -- if you keep moving to edge it goes off teh edge and weird stuff happens
-- Change collision on paddle to manual -- just look at y of ball and if it collided (for pills and ball -- you can then remove collisions on pill entirely)
-- probably need to split bullet into two bullets
-- Say something on death
-- Show speed somehow in a guage
+
 - Powerups:
-
     - Bomb
-     - Laser (can go through metal?)
+    - Laser (can go through metal?)
+    - Something else?
 
 - Create 5 Levels and screens between them
 - Create 25 levels
 - Better end game
-
-- Bricks come down as time passes (only goes so far)
-
 - Right now we have an issue that if you shoot, and then restart level, the gun shots keep propagating
+- Say something on death
 
-- Test speed up timer at highest speeds. Is it too fast?
+- Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
+
+== Bugs ==
+- was able to get a ball to bounce side to side and never come down
 
 
 
-Considerations:
+
+
+== Consider / Ideas ==
 - Should we make each pill say what it does?
 - Comment code
 - Level file format?
+- Ideally render all the stuff on the right side into a sprite so it's not drawn over and over
+https://devforum.play.date/t/90-rotatable-text/3325/4
+- probably need to split bullet into two bullets
+- Should speed progress if you are stuck to paddle -- you could be shooting. Maybe we should stop time even so
+- Manually calculating pill collisions will allow us to remove collisions with paddle completely, saving computation
+- Double paddle mode -- paddle turns into two paddles
+- Bricks should come down as time passes (but only go so far)
 
 
 
-DONE
+
+== FIXED ==
+
 ✅- Remove life if ball falls too low
 ✅- Start with ball stuck to paddle and button press to release
 ✅- Limit number of gun shots at any time -- it's too easy to shoot fast
@@ -49,3 +57,11 @@ DONE
 - Different name
 - Home Splash Screen
 - Remove ball and replace entirely with multiball array
+- Show speed somehow in a guage
+- Test speed up timer at highest speeds. Is it too fast? no it's ok
+- When there are multiple balls shown on the screen, and you shoot, they all shoot upwards, even if not on the paddle
+- was able to grab sticky on multi and some balls stuck in the middle of the sky
+    - Need to remove concept of "isStuck" to paddle and move it to the ball
+- balls once stuck don't move with paddle
+- Sticky -- if you keep moving to edge it goes off teh edge and weird stuff happens
+- Change collision on paddle to manual -- just look at y of ball and if it collided

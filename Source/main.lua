@@ -46,7 +46,7 @@ currentPowerUP = "NONE"
 lives = 3
 -- Game goes faster and faster as time passes, but is limited
 gameSpeed = 1
-gameStartTime = 0  -- we do not use playdate.resetElapsedTime() for whatever reason
+gameStartTime = 1  -- we do not use playdate.resetElapsedTime() for whatever reason
 playerHasBegunPlaying = false
 
 -- Manage the number of gun bullets on the screen
@@ -71,7 +71,7 @@ SpriteTypes = {
 -- Side Panel
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
-local PANEL_START = SCREEN_WIDTH
+PANEL_START = SCREEN_WIDTH
 
 holdComboPositionX = nil
 holdComboPositionY = nil
@@ -81,6 +81,18 @@ local function drawSidePanel()
 	-- Draw Border
 	gfx.setLineWidth(3)
 	gfx.drawLine(PANEL_START, 0, PANEL_START, SCREEN_HEIGHT)
+
+	-- Draw line where the paddle is
+	-- gfx.setLineWidth(1)
+	-- gfx.drawLine(0, TOP_OF_PADDLE_Y, PANEL_START, TOP_OF_PADDLE_Y)
+
+	-- Draw collision boundaries manually for testing
+	-- local x, y, width, height = paddle:getBounds()
+
+	-- gfx.setLineWidth(1)
+	-- gfx.drawLine(0, TOP_OF_PADDLE_Y, 300, TOP_OF_PADDLE_Y)
+	-- gfx.drawLine(0, 10, 300, 10)
+	-- gfx.drawLine(x, 0, x, SCREEN_HEIGHT)
 
 	-- Draw Life Hearts
 	local pad = heartImgFilled.width + 1
@@ -117,7 +129,29 @@ local function drawSidePanel()
 	-- playdate.drawFPS(PANEL_START + 10, 170+2)
 
 	-- gfx.drawText('BUL ON S: ' .. bulletsOnScreenCount, PANEL_START + 10, 32 + linespacing * 2 + 10  + linespacing * 2)
-	-- gfx.drawText('TICK ' .. gameStartTime, PANEL_START + 10, 32 + linespacing * 2 + 10  + linespacing * 2)
+	gfx.drawText('SPEED: ', PANEL_START + 10, 32 + linespacing * 3 + 10)
+
+
+	-- Draw Speed Gauge
+	local x1 = PANEL_START + 10
+	local y1 = 32 + linespacing * 4 + 5
+	
+	-- -- outer rectangle
+	-- gfx.setLineWidth(1)
+	-- gfx.drawRect(x1, y1 - 1, 30, 5*5 - 2)
+	-- -- bars
+
+	for i=1,5 do
+		if (gameSpeed >= i) then
+			gfx.setLineWidth(1)
+			-- gfx.drawLine(x1, y1 + (5*5) - (i*5) , x1 + 10 + i*5, y1 + (5*5) - (i*5) )
+			gfx.fillRect(x1, y1 + (5*5) - (i*4) - 1, 10 + i*4, 5)
+		else
+			gfx.setLineWidth(1)
+			gfx.drawRect(x1, y1 + (5*5) - (i*4) - 1, 10 + i*4, 5)
+		end
+	end
+
 
 
 	local now = playdate.getCurrentTimeMilliseconds()
@@ -168,7 +202,7 @@ end
 
 function gameSpeedReset()
 	gameSpeed = 1
-	gameStartTime = 0
+	gameStartTime = 1
 	playerHasBegunPlaying = false
 end
 
@@ -240,7 +274,7 @@ function restartGame()
 	if (paddle ~= nil) then
 		paddle:remove()
 	end
-	paddle = createPaddle(130, 231)
+	paddle = createPaddle(130, TOP_OF_PADDLE_Y + 6)
 
 	-- Extra balls
 	for i,v in ipairs(balls) do
@@ -248,6 +282,7 @@ function restartGame()
 	end
 	-- Create all balls on standby
 	balls = createBalls()
+	resetMainBall()
 
 	levelStart = true
 
@@ -277,8 +312,8 @@ function playdate.update()
 
 	-- Shoot bullets if you have the Gun
 	if playdate.buttonJustPressed("A") then
-		-- Don't shoot if you have a ball stuck to you right now
-		if (paddle.hasGun and paddle.isStuck == false) then
+		-- Don't shoot if you have a ball stuck to you right now ( @TODO )
+		if (paddle.hasGun) then
 
 			local now = playdate.getCurrentTimeMilliseconds()
 
@@ -321,6 +356,8 @@ function playdate.keyPressed(key)
 		powerUp("SHORT")
 	elseif (key =="t") then
 		powerUp("SLOW")
+	elseif (key =="y") then
+		powerUp("1UP")
 	end
 end
 

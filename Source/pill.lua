@@ -60,10 +60,9 @@ function createPill(x, y)
 						powerUp("SLOW")
 					elseif r < 80 then
 						powerUp("MLTI")
-					elseif r < 90 then
+					elseif r <= 100 then
 						powerUp("STKY")
 					end
-
 
 					pill:remove()
 				end
@@ -126,6 +125,7 @@ function powerUp( type )
 			p = i - (MAX_NUMBER_OF_BALLS+1)/2 --position with zero at center
 			balls[i].dx = p
 			balls[i].dy = -2 + math.abs(p)/2
+			balls[i].isStuck = false
 		end
 	else
 		paddle:removeAllPowerUps()

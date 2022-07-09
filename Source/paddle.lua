@@ -5,7 +5,6 @@ function createPaddle(x, y)
 	local playerImage = gfx.image.new('images/paddle1')
 	local w, h = playerImage:getSize()
 	paddle.isSticky = false
-	paddle.isStuck = true
 	paddle.movementFlip = 1   --if this is -1 then the motion flips
 
 	paddle:setImage(playerImage)
@@ -65,7 +64,7 @@ function createPaddle(x, y)
 	-- end
 
 	function paddle:collisionResponse(other)
-		return gfx.sprite.kCollisionTypeBounce
+		return gfx.sprite.kCollisionTypeOverlap
 	end
 
 	function paddle:update()
@@ -95,26 +94,29 @@ function createPaddle(x, y)
 			playerHasBegunPlaying = true
 		end
 
-		self:moveBy(dx, dy)
-		-- move ball with paddle if they are stuck together :)
-		if (paddle.isStuck) then
-			balls:moveBy(dx,0)
-		end
 
 		-- print('paddle pos: '..self.x..","..self.y)
 
-		if self.x > SCREEN_WIDTH - w/2 then self:moveTo(SCREEN_WIDTH - w/2, self.y) end
-		if self.x < 0 + w/2			 then self:moveTo(w/2, self.y) end
+		if self.x + dx > SCREEN_WIDTH - w/2 then
+			dx = (SCREEN_WIDTH - w/2) - self.x
+			-- self:moveTo(SCREEN_WIDTH - w/2, self.y)
+		end
+		
+		if self.x + dx < 0 + w/2 then 
+			dx = (w/2) - self.x
+			-- self:moveTo(w/2, self.y)
+		end
 
-		-- local actualX, actualY, collisions, length = paddle:moveWithCollisions(paddle.x + dx, paddle.y + dy)
-		-- for i = 1, length do
-		-- 	local collision = collisions[i]
-		-- 	if collision.other.isEnemy == true then	-- crashed into enemy plane
-		-- 		hitBrick(collision.other)
-		-- 		collision.other:remove()
-		-- 		score -= 1
-		-- 	end
-		-- end
+		self:moveBy(dx, dy)
+
+		-- Move any balls that are stuck to the paddle
+		for i,ball in ipairs(balls) do
+			if ball.isAlive then
+				if (ball.isStuck) then
+					ball:moveBy(dx,0)
+				end
+			end
+		end
 
 	end
 
@@ -142,7 +144,7 @@ function playerFire()
 
 	function s:update()
 
-		-- Move upwards at 20 pixel per frame
+		-- Move upwards at 10 pixel per frame
 		local newY = s.y - 10
 		local didCollisionHappen = false
 

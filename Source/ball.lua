@@ -10,7 +10,7 @@ function createBall(x, y, dx_in, dy_in)
 	ball.dx, ball.dy = dx_in, dy_in
 
 	ball:setTag(SpriteTypes.BALL)
-	
+
 	ball:setCollideRect(0, 0, w, h)
 	ball:moveTo(x, y)
 	ball:add()
@@ -22,12 +22,18 @@ function createBall(x, y, dx_in, dy_in)
 
 	ball.spriteType = SpriteTypes.BALL
 
+	ball.isStuck = false
+
 
 	function ball:collisionResponse(other)
 		local collisionType = playdate.graphics.sprite.kCollisionTypeOverlap
 
+		-- Handle paddle collisions manually so this returns overlap which makes
+		-- The ball pass through the paddle but still records the collision
+		-- In the future we could use groups, or make all paddle collisions
+		-- Manual so this doesn't need to be calculated
 		if other.spriteType == SpriteTypes.PADDLE then
-			collisionType = gfx.sprite.kCollisionTypeBounce
+			collisionType = gfx.sprite.kCollisionTypeOverlap
 		end
 
 		if other.spriteType == SpriteTypes.BRICK then
@@ -58,8 +64,6 @@ function createBall(x, y, dx_in, dy_in)
 
 		if activeBalls < 1 then
 			lives = lives - 1
-			paddle.isSticky = false
-			paddle.isStuck = true
 			gameSpeedReset()
 			resetMainBall()
 		end
@@ -67,7 +71,8 @@ function createBall(x, y, dx_in, dy_in)
 
 
 	function ball:update()
-		-- Bounce of edges of screen
+		-----------------------------
+		-- Bounce off edges of screen
 		--
 		-- Right
 		if (ball.x + ball.width/2 >= SCREEN_WIDTH) then
@@ -88,33 +93,25 @@ function createBall(x, y, dx_in, dy_in)
 		if (ball.y >= SCREEN_HEIGHT + 40) then
 			self:die()
 		end
+		------------------------------
 
- 		-- self:moveBy(dx, dy)
+		-----------------------
+		-- BOUNCE off of paddle
+		--
 
-		local verticalMoveSpeed = ball.dy * (1+( (gameSpeed-1) / 2))
-		-- print(verticalMoveSpeed)
+		local paddleX, paddleY, paddleWidth, paddleHeight = paddle:getBounds()
 
-		if (paddle.isStuck) then
-			return
-		end
 
-		local actualX, actualY, collisions, length = ball:moveWithCollisions(ball.x + ball.dx, ball.y + verticalMoveSpeed)
-		for i = 1, length do
-			local collision = collisions[i]
+		-- Manually detect a collision based on height and x position between paddle bounds
+		-- we add a 1px shift because it looks better
+		if (ball.dx ~= 0 and ball.y  > TOP_OF_PADDLE_Y - 1 and ball.y < TOP_OF_PADDLE_Y + ball.dy + 1) then
 
-			if (collision.other.spriteType == SpriteTypes.BRICK) then
-				-- This isn't the perfect collision detection
-				-- with understanding walls, etc, but it's simple for now
-				local n = collision.normal
+			if (ball.x >= paddleX and ball.x <= (paddleX + paddleWidth)) then
+				ball.dy = -(math.abs(ball.dy) )
+				ball.y = TOP_OF_PADDLE_Y - 1
+			
 
-				if n.x ~= 0.0 then ball.dx = -ball.dx end
-				if n.y ~= 0.0 then ball.dy = -ball.dy end
-
-				hitBrick(collision.other)
-			end
-
-			if (collision.other.spriteType == SpriteTypes.PADDLE) then
-				local whereOnPaddle = ( (ball.x - collision.otherRect.x) / collision.other.width)
+				local whereOnPaddle = ( (ball.x - paddleX) / paddleWidth )
 				-- whereOnPaddle is between 0 and 1 which is a percent of the position on the paddle
 				-- where 0 is fully to the left, and 1.0 is fully to the right. It can be less than 0
 				-- or more than 1 if it hits the far edge.
@@ -129,25 +126,96 @@ function createBall(x, y, dx_in, dy_in)
 				-- else   						     dx = 8
 				-- end
 
-				-- print("where: " .. whereOnPaddle)
-
 				ball.dx = (whereOnPaddle - 0.5) * 16
 
-				if (ball.dx > 0) 
-					then ball.dx = math.floor(ball.dx)
-					else ball.dx = math.ceil(ball.dx)
+				-- Round floats up or down based on sign
+				if (ball.dx > 0)
+					then 
+						ball.dx = math.floor(ball.dx)
+					else 
+						ball.dx = math.ceil(ball.dx)
 				end
-				
+
+				-- add slight angle to the ball if it is going perfectly up and down
 				if (ball.dx == 0) then ball.dx = 0.5 end
 
-				if (paddle.isSticky) then
+				if (paddle.isSticky and (ball.y >= TOP_OF_PADDLE_Y - 5) ) then
 					ball.dy = 0
 					ball:moveTo(ball.x, TOP_OF_PADDLE_Y)
-					paddle.isStuck = true
+					ball.isStuck = true
 				else
-					ball.dy = -math.abs(ball.dy)
+					-- ball.dy = -math.abs(ball.dy)
 				end
+
 			end
+
+		end
+
+
+
+
+		-----------------------
+
+ 		-- self:moveBy(dx, dy)
+
+		local verticalMoveSpeed = ball.dy * (1+( (gameSpeed-1) / 2))
+		-- print(verticalMoveSpeed)
+
+		-- If we are stuck, no point in checking for collisions
+		if (ball.isStuck) then
+			return
+		end
+
+		local actualX, actualY, collisions, length = ball:moveWithCollisions(ball.x + ball.dx, ball.y + verticalMoveSpeed)
+		for i = 1, length do
+			local collision = collisions[i]
+
+			if (collision.other.spriteType == SpriteTypes.BRICK) then
+				-- This isn't the perfect collision detection
+				-- with understanding walls of bricks as flat, for example, but it's simple for now
+				local n = collision.normal
+
+				if n.x ~= 0.0 then ball.dx = -ball.dx end
+				if n.y ~= 0.0 then ball.dy = -ball.dy end
+
+				hitBrick(collision.other)
+			end
+
+			-- if (collision.other.spriteType == SpriteTypes.PADDLE) then
+				-- local whereOnPaddle = ( (ball.x - collision.otherRect.x) / collision.other.width)
+				-- whereOnPaddle is between 0 and 1 which is a percent of the position on the paddle
+				-- where 0 is fully to the left, and 1.0 is fully to the right. It can be less than 0
+				-- or more than 1 if it hits the far edge.
+				-- print (whereOnPaddle)
+				--      .2 .4 .5 .6 .8
+				--      |  |  |  |  |
+				--    <===============>
+				-- if     whereOnPaddle < 0.2 	then dx = -8
+				-- elseif whereOnPaddle < 0.4  then dx = -4
+				-- elseif whereOnPaddle < 0.6  then dx = 2
+				-- elseif whereOnPaddle < 0.8  then dx = 4
+				-- else   						     dx = 8
+				-- end
+
+				-- print("where: (" .. whereOnPaddle .. "," .. whereOnPaddle2 .. ")")
+
+				-- ball.dx = (whereOnPaddle - 0.5) * 16
+
+				-- if (ball.dx > 0) 
+				-- 	then ball.dx = math.floor(ball.dx)
+				-- 	else ball.dx = math.ceil(ball.dx)
+				-- end
+
+				-- if (ball.dx == 0) then ball.dx = 0.5 end
+
+				-- if (paddle.isSticky) then
+				-- 	ball.dy = 0
+				-- 	ball:moveTo(ball.x, TOP_OF_PADDLE_Y)
+				-- 	paddle.isStuck = true
+				-- else
+				-- 	-- ball.dy = -math.abs(ball.dy)
+				-- end
+			-- end
 		end
 		-- print(ball.dx .. ', ' .. ball.dy)
 	end
@@ -184,8 +252,6 @@ function createBalls()
 	balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 	activeBalls = 1
 
-	resetMainBall()
-
 	function balls:moveBy(dx,dy)
 		for i,v in ipairs(balls) do
 			if v.isAlive then
@@ -197,10 +263,10 @@ function createBalls()
 	function balls:highestBallIndex()
 		local highestBallIndex = 1
 		for i=2,MAX_NUMBER_OF_BALLS do
-			if 
+			if
 				(balls[highestBallIndex].isAlive == false)
-				or 
-				(balls[i].isAlive and balls[i].y > balls[highestBallIndex].y) 
+				or
+				(balls[i].isAlive and balls[i].y > balls[highestBallIndex].y)
 			then
 				highestBallIndex = i
 			end
@@ -223,17 +289,12 @@ function createBalls()
 
 		for i,ball in ipairs(balls) do
 			if ball.isAlive then
-				if (paddle.isStuck) then
-					paddle.isStuck = false
+				if (ball.isStuck) then
+					ball.isStuck = false
 					ball.dy = -BALL_ORIGINAL_DY
 					if (ball.dx == 0) then ball.dx = 2 end
+					ball:moveBy(0, -2) --if you don't move out a bit it gets stuck with collision again
 				end
-		
-				if (paddle.isSticky) then
-					ball.dy = -BALL_ORIGINAL_DY
-				end
-		
-				ball:moveBy(0, -2) --if you don't move out a bit it gets stuck with collision again
 			end
 		end
 
@@ -252,6 +313,7 @@ function resetMainBall()
 	balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 	balls[1].dx = 2
 	activeBalls = 1
+	balls[1].isStuck = true
 	end
 end
 
