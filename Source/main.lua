@@ -135,11 +135,6 @@ local function drawSidePanel()
 	-- Draw Speed Gauge
 	local x1 = PANEL_START + 10
 	local y1 = 32 + linespacing * 4 + 5
-	
-	-- -- outer rectangle
-	-- gfx.setLineWidth(1)
-	-- gfx.drawRect(x1, y1 - 1, 30, 5*5 - 2)
-	-- -- bars
 
 	for i=1,5 do
 		if (gameSpeed >= i) then
@@ -303,6 +298,7 @@ function restartGame()
 	bullets = {}
 end
 
+-- The main loop
 function playdate.update()
 
 	if (lives < 0) then

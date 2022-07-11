@@ -1,7 +1,16 @@
+-- -----------------------------------------------------
+-- This is where we store the data for all levels
+-- -----------------------------------------------------
+-- FORMAT:
+-- There are 6 kinds of bricks from 1 - 6
+-- Use "-" to denote a metal (unbreakable) brick
+-- 0 (zero) represents empty space
+-- -----------------------------------------------------
+-- Currently we can't specify where pills are stored
+-- It's just random. Might want to change that
 
 
-
--- Store Data for All Levels Here
+-- Store Data for All Levels in levels object
 levels = {}
 
 -- Level 1

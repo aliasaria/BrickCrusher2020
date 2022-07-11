@@ -1,27 +1,29 @@
-== TODO ==
+## TODO
 
+
+- Home Screen
+- Create first 5 Levels and screens between them
+- Create 25 levels
+- Better end game
+- Say something on death
+
+---
+
+- Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
 
 - Powerups:
     - Bomb
     - Laser (can go through metal?)
     - Something else?
 
-- Create 5 Levels and screens between them
-- Create 25 levels
-- Better end game
-- Right now we have an issue that if you shoot, and then restart level, the gun shots keep propagating
-- Say something on death
-
-- Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
-
-== Bugs ==
+## Bugs
 - was able to get a ball to bounce side to side and never come down
+- Right now we have an issue that if you shoot, and then restart level, the gun shots keep propagating
 
 
 
 
-
-== Consider / Ideas ==
+## Consider / Ideas
 - Should we make each pill say what it does?
 - Comment code
 - Level file format?
@@ -32,11 +34,13 @@ https://devforum.play.date/t/90-rotatable-text/3325/4
 - Manually calculating pill collisions will allow us to remove collisions with paddle completely, saving computation
 - Double paddle mode -- paddle turns into two paddles
 - Bricks should come down as time passes (but only go so far)
+- Specify where pills are stored
+- Animate paddle's movement, even though it can move by large #'s, just to make it smoother? Or will this create lag?
 
 
+------------
 
-
-== FIXED ==
+## FIXED
 
 ✅- Remove life if ball falls too low
 ✅- Start with ball stuck to paddle and button press to release
