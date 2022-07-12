@@ -1,4 +1,8 @@
-
+-- ------------------------------
+-- ------------------------------
+-- Imports
+-- ------------------------------
+-- ------------------------------
 import 'CoreLibs/graphics'
 import 'CoreLibs/sprites'
 -- import 'CoreLibs/animation'
@@ -21,14 +25,32 @@ math.randomseed(ms,s)
 local font = gfx.font.new('images/font/blocky')
 local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
+-- ------------------------------
+-- ------------------------------
+-- Constants
+-- ------------------------------
+-- ------------------------------
 SCREEN_WIDTH = 310
 SCREEN_HEIGHT = playdate.display.getHeight()
 
--- Constants
 BALL_ORIGINAL_DY = 2
 TOP_OF_PADDLE_Y = 225
 
 MAX_NUMBER_OF_BALLS = 4
+
+SpriteTypes = {
+	PADDLE = 1,
+	BALL = 2,
+	BRICK = 3,
+	VIOLET = 4,
+	YELLOW = 5,
+ }
+
+-- ------------------------------
+-- ------------------------------
+-- Globals
+-- ------------------------------
+-- ------------------------------
 
 -- Important global objects that are sprites
 paddle = nil
@@ -60,15 +82,12 @@ timeWhenLastBulletWasShot = -99999
 -- to draw the current power up name until the fade timer runs
 powerUpMessageFadeTimer = 0
 
-SpriteTypes = {
-	PADDLE = 1,
-	BALL = 2,
-	BRICK = 3,
-	VIOLET = 4,
-	YELLOW = 5,
- }
 
+-- ------------------------------
+-- ------------------------------
 -- Side Panel
+-- ------------------------------
+-- ------------------------------
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 PANEL_START = SCREEN_WIDTH
@@ -202,32 +221,7 @@ function gameSpeedReset()
 end
 
 
--- local function createExplosion(x, y)
-
--- 	local s = gfx.sprite.new()
--- 	s.frame = 1
--- 	local img = gfx.image.new('images/explosion/'..s.frame)
--- 	s:setImage(img)
--- 	s:moveTo(x, y)
-
--- 	function s:update()
--- 		s.frame += 1
--- 		if s.frame > 11 then
--- 			s:remove()
--- 		else
--- 			local img = gfx.image.new('images/explosion/'..s.frame)
--- 			s:setImage(img)
--- 		end
--- 	end
-
--- 	s:setZIndex(2000)
--- 	s:add()
-
--- end
-
-
 local function initializeLevel( n )
-
 	for i,v in ipairs(bricks) do
 		v:remove()
 	end
@@ -250,16 +244,6 @@ local function createBricksIfNeeded()
 		initializeLevel(currentLevel)
 	end
 end
-
--- function playdate.cranked(change, acceleratedChange)
-
--- 	if change > 1 then
--- 		maxEnemies += 1
--- 	elseif change < -1 then
--- 		maxEnemies -= 1
--- 	end
-
--- end
 
 function restartGame()
 	score = 0

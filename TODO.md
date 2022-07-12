@@ -1,6 +1,6 @@
 ## TODO
 
-
+### HIGH
 - Home Screen
 - Create first 5 Levels and screens between them
 - Create 25 levels
@@ -9,7 +9,14 @@
 
 ---
 
+### Medium
+- Use timers for places where we are currently capturing the time (I didn't know they existed https://sdk.play.date/1.12.1/Inside%20Playdate.html#C-timer)
 - Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
+- Use total bounces to calculate speed, instead of time elapsed
+
+---
+
+### Low
 
 - Powerups:
     - Bomb
@@ -17,6 +24,7 @@
     - Something else?
 
 ## Bugs
+- Ball can go through the very right side of the paddle if it is right at the edge
 - was able to get a ball to bounce side to side and never come down
 - Right now we have an issue that if you shoot, and then restart level, the gun shots keep propagating
 

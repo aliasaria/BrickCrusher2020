@@ -1,4 +1,7 @@
-# BrickCrusher2020
+# BrickCrusher2020 for Playdate
+
+![This is an image](Source/images/launcher/card.png)
+
 
 ## Development
 
