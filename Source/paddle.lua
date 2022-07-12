@@ -1,4 +1,4 @@
-local gfx = playdate.graphics
+local gfx <const> = playdate.graphics
 
 function createPaddle(x, y)
 	local paddle = gfx.sprite.new()

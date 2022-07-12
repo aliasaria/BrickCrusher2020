@@ -1,5 +1,5 @@
 
-local gfx = playdate.graphics
+local gfx <const> = playdate.graphics
 
 local brickImages = {}
 for i = 1, 6 do
@@ -58,6 +58,7 @@ function hitBrick(brick)
 
 	if brick.brickType < 1 then
 		brick:remove()
+		brickCount -= 1
 	end
 
 
@@ -80,6 +81,7 @@ function shootBrick(brick)
 
     if brick.brickType < 1 then
 		brick:remove()
+		brickCount -= 1
 	end
 end
 
@@ -92,6 +94,7 @@ function createBrick(x, y, brickType)
 
 	if (type(brickType) == "number") then
 		brickImg = brickImages[brickType]
+		brickCount += 1
 	else
 		brickImg = gfx.image.new('images/brick/brick-metal')
 	end

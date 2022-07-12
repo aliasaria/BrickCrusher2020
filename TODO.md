@@ -6,6 +6,7 @@
 - Create 25 levels
 - Better end game
 - Say something on death
+- You should not be able to sit sticky and shoot as much as you want. Either have a shoot timer, or prevent guns + sticky or something...
 
 ---
 

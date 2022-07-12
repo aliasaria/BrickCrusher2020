@@ -1,5 +1,5 @@
 
-local gfx = playdate.graphics
+local gfx <const> = playdate.graphics
 
 function createPill(x, y)
 

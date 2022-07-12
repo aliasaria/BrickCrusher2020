@@ -1,5 +1,5 @@
 
-local gfx = playdate.graphics
+local gfx <const> = playdate.graphics
 
 function createBall(x, y, dx_in, dy_in)
 	local ball = gfx.sprite.new()
@@ -64,6 +64,11 @@ function createBall(x, y, dx_in, dy_in)
 
 		if activeBalls < 1 then
 			lives = lives - 1
+
+			if lives < 0 then
+				currentGameState = GAME_STATES.GAMEOVER
+			end
+
 			gameSpeedReset()
 			resetMainBall()
 		end

@@ -15,7 +15,7 @@ import 'pill.lua'
 import 'levels.lua'
 import 'bricks.lua'
 
-local gfx = playdate.graphics
+local gfx <const> = playdate.graphics
 
 -- playdate.inputHandlers.push(playdate.input)
 
@@ -41,9 +41,19 @@ MAX_NUMBER_OF_BALLS = 4
 SpriteTypes = {
 	PADDLE = 1,
 	BALL = 2,
-	BRICK = 3,
-	VIOLET = 4,
-	YELLOW = 5,
+	BRICK = 3
+ }
+
+ -- The game goes through these states in order
+ -- the current state is stored in currentGameState
+ GAME_STATES = {
+	GAMEOVER		= 0,
+	HOMESCREEN 		= 1,
+	LEVEL1 			= 2,
+	LEVEL2_CUTSCENE = 3,
+	LEVEL2 			= 4,
+	LEVEL3_CUTSCENE = 5,
+	LEVEL3 			= 6
  }
 
 -- ------------------------------
@@ -63,9 +73,13 @@ balls = {}
 
 -- Important global states and variables
 score = 0
-currentLevel = 3
+currentLevel = 1
+currentGameState = GAME_STATES.HOMESCREEN 
 currentPowerUP = "NONE"
 lives = 3
+
+brickCount = 0  -- total number of bricks on the screen
+
 -- Game goes faster and faster as time passes, but is limited
 gameSpeed = 1
 gameStartTime = 1  -- we do not use playdate.resetElapsedTime() for whatever reason
@@ -161,7 +175,7 @@ local function drawSidePanel()
 		end
 	end
 
-
+	gfx.drawText('BRICKS: '.. brickCount, PANEL_START + 10, 32 + linespacing * 7)
 
 	local now = playdate.getCurrentTimeMilliseconds()
 	-- gfx.setFont(minimonofont)
@@ -182,14 +196,6 @@ local function drawSidePanel()
 		powerUpMessageFadeTimer = powerUpMessageFadeTimer - 1
 	end
 
-
-	if (lives < 0) then
-		gfx.setFont(minimonofont)
-		gfx.setColor(playdate.graphics.kColorWhite)
-		gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
-		gfx.setColor(playdate.graphics.kColorBlack)
-		gfx.drawText("GAME OVER!", 90, SCREEN_HEIGHT / 2 - 30)
-	end
 end
 
 local function gameSpeedSpeedUpIfNeeded()
@@ -221,6 +227,8 @@ local function initializeLevel( n )
 		v:remove()
 	end
 
+	brickCount = 0
+
 	for col, v in ipairs(levels[n]) do
 		for row, brickVal in ipairs(v) do
 			-- print(i2, v2)
@@ -244,6 +252,7 @@ function restartGame()
 	score = 0
 	currentLevel = 1
 	currentPowerUP = "NONE"
+	currentGameState = GAME_STATES.HOMESCREEN
 	lives = 3
 	if (paddle ~= nil) then
 		paddle:remove()
@@ -277,6 +286,35 @@ function restartGame()
 	bullets = {}
 end
 
+
+local function displayHomeScreen()
+	gfx.setFont(minimonofont)
+	gfx.setColor(playdate.graphics.kColorWhite)
+	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
+	gfx.setColor(playdate.graphics.kColorBlack)
+	gfx.drawText("HOME SCREEN!", 90, SCREEN_HEIGHT / 2 - 30)
+
+	if playdate.buttonJustPressed("B") then
+		currentGameState = GAME_STATES.LEVEL1
+	end
+
+	drawSidePanel()
+end
+
+local function displayGameOverScreen()
+	gfx.setFont(minimonofont)
+	gfx.setColor(playdate.graphics.kColorWhite)
+	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
+	gfx.setColor(playdate.graphics.kColorBlack)
+	gfx.drawText("GAMEOVER!", 90, SCREEN_HEIGHT / 2 - 30)
+
+	if playdate.buttonJustPressed("B") then
+		restartGame()
+	end
+
+	drawSidePanel()
+end
+
 -- ------------------------------
 -- ------------------------------
 -- The main loop
@@ -284,46 +322,58 @@ end
 -- ------------------------------
 function playdate.update()
 
-	if (lives < 0) then
+	-- If we are in an active level then do the following
+	if (currentGameState == GAME_STATES.LEVEL1 or currentGameState == GAME_STATES.LEVEL2 or currentGameState == GAME_STATES.LEVEL3) then
+		-- Shoot bullets if you have the Gun
+		if playdate.buttonJustPressed("A") then
+			-- Don't shoot if you have a ball stuck to you right now ( @TODO )
+			if (paddle.hasGun) then
+
+				local now = playdate.getCurrentTimeMilliseconds()
+
+				local delay = (now - timeWhenLastBulletWasShot)
+
+				if (bulletsOnScreenCount > 1 or delay < 350) then
+					-- do nothing if there are too many bullets on the screen
+				else
+					local b = playerFire()
+				end
+
+				-- Add this bullet to the global list of bullets
+				-- WE don't know how to manage this table and remove so leave out for now ... @TODO table.insert(bullets, b)
+				
+			end
+		end
+
+		if playdate.buttonJustPressed("B") then
+			balls:shootBalls()
+		end
+
+		createBricksIfNeeded()
+
+		gfx.sprite.update()
+		
 		drawSidePanel()
+	
+		gameSpeedSpeedUpIfNeeded()
+
 		return
 	end
 
-	-- Shoot bullets if you have the Gun
-	if playdate.buttonJustPressed("A") then
-		-- Don't shoot if you have a ball stuck to you right now ( @TODO )
-		if (paddle.hasGun) then
-
-			local now = playdate.getCurrentTimeMilliseconds()
-
-			local delay = (now - timeWhenLastBulletWasShot)
-
-			if (bulletsOnScreenCount > 1 or delay < 350) then
-				return
-			end
-
-			local b = playerFire()
-
-			-- Add this bullet to the global list of bullets
-			-- WE don't know how to manage this table and remove so leave out for now ... @TODO table.insert(bullets, b)
-			
-		end
+	-- otherwise we are in a cutscene
+	if (currentGameState == GAME_STATES.GAMEOVER) then
+		displayGameOverScreen()
+		return
 	end
 
-	if playdate.buttonJustPressed("B") then
-		-- playerFire()
-		balls:shootBalls()
+	if (currentGameState == GAME_STATES.HOMESCREEN) then
+		displayHomeScreen()
+		return
 	end
-
-	createBricksIfNeeded()
-
-	gfx.sprite.update()
-	
-	drawSidePanel()
-
-	gameSpeedSpeedUpIfNeeded()
 end
 
+-- Remove in production -- this hack let's us fake getting a pill
+-- for testing
 function playdate.keyPressed(key)
 	if (key == "q") then
 		powerUp("MLTI")
