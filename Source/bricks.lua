@@ -26,6 +26,7 @@ function hitBrick(brick)
 	-- If the type is not a number, this is a metal brick
 	if (type(brick.brickType) ~= "number") then
         -- thudSound:play()
+		if (DEBUG) then brick.brickType = 1 end
 		return
 	end
 	
@@ -56,10 +57,7 @@ function hitBrick(brick)
 
 	brick:setImage(brickImages[brick.brickType])
 
-	if brick.brickType < 1 then
-		brick:remove()
-		brickCount -= 1
-	end
+	killBrickIfDead(brick)
 
 
 	if math.random(6) == 1 then
@@ -79,9 +77,17 @@ function shootBrick(brick)
 	score = score + 1
     brick:setImage(brickImages[brick.brickType])
 
-    if brick.brickType < 1 then
+	killBrickIfDead(brick)
+end
+
+function killBrickIfDead(brick)
+	if brick.brickType < 1 then
 		brick:remove()
 		brickCount -= 1
+
+		if brickCount == 0 then
+			nextLevel()
+		end
 	end
 end
 
@@ -89,6 +95,10 @@ end
 function createBrick(x, y, brickType)
 
 	local brick = gfx.sprite.new()
+
+	-- Store where in the bricks table this is
+	brick.row = x
+	brick.column = y
 
 	local brickImg
 

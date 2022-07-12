@@ -95,8 +95,12 @@ function createBall(x, y, dx_in, dy_in)
 			ball.y = 0 + ball.width/2
 		end
 		-- Bottom
-		if (ball.y >= SCREEN_HEIGHT + 40) then
-			self:die()
+		if (ball.y >= SCREEN_HEIGHT + 10) then
+			if (DEBUG) then
+				ball.dy = -(math.abs(ball.dy) )
+			else
+				self:die()
+			end
 		end
 		------------------------------
 
@@ -107,9 +111,10 @@ function createBall(x, y, dx_in, dy_in)
 		local paddleX, paddleY, paddleWidth, paddleHeight = paddle:getBounds()
 
 
-		-- Manually detect a collision based on height and x position between paddle bounds
-		-- we add a 1px shift because it looks better
-		if (ball.dx ~= 0 and ball.y  > TOP_OF_PADDLE_Y - 1 and ball.y < TOP_OF_PADDLE_Y + ball.dy + 1) then
+		-- Manually detect a collision with paddle based on height and x position between paddle bounds
+		-- we add a 1px shift on top because it looks better
+		-- we add 5px on the bottom otherwise fast balls go through the paddle
+		if (ball.dx ~= 0 and ball.y  > TOP_OF_PADDLE_Y - 1 and ball.y < TOP_OF_PADDLE_Y + ball.dy + 5) then
 
 			if (ball.x >= paddleX and ball.x <= (paddleX + paddleWidth)) then
 				ball.dy = -(math.abs(ball.dy) )

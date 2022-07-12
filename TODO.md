@@ -1,8 +1,11 @@
 ## TODO
 
 ### HIGH
-- Home Screen
-- Create first 5 Levels and screens between them
+
+- Real Home Screen
+- Way less bricks in lower levels -- too hard
+- Create first 5 Levels and screenfs between them
+- When you finish a level the balls don't reset (they are just floating where they were before)
 - Create 25 levels
 - Better end game
 - Say something on death
@@ -23,6 +26,7 @@
     - Bomb
     - Laser (can go through metal?)
     - Something else?
+    - Backup wall that breaks after it is hit but can save you one time
 
 ## Bugs
 - Ball can go through the very right side of the paddle if it is right at the edge
@@ -67,14 +71,17 @@ https://devforum.play.date/t/90-rotatable-text/3325/4
 ✅- Sticky doesn't work with multiball, and sometimes gets stuck on edge -- just turned it off blah
 ✅- Speed up timer happens right away, but shoudl start when you first shoot the ball
 ✅- Gun bullet sprite is ugly
-- Different name
-- Home Splash Screen
-- Remove ball and replace entirely with multiball array
-- Show speed somehow in a guage
-- Test speed up timer at highest speeds. Is it too fast? no it's ok
-- When there are multiple balls shown on the screen, and you shoot, they all shoot upwards, even if not on the paddle
-- was able to grab sticky on multi and some balls stuck in the middle of the sky
+✅- Different name
+✅- Home Splash Screen
+✅- Remove ball and replace entirely with multiball array
+✅- Show speed somehow in a guage
+✅- Test speed up timer at highest speeds. Is it too fast? no it's ok
+✅- When there are multiple balls shown on the screen, and you shoot, they all shoot upwards, even if not on the paddle
+✅- was able to grab sticky on multi and some balls stuck in the middle of the sky
     - Need to remove concept of "isStuck" to paddle and move it to the ball
-- balls once stuck don't move with paddle
-- Sticky -- if you keep moving to edge it goes off teh edge and weird stuff happens
-- Change collision on paddle to manual -- just look at y of ball and if it collided
+✅- balls once stuck don't move with paddle
+✅- Sticky -- if you keep moving to edge it goes off teh edge and weird stuff happens
+✅- Change collision on paddle to manual -- just look at y of ball and if it collided
+✅- Fake Homescreen
+✅- Fake custscenes
+✅- At top speed, the ball sometimes goes through the paddle

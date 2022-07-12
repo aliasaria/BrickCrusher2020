@@ -14,6 +14,7 @@ import 'ball.lua'
 import 'pill.lua'
 import 'levels.lua'
 import 'bricks.lua'
+import 'screens.lua'
 
 local gfx <const> = playdate.graphics
 
@@ -22,7 +23,6 @@ local gfx <const> = playdate.graphics
 local s, ms = playdate.getSecondsSinceEpoch()
 math.randomseed(ms,s)
 
-local font = gfx.font.new('images/font/blocky')
 local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
 -- ------------------------------
@@ -53,8 +53,17 @@ SpriteTypes = {
 	LEVEL2_CUTSCENE = 3,
 	LEVEL2 			= 4,
 	LEVEL3_CUTSCENE = 5,
-	LEVEL3 			= 6
+	LEVEL3 			= 6,
+	LEVEL4_CUTSCENE = 7,
+	LEVEL4 			= 8,
+	LEVEL5_CUTSCENE = 9,
+	LEVEL5 			= 10,
+	THEEND			= 11
  }
+
+ -- If this is true, the ball will never die, it will just bounce back
+ -- Only use this for debugging / testing
+ DEBUG = false
 
 -- ------------------------------
 -- ------------------------------
@@ -96,107 +105,20 @@ timeWhenLastBulletWasShot = -99999
 -- to draw the current power up name until the fade timer runs
 powerUpMessageFadeTimer = 0
 
+-- This is true at the start of a level, before the level is loaded
+local levelNeedsInitialization = true
 
 -- ------------------------------
 -- ------------------------------
 -- Side Panel
 -- ------------------------------
 -- ------------------------------
-local heartImgFilled = gfx.image.new('images/heartFilled.png')
-local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
+
 PANEL_START = SCREEN_WIDTH
 
 holdComboPositionX = nil
 holdComboPositionY = nil
-local function drawSidePanel()
-	gfx.setFont(font)
 
-	-- Draw Border
-	gfx.setLineWidth(3)
-	gfx.drawLine(PANEL_START, 0, PANEL_START, SCREEN_HEIGHT)
-
-	-- Draw line where the paddle is
-	-- gfx.setLineWidth(1)
-	-- gfx.drawLine(0, TOP_OF_PADDLE_Y, PANEL_START, TOP_OF_PADDLE_Y)
-
-	-- Draw collision boundaries manually for testing
-	-- local x, y, width, height = paddle:getBounds()
-
-	-- gfx.setLineWidth(1)
-	-- gfx.drawLine(0, TOP_OF_PADDLE_Y, 300, TOP_OF_PADDLE_Y)
-	-- gfx.drawLine(0, 10, 300, 10)
-	-- gfx.drawLine(x, 0, x, SCREEN_HEIGHT)
-
-	-- Draw Life Hearts
-	local pad = heartImgFilled.width + 1
-	local paddingTop = 6
-	local paddingLeft = 10
-	local linespacing = 16
-
-	for i=0,3 do
-		if (lives > i) then
-			heartImgFilled:draw(PANEL_START + paddingLeft + pad*i,paddingTop)
-		else
-			heartImgEmpty:draw(PANEL_START + paddingLeft + pad*i,paddingTop)
-		end
-	end
-
-	gfx.drawText('LEVEL: '..currentLevel, PANEL_START + 10, 32)
-
-	gfx.drawText('SCORE: '..score, PANEL_START + 10, 32 + linespacing)
-
-	gfx.drawText('BEST', PANEL_START + 10, 32 + linespacing * 2)
-	gfx.drawText('COMBO: ' .. longestCombo, PANEL_START + 10, 32 + linespacing * 2 + 10)
-
-	-- gfx.drawText('POW: '..currentPowerUP, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 2)
-	-- gfx.drawText('ACT: '..activeBalls, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 2)
-
-	-- gfx.drawText('LIVES: '..lives, PANEL_START + 10, 32 + linespacing * 2 + 10 + linespacing * 3)
-
-	-- gfx.drawText('SPRITES: '..#gfx.sprite.getAllSprites(), PANEL_START + 10, 150+2)
-	-- playdate.drawFPS(PANEL_START + 10, 170+2)
-
-	-- gfx.drawText('BUL ON S: ' .. bulletsOnScreenCount, PANEL_START + 10, 32 + linespacing * 2 + 10  + linespacing * 2)
-	gfx.drawText('SPEED: ', PANEL_START + 10, 32 + linespacing * 3 + 10)
-
-
-	-- Draw Speed Gauge
-	local x1 = PANEL_START + 10
-	local y1 = 32 + linespacing * 4 + 5
-
-	for i=1,5 do
-		if (gameSpeed >= i) then
-			gfx.setLineWidth(1)
-			-- gfx.drawLine(x1, y1 + (5*5) - (i*5) , x1 + 10 + i*5, y1 + (5*5) - (i*5) )
-			gfx.fillRect(x1, y1 + (5*5) - (i*4) - 1, 10 + i*4, 5)
-		else
-			gfx.setLineWidth(1)
-			gfx.drawRect(x1, y1 + (5*5) - (i*4) - 1, 10 + i*4, 5)
-		end
-	end
-
-	gfx.drawText('BRICKS: '.. brickCount, PANEL_START + 10, 32 + linespacing * 7)
-
-	local now = playdate.getCurrentTimeMilliseconds()
-	-- gfx.setFont(minimonofont)
-
-	-- if (now - lastHitTime) > 250 and (comboCounter > 1) then
-	-- 	holdComboPositionX = comboPositionX
-	-- 	holdComboPositionY = comboPositionY
-	-- 	-- print(comboCounter)
-	-- 	gfx.drawText(comboCounter .. ' COMBO!', comboPositionX, comboPositionY)
-	-- end
-
-	if (lastComboPositionX ~= 0 and (now - lastComboTime) < 750) then
-		gfx.drawText(lastComboSize .. ' COMBO!', lastComboPositionX, lastComboPositionY)
-	end
-
-	if (powerUpMessageFadeTimer > 0) then
-		gfx.drawText(currentPowerUP, paddle.x - 4, paddle.y-25)
-		powerUpMessageFadeTimer = powerUpMessageFadeTimer - 1
-	end
-
-end
 
 local function gameSpeedSpeedUpIfNeeded()
 
@@ -205,7 +127,7 @@ local function gameSpeedSpeedUpIfNeeded()
 	end
 
 	-- Don't let the game go faster than the max speed of 5
-	if (gameSpeed > 5) then
+	if (gameSpeed >= 5) then
 		gameSpeed = 5
 	else
 		gameSpeed = math.ceil(gameStartTime / 750)
@@ -217,6 +139,11 @@ end
 
 function gameSpeedReset()
 	gameSpeed = 1
+
+	if (DEBUG) then
+		gameSpeed = 5
+	end
+
 	gameStartTime = 1
 	playerHasBegunPlaying = false
 end
@@ -224,7 +151,9 @@ end
 
 local function initializeLevel( n )
 	for i,v in ipairs(bricks) do
-		v:remove()
+		if v ~= nil then
+			v:remove()
+		end
 	end
 
 	brickCount = 0
@@ -240,10 +169,9 @@ local function initializeLevel( n )
 	end
 end
 
-local levelStart = true
 local function createBricksIfNeeded()
-	if (levelStart == true) then
-		levelStart = false
+	if (levelNeedsInitialization == true) then
+		levelNeedsInitialization = false
 		initializeLevel(currentLevel)
 	end
 end
@@ -267,7 +195,7 @@ function restartGame()
 	balls = createBalls()
 	resetMainBall()
 
-	levelStart = true
+	levelNeedsInitialization = true
 
 	-- delete all floating pills
 	for i,v in ipairs(pills) do
@@ -286,33 +214,21 @@ function restartGame()
 	bullets = {}
 end
 
+-- Call this function to advance to the next level
+function nextLevel()
+	currentLevel += 1
+	levelNeedsInitialization = true
 
-local function displayHomeScreen()
-	gfx.setFont(minimonofont)
-	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("HOME SCREEN!", 90, SCREEN_HEIGHT / 2 - 30)
-
-	if playdate.buttonJustPressed("B") then
-		currentGameState = GAME_STATES.LEVEL1
+	if (currentGameState == GAME_STATES.LEVEL1 
+		or currentGameState == GAME_STATES.LEVEL2 
+		or currentGameState == GAME_STATES.LEVEL3
+		or currentGameState == GAME_STATES.LEVEL4
+	   ) then
+		currentGameState += 1
+	elseif currentGameState == GAME_STATES.LEVEL5 then
+		currentGameState = GAME_STATES.THEEND
+		currentLevel = 5
 	end
-
-	drawSidePanel()
-end
-
-local function displayGameOverScreen()
-	gfx.setFont(minimonofont)
-	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("GAMEOVER!", 90, SCREEN_HEIGHT / 2 - 30)
-
-	if playdate.buttonJustPressed("B") then
-		restartGame()
-	end
-
-	drawSidePanel()
 end
 
 -- ------------------------------
@@ -323,7 +239,13 @@ end
 function playdate.update()
 
 	-- If we are in an active level then do the following
-	if (currentGameState == GAME_STATES.LEVEL1 or currentGameState == GAME_STATES.LEVEL2 or currentGameState == GAME_STATES.LEVEL3) then
+	if (
+		currentGameState == GAME_STATES.LEVEL1 
+		or currentGameState == GAME_STATES.LEVEL2 
+		or currentGameState == GAME_STATES.LEVEL3
+		or currentGameState == GAME_STATES.LEVEL4
+		or currentGameState == GAME_STATES.LEVEL5
+	   ) then
 		-- Shoot bullets if you have the Gun
 		if playdate.buttonJustPressed("A") then
 			-- Don't shoot if you have a ball stuck to you right now ( @TODO )
@@ -358,17 +280,20 @@ function playdate.update()
 		gameSpeedSpeedUpIfNeeded()
 
 		return
-	end
 
-	-- otherwise we are in a cutscene
-	if (currentGameState == GAME_STATES.GAMEOVER) then
+	elseif (currentGameState == GAME_STATES.GAMEOVER) then
 		displayGameOverScreen()
 		return
-	end
-
-	if (currentGameState == GAME_STATES.HOMESCREEN) then
+	elseif (currentGameState == GAME_STATES.HOMESCREEN) then
 		displayHomeScreen()
 		return
+	elseif (currentGameState == GAME_STATES.LEVEL2_CUTSCENE
+			or currentGameState == GAME_STATES.LEVEL3_CUTSCENE
+			or currentGameState == GAME_STATES.LEVEL4_CUTSCENE
+			or currentGameState == GAME_STATES.LEVEL5_CUTSCENE) then
+		displayCutScene(currentLevel)
+	elseif (currentGameState == GAME_STATES.THEEND) then
+		displayTheEnd()
 	end
 end
 
