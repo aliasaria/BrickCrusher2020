@@ -126,11 +126,6 @@ local function drawSidePanel()
 			heartImgEmpty:draw(PANEL_START + paddingLeft + pad*i,paddingTop)
 		end
 	end
- 
-	-- heartImgFilled:draw(PANEL_START + paddingLeft,paddingTop)
-	-- heartImgFilled:draw(PANEL_START + paddingLeft + pad,paddingTop)
-	-- heartImgFilled:draw(PANEL_START + paddingLeft + pad * 2,paddingTop)
-	-- heartImgEmpty:draw(PANEL_START + paddingLeft + pad * 3,paddingTop)
 
 	gfx.drawText('LEVEL: '..currentLevel, PANEL_START + 10, 32)
 
@@ -282,7 +277,11 @@ function restartGame()
 	bullets = {}
 end
 
+-- ------------------------------
+-- ------------------------------
 -- The main loop
+-- ------------------------------
+-- ------------------------------
 function playdate.update()
 
 	if (lives < 0) then
