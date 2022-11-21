@@ -1,11 +1,12 @@
 # BrickCrusher2020 for Playdate
 
-![This is an image](Source/images/launcher/card.png)
-
+![BrickCrusher Image](art/screenshot.png)
 
 ## Development
 
-Once you have `make` installed,  you can run:
+Download the Playdate SDK https://play.date/dev/ (tested on v1.12.3 on macOS) and install.
+
+Once you have `make` installed, you can run:
 
 ```
 make build
@@ -19,4 +20,4 @@ You can also run:
 make build-production
 ```
 
-to build a production binary
+to build a clean production binary for distribution.
