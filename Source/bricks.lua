@@ -1,9 +1,8 @@
-
 local gfx <const> = playdate.graphics
 
 local brickImages = {}
 for i = 1, 6 do
-	brickImages[i] = gfx.image.new('images/brick/brick'..i)
+	brickImages[i] = gfx.image.new('images/brick/brick' .. i)
 end
 
 
@@ -25,35 +24,35 @@ function hitBrick(brick)
 
 	-- If the type is not a number, this is a metal brick
 	if (type(brick.brickType) ~= "number") then
-        -- thudSound:play()
+		-- thudSound:play()
 		if (DEBUG) then brick.brickType = 1 end
 		return
 	end
-	
-    hitSound:play()
+
+	hitSound:play()
 	brick.brickType -= 1
 	score += 1
 
-    local hitTime = playdate.getCurrentTimeMilliseconds()
-    if (hitTime - lastHitTime) < 250 then
-        comboCounter += 1
+	local hitTime = playdate.getCurrentTimeMilliseconds()
+	if (hitTime - lastHitTime) < 250 then
+		comboCounter += 1
 		comboPositionX = brick.x
 		comboPositionY = brick.y
-    else 
-        if (comboCounter > 1) then
-            score += comboCounter*5
-            lastComboPositionX = brick.x
-            lastComboPositionY = brick.y
+	else
+		if (comboCounter > 1) then
+			score += comboCounter * 5
+			lastComboPositionX = brick.x
+			lastComboPositionY = brick.y
 			-- print(brick.x .. ", " .. brick.y)
-            lastComboTime = hitTime
-            lastComboSize = comboCounter
-            if (comboCounter > longestCombo) then
-                longestCombo = comboCounter
-            end
-        end
-        comboCounter = 0
-    end
-    lastHitTime = hitTime
+			lastComboTime = hitTime
+			lastComboSize = comboCounter
+			if (comboCounter > longestCombo) then
+				longestCombo = comboCounter
+			end
+		end
+		comboCounter = 0
+	end
+	lastHitTime = hitTime
 
 	brick:setImage(brickImages[brick.brickType])
 
@@ -62,20 +61,19 @@ function hitBrick(brick)
 
 	if math.random(6) == 1 then
 		local p = createPill(brick.x, brick.y)
-		table.insert( pills, p )
+		table.insert(pills, p)
 	end
-
 end
 
 function shootBrick(brick)
-    -- If the type is not a number, this is a metal brick
+	-- If the type is not a number, this is a metal brick
 	if (type(brick.brickType) ~= "number") then
 		return
 	end
-    -- hitSound:play()
+	-- hitSound:play()
 	brick.brickType = brick.brickType - 1
 	score = score + 1
-    brick:setImage(brickImages[brick.brickType])
+	brick:setImage(brickImages[brick.brickType])
 
 	killBrickIfDead(brick)
 end
@@ -91,9 +89,7 @@ function killBrickIfDead(brick)
 	end
 end
 
-
 function createBrick(x, y, brickType)
-
 	local brick = gfx.sprite.new()
 
 	-- Store where in the bricks table this is
@@ -114,9 +110,9 @@ function createBrick(x, y, brickType)
 	brick:setCollideRect(0, 0, w, h)
 	-- brick:moveTo(math.random( math.floor(SCREEN_WIDTH / w) )*w - 4, math.random(10)*h)
 	brick:setBounds(0, 0, w, h)
-	brick:moveTo(x * (w-1) - w/2, y * (h-1) - h/2)
+	brick:moveTo(x * (w - 1) - w / 2, y * (h - 1) - h / 2)
 	brick:add()
-	
+
 	brick:setTag(SpriteTypes.BRICK)
 
 	brick.isEnemy = true
@@ -132,7 +128,6 @@ function createBrick(x, y, brickType)
 	function brick:collisionResponse(other)
 		return gfx.sprite.kCollisionTypeBounce
 	end
-
 
 	function brick:update()
 

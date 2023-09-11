@@ -1,4 +1,3 @@
-
 local gfx <const> = playdate.graphics
 
 function createBall(x, y, dx_in, dy_in)
@@ -74,30 +73,29 @@ function createBall(x, y, dx_in, dy_in)
 		end
 	end
 
-
 	function ball:update()
 		-----------------------------
 		-- Bounce off edges of screen
 		--
 		-- Right
-		if (ball.x + ball.width/2 >= SCREEN_WIDTH) then
-			ball.x = SCREEN_WIDTH - ball.width/2
+		if (ball.x + ball.width / 2 >= SCREEN_WIDTH) then
+			ball.x = SCREEN_WIDTH - ball.width / 2
 			ball.dx = -math.abs(ball.dx)
 		end
 		-- Left
-		if (ball.x - ball.width/2 <= 0) then
-			ball.x = 0 + ball.width/2
+		if (ball.x - ball.width / 2 <= 0) then
+			ball.x = 0 + ball.width / 2
 			ball.dx = math.abs(ball.dx)
 		end
 		-- Top
-		if (ball.y <= 0 + ball.width/2) then
+		if (ball.y <= 0 + ball.width / 2) then
 			ball.dy = math.abs(ball.dy)
-			ball.y = 0 + ball.width/2
+			ball.y = 0 + ball.width / 2
 		end
 		-- Bottom
 		if (ball.y >= SCREEN_HEIGHT + 10) then
 			if (DEBUG) then
-				ball.dy = -(math.abs(ball.dy) )
+				ball.dy = -(math.abs(ball.dy))
 			else
 				self:die()
 			end
@@ -114,14 +112,13 @@ function createBall(x, y, dx_in, dy_in)
 		-- Manually detect a collision with paddle based on height and x position between paddle bounds
 		-- we add a 1px shift on top because it looks better
 		-- we add 5px on the bottom otherwise fast balls go through the paddle
-		if (ball.dx ~= 0 and ball.y  > TOP_OF_PADDLE_Y - 1 and ball.y < TOP_OF_PADDLE_Y + ball.dy + 5) then
-
+		if (ball.dx ~= 0 and ball.y > TOP_OF_PADDLE_Y - 1 and ball.y < TOP_OF_PADDLE_Y + ball.dy + 5) then
 			if (ball.x >= paddleX and ball.x <= (paddleX + paddleWidth)) then
-				ball.dy = -(math.abs(ball.dy) )
+				ball.dy = -(math.abs(ball.dy))
 				ball.y = TOP_OF_PADDLE_Y - 1
-			
 
-				local whereOnPaddle = ( (ball.x - paddleX) / paddleWidth )
+
+				local whereOnPaddle = ((ball.x - paddleX) / paddleWidth)
 				-- whereOnPaddle is between 0 and 1 which is a percent of the position on the paddle
 				-- where 0 is fully to the left, and 1.0 is fully to the right. It can be less than 0
 				-- or more than 1 if it hits the far edge.
@@ -140,25 +137,23 @@ function createBall(x, y, dx_in, dy_in)
 
 				-- Round floats up or down based on sign
 				if (ball.dx > 0)
-					then 
-						ball.dx = math.floor(ball.dx)
-					else 
-						ball.dx = math.ceil(ball.dx)
+				then
+					ball.dx = math.floor(ball.dx)
+				else
+					ball.dx = math.ceil(ball.dx)
 				end
 
 				-- add slight angle to the ball if it is going perfectly up and down
 				if (ball.dx == 0) then ball.dx = 0.5 end
 
-				if (paddle.isSticky and (ball.y >= TOP_OF_PADDLE_Y - 5) ) then
+				if (paddle.isSticky and (ball.y >= TOP_OF_PADDLE_Y - 5)) then
 					ball.dy = 0
 					ball:moveTo(ball.x, TOP_OF_PADDLE_Y)
 					ball.isStuck = true
 				else
 					-- ball.dy = -math.abs(ball.dy)
 				end
-
 			end
-
 		end
 
 
@@ -166,9 +161,9 @@ function createBall(x, y, dx_in, dy_in)
 
 		-----------------------
 
- 		-- self:moveBy(dx, dy)
+		-- self:moveBy(dx, dy)
 
-		local verticalMoveSpeed = ball.dy * (1+( (gameSpeed-1) / 2))
+		local verticalMoveSpeed = ball.dy * (1 + ((gameSpeed - 1) / 2))
 		-- print(verticalMoveSpeed)
 
 		-- If we are stuck, no point in checking for collisions
@@ -192,45 +187,45 @@ function createBall(x, y, dx_in, dy_in)
 			end
 
 			-- if (collision.other.spriteType == SpriteTypes.PADDLE) then
-				-- local whereOnPaddle = ( (ball.x - collision.otherRect.x) / collision.other.width)
-				-- whereOnPaddle is between 0 and 1 which is a percent of the position on the paddle
-				-- where 0 is fully to the left, and 1.0 is fully to the right. It can be less than 0
-				-- or more than 1 if it hits the far edge.
-				-- print (whereOnPaddle)
-				--      .2 .4 .5 .6 .8
-				--      |  |  |  |  |
-				--    <===============>
-				-- if     whereOnPaddle < 0.2 	then dx = -8
-				-- elseif whereOnPaddle < 0.4  then dx = -4
-				-- elseif whereOnPaddle < 0.6  then dx = 2
-				-- elseif whereOnPaddle < 0.8  then dx = 4
-				-- else   						     dx = 8
-				-- end
+			-- local whereOnPaddle = ( (ball.x - collision.otherRect.x) / collision.other.width)
+			-- whereOnPaddle is between 0 and 1 which is a percent of the position on the paddle
+			-- where 0 is fully to the left, and 1.0 is fully to the right. It can be less than 0
+			-- or more than 1 if it hits the far edge.
+			-- print (whereOnPaddle)
+			--      .2 .4 .5 .6 .8
+			--      |  |  |  |  |
+			--    <===============>
+			-- if     whereOnPaddle < 0.2 	then dx = -8
+			-- elseif whereOnPaddle < 0.4  then dx = -4
+			-- elseif whereOnPaddle < 0.6  then dx = 2
+			-- elseif whereOnPaddle < 0.8  then dx = 4
+			-- else   						     dx = 8
+			-- end
 
-				-- print("where: (" .. whereOnPaddle .. "," .. whereOnPaddle2 .. ")")
+			-- print("where: (" .. whereOnPaddle .. "," .. whereOnPaddle2 .. ")")
 
-				-- ball.dx = (whereOnPaddle - 0.5) * 16
+			-- ball.dx = (whereOnPaddle - 0.5) * 16
 
-				-- if (ball.dx > 0) 
-				-- 	then ball.dx = math.floor(ball.dx)
-				-- 	else ball.dx = math.ceil(ball.dx)
-				-- end
+			-- if (ball.dx > 0)
+			-- 	then ball.dx = math.floor(ball.dx)
+			-- 	else ball.dx = math.ceil(ball.dx)
+			-- end
 
-				-- if (ball.dx == 0) then ball.dx = 0.5 end
+			-- if (ball.dx == 0) then ball.dx = 0.5 end
 
-				-- if (paddle.isSticky) then
-				-- 	ball.dy = 0
-				-- 	ball:moveTo(ball.x, TOP_OF_PADDLE_Y)
-				-- 	paddle.isStuck = true
-				-- else
-				-- 	-- ball.dy = -math.abs(ball.dy)
-				-- end
+			-- if (paddle.isSticky) then
+			-- 	ball.dy = 0
+			-- 	ball:moveTo(ball.x, TOP_OF_PADDLE_Y)
+			-- 	paddle.isStuck = true
+			-- else
+			-- 	-- ball.dy = -math.abs(ball.dy)
+			-- end
 			-- end
 		end
 		-- print(ball.dx .. ', ' .. ball.dy)
 	end
 
-	function ball:reset(x,y,dx_in, dy_in)
+	function ball:reset(x, y, dx_in, dy_in)
 		if (dx_in ~= nil) then
 			ball.dx = dx_in
 		end
@@ -242,13 +237,11 @@ function createBall(x, y, dx_in, dy_in)
 	return ball
 end
 
-
-
 function createBalls()
 	local balls = {}
 
-	for i=1,MAX_NUMBER_OF_BALLS do
-		local b = createBall(330,100 + i*10,0,0)
+	for i = 1, MAX_NUMBER_OF_BALLS do
+		local b = createBall(330, 100 + i * 10, 0, 0)
 		b:setVisible(false)
 		b:setUpdatesEnabled(false)
 		b.isAlive = false
@@ -262,17 +255,17 @@ function createBalls()
 	balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 	activeBalls = 1
 
-	function balls:moveBy(dx,dy)
-		for i,v in ipairs(balls) do
+	function balls:moveBy(dx, dy)
+		for i, v in ipairs(balls) do
 			if v.isAlive then
-				v:moveBy(dx,dy)
+				v:moveBy(dx, dy)
 			end
 		end
 	end
 
 	function balls:highestBallIndex()
 		local highestBallIndex = 1
-		for i=2,MAX_NUMBER_OF_BALLS do
+		for i = 2, MAX_NUMBER_OF_BALLS do
 			if
 				(balls[highestBallIndex].isAlive == false)
 				or
@@ -289,15 +282,13 @@ function createBalls()
 		return highestBallIndex
 	end
 
-
 	function balls:shootBalls()
-
 		-- Whenever we reset the speed we set this to false
 		-- and we wait until the player moves or shoots to
 		-- "start the timer"
 		playerHasBegunPlaying = true
 
-		for i,ball in ipairs(balls) do
+		for i, ball in ipairs(balls) do
 			if ball.isAlive then
 				if (ball.isStuck) then
 					ball.isStuck = false
@@ -307,23 +298,19 @@ function createBalls()
 				end
 			end
 		end
-
-
 	end
 
 	return balls
 end
 
-
 function resetMainBall()
 	if balls[1] ~= nil then
-	balls[1]:setVisible(true)
-	balls[1]:setUpdatesEnabled(true)
-	balls[1].isAlive = true
-	balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
-	balls[1].dx = 2
-	activeBalls = 1
-	balls[1].isStuck = true
+		balls[1]:setVisible(true)
+		balls[1]:setUpdatesEnabled(true)
+		balls[1].isAlive = true
+		balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
+		balls[1].dx = 2
+		activeBalls = 1
+		balls[1].isStuck = true
 	end
 end
-

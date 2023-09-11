@@ -35,7 +35,6 @@ function displayGameOverScreen()
 	drawSidePanel()
 end
 
-
 function displayTheEnd()
 	gfx.setFont(minimonofont)
 	gfx.setColor(playdate.graphics.kColorWhite)
@@ -50,8 +49,7 @@ function displayTheEnd()
 	drawSidePanel()
 end
 
-
-function displayCutScene( level )
+function displayCutScene(level)
 	gfx.setFont(minimonofont)
 	gfx.setColor(playdate.graphics.kColorWhite)
 	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
@@ -64,7 +62,6 @@ function displayCutScene( level )
 
 	drawSidePanel()
 end
-
 
 function drawSidePanel()
 	gfx.setFont(font)
@@ -91,17 +88,17 @@ function drawSidePanel()
 	local paddingLeft = 10
 	local linespacing = 16
 
-	for i=0,3 do
+	for i = 0, 3 do
 		if (lives > i) then
-			heartImgFilled:draw(PANEL_START + paddingLeft + pad*i,paddingTop)
+			heartImgFilled:draw(PANEL_START + paddingLeft + pad * i, paddingTop)
 		else
-			heartImgEmpty:draw(PANEL_START + paddingLeft + pad*i,paddingTop)
+			heartImgEmpty:draw(PANEL_START + paddingLeft + pad * i, paddingTop)
 		end
 	end
 
-	gfx.drawText('LEVEL: '..currentLevel, PANEL_START + 10, 32)
+	gfx.drawText('LEVEL: ' .. currentLevel, PANEL_START + 10, 32)
 
-	gfx.drawText('SCORE: '..score, PANEL_START + 10, 32 + linespacing)
+	gfx.drawText('SCORE: ' .. score, PANEL_START + 10, 32 + linespacing)
 
 	gfx.drawText('BEST', PANEL_START + 10, 32 + linespacing * 2)
 	gfx.drawText('COMBO: ' .. longestCombo, PANEL_START + 10, 32 + linespacing * 2 + 10)
@@ -122,18 +119,18 @@ function drawSidePanel()
 	local x1 = PANEL_START + 10
 	local y1 = 32 + linespacing * 4 + 5
 
-	for i=1,5 do
+	for i = 1, 5 do
 		if (gameSpeed >= i) then
 			gfx.setLineWidth(1)
 			-- gfx.drawLine(x1, y1 + (5*5) - (i*5) , x1 + 10 + i*5, y1 + (5*5) - (i*5) )
-			gfx.fillRect(x1, y1 + (5*5) - (i*4) - 1, 10 + i*4, 5)
+			gfx.fillRect(x1, y1 + (5 * 5) - (i * 4) - 1, 10 + i * 4, 5)
 		else
 			gfx.setLineWidth(1)
-			gfx.drawRect(x1, y1 + (5*5) - (i*4) - 1, 10 + i*4, 5)
+			gfx.drawRect(x1, y1 + (5 * 5) - (i * 4) - 1, 10 + i * 4, 5)
 		end
 	end
 
-	gfx.drawText('BRICKS: '.. brickCount, PANEL_START + 10, 32 + linespacing * 7)
+	gfx.drawText('BRICKS: ' .. brickCount, PANEL_START + 10, 32 + linespacing * 7)
 
 	local now = playdate.getCurrentTimeMilliseconds()
 	-- gfx.setFont(minimonofont)
@@ -150,8 +147,7 @@ function drawSidePanel()
 	end
 
 	if (powerUpMessageFadeTimer > 0) then
-		gfx.drawText(currentPowerUP, paddle.x - 4, paddle.y-25)
+		gfx.drawText(currentPowerUP, paddle.x - 4, paddle.y - 25)
 		powerUpMessageFadeTimer = powerUpMessageFadeTimer - 1
 	end
-
 end

@@ -1,14 +1,12 @@
-
 local gfx <const> = playdate.graphics
 
 function createPill(x, y)
-
 	local pill = gfx.sprite.new()
 
 	local pillAnimation = gfx.imagetable.new('images/pill/pill')
 	local animationLength = pillAnimation:getLength()
 	pill.frame = 1.0
-	pill:setImage(pillAnimation:getImage( math.floor(pill.frame) ))
+	pill:setImage(pillAnimation:getImage(math.floor(pill.frame)))
 
 	local w, h = pill:getImage():getSize()
 
@@ -27,7 +25,7 @@ function createPill(x, y)
 	end
 
 	function pill:update()
-		pill:setImage(pillAnimation:getImage( math.floor(pill.frame) ))
+		pill:setImage(pillAnimation:getImage(math.floor(pill.frame)))
 
 		local newY = pill.y + 1
 
@@ -39,21 +37,21 @@ function createPill(x, y)
 
 			for i = 1, length do
 				local collision = collisions[i]
-	
+
 				if (collision.other.spriteType == SpriteTypes.PADDLE) then
 					local r = math.random(100)
-					
-					if 		r < 20 then
+
+					if r < 20 then
 						powerUp("GUN")
-					elseif 	r < 40 then
+					elseif r < 40 then
 						powerUp("LONG")
-					elseif 	r < 45 then
+					elseif r < 45 then
 						powerUp("SHORT")
-					elseif  r < 50 then
+					elseif r < 50 then
 						powerUp("1UP")
-					elseif 	r < 55 then
+					elseif r < 55 then
 						powerUp("FLIP")
-					elseif 	r < 70 then
+					elseif r < 70 then
 						powerUp("SLOW")
 					elseif r < 80 then
 						powerUp("MLTI")
@@ -65,20 +63,19 @@ function createPill(x, y)
 				end
 			end
 		end
-		
+
 		pill.frame += 0.2
 		if pill.frame > animationLength then
 			pill.frame = 1
 		end
 	end
 
-
 	pill:setZIndex(100)
 	return pill
 end
 
 local powerUpSound = playdate.sound.sampleplayer.new('sounds/MenuSound_DDM23.1_Wav.wav')
-function powerUp( type )
+function powerUp(type)
 	currentPowerUP = type
 
 	if (type == "LONG") then
@@ -107,28 +104,28 @@ function powerUp( type )
 			hix = paddle.x
 			hiy = TOP_OF_PADDLE_Y
 		else
-			hix  = balls[hi].x
-			hiy  = balls[hi].y
+			hix = balls[hi].x
+			hiy = balls[hi].y
 		end
 
-		for i=1,MAX_NUMBER_OF_BALLS do
-			balls[i]:moveTo(hix,hiy)
+		for i = 1, MAX_NUMBER_OF_BALLS do
+			balls[i]:moveTo(hix, hiy)
 
 			balls[i]:setVisible(true)
 			balls[i]:setUpdatesEnabled(true)
 			balls[i].isAlive = true
 			-- balls[i].x = hix
 			-- balls[i].y = hiy
-			p = i - (MAX_NUMBER_OF_BALLS+1)/2 --position with zero at center
+			p = i - (MAX_NUMBER_OF_BALLS + 1) / 2 --position with zero at center
 			balls[i].dx = p
-			balls[i].dy = -2 + math.abs(p)/2
+			balls[i].dy = -2 + math.abs(p) / 2
 			balls[i].isStuck = false
 		end
 	else
 		paddle:removeAllPowerUps()
 	end
-	
+
 	powerUpMessageFadeTimer = 30
-    powerUpSound:play()
-    score = score + 12
+	powerUpSound:play()
+	score = score + 12
 end

@@ -5,14 +5,14 @@ function createPaddle(x, y)
 	local playerImage = gfx.image.new('images/paddle1')
 	local w, h = playerImage:getSize()
 	paddle.isSticky = false
-	paddle.movementFlip = 1   --if this is -1 then the motion flips
+	paddle.movementFlip = 1 --if this is -1 then the motion flips
 
 	paddle:setImage(playerImage)
 
 	paddle.spriteType = SpriteTypes.PADDLE
 	paddle.hasGun = false
 
-	paddle:setCollideRect(0, 4, w, h-3)
+	paddle:setCollideRect(0, 4, w, h - 3)
 	paddle:moveTo(x, y)
 	paddle:add()
 
@@ -21,24 +21,24 @@ function createPaddle(x, y)
 		playerImage = gfx.image.new('images/paddle_long')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
-		paddle:setCollideRect(0, 4, w, h-3)
+		paddle:setCollideRect(0, 4, w, h - 3)
 	end
 
 	function paddle:addGun()
 		self:removeAllPowerUps()
 		self.hasGun = true
 		local gunImage = gfx.image.new('images/paddle_w_gun')
-		paddle:moveTo(self.x,y)
+		paddle:moveTo(self.x, y)
 		paddle:setImage(gunImage)
 		w, h = gunImage:getSize()
-		paddle:setCollideRect(0, 4, w, h-3)
+		paddle:setCollideRect(0, 4, w, h - 3)
 	end
 
 	function paddle:removeAllPowerUps()
 		local playerImage = gfx.image.new('images/paddle1')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
-		paddle:setCollideRect(0, 4, w, h-3)
+		paddle:setCollideRect(0, 4, w, h - 3)
 		self.movementFlip = 1
 		paddle.isSticky = false
 		paddle.hasGun = false
@@ -47,7 +47,6 @@ function createPaddle(x, y)
 	function paddle:flip()
 		self.movementFlip = -1
 	end
-
 
 	-- function paddle:shootBall()
 	-- 	if (paddle.isStuck) then
@@ -68,7 +67,6 @@ function createPaddle(x, y)
 	end
 
 	function paddle:update()
-
 		local dx = 0
 		local dy = 0
 
@@ -97,27 +95,26 @@ function createPaddle(x, y)
 
 		-- print('paddle pos: '..self.x..","..self.y)
 
-		if self.x + dx > SCREEN_WIDTH - w/2 then
-			dx = (SCREEN_WIDTH - w/2) - self.x
+		if self.x + dx > SCREEN_WIDTH - w / 2 then
+			dx = (SCREEN_WIDTH - w / 2) - self.x
 			-- self:moveTo(SCREEN_WIDTH - w/2, self.y)
 		end
-		
-		if self.x + dx < 0 + w/2 then 
-			dx = (w/2) - self.x
+
+		if self.x + dx < 0 + w / 2 then
+			dx = (w / 2) - self.x
 			-- self:moveTo(w/2, self.y)
 		end
 
 		self:moveBy(dx, dy)
 
 		-- Move any balls that are stuck to the paddle
-		for i,ball in ipairs(balls) do
+		for i, ball in ipairs(balls) do
 			if ball.isAlive then
 				if (ball.isStuck) then
-					ball:moveBy(dx,0)
+					ball:moveBy(dx, 0)
 				end
 			end
 		end
-
 	end
 
 	paddle:setZIndex(1000)
@@ -143,7 +140,6 @@ function playerFire()
 	end
 
 	function s:update()
-
 		-- Move upwards at 10 pixel per frame
 		local newY = s.y - 10
 		local didCollisionHappen = false
@@ -176,11 +172,9 @@ function playerFire()
 			s:remove()
 			bulletsOnScreenCount -= 1
 		end
-
 	end
 
 	s:setZIndex(999)
 	s:add()
 	return s
-
 end

@@ -21,7 +21,7 @@ local gfx <const> = playdate.graphics
 -- playdate.inputHandlers.push(playdate.input)
 
 local s, ms = playdate.getSecondsSinceEpoch()
-math.randomseed(ms,s)
+math.randomseed(ms, s)
 
 local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
@@ -42,28 +42,28 @@ SpriteTypes = {
 	PADDLE = 1,
 	BALL = 2,
 	BRICK = 3
- }
+}
 
- -- The game goes through these states in order
- -- the current state is stored in currentGameState
- GAME_STATES = {
-	GAMEOVER		= 0,
-	HOMESCREEN 		= 1,
-	LEVEL1 			= 2,
+-- The game goes through these states in order
+-- the current state is stored in currentGameState
+GAME_STATES = {
+	GAMEOVER        = 0,
+	HOMESCREEN      = 1,
+	LEVEL1          = 2,
 	LEVEL2_CUTSCENE = 3,
-	LEVEL2 			= 4,
+	LEVEL2          = 4,
 	LEVEL3_CUTSCENE = 5,
-	LEVEL3 			= 6,
+	LEVEL3          = 6,
 	LEVEL4_CUTSCENE = 7,
-	LEVEL4 			= 8,
+	LEVEL4          = 8,
 	LEVEL5_CUTSCENE = 9,
-	LEVEL5 			= 10,
-	THEEND			= 11
- }
+	LEVEL5          = 10,
+	THEEND          = 11
+}
 
- -- If this is true, the ball will never die, it will just bounce back
- -- Only use this for debugging / testing
- DEBUG = false
+-- If this is true, the ball will never die, it will just bounce back
+-- Only use this for debugging / testing
+DEBUG = false
 
 -- ------------------------------
 -- ------------------------------
@@ -83,15 +83,15 @@ balls = {}
 -- Important global states and variables
 score = 0
 currentLevel = 1
-currentGameState = GAME_STATES.HOMESCREEN 
+currentGameState = GAME_STATES.HOMESCREEN
 currentPowerUP = "NONE"
 lives = 3
 
-brickCount = 0  -- total number of bricks on the screen
+brickCount = 0 -- total number of bricks on the screen
 
 -- Game goes faster and faster as time passes, but is limited
 gameSpeed = 1
-gameStartTime = 1  -- we do not use playdate.resetElapsedTime() for whatever reason
+gameStartTime = 1 -- we do not use playdate.resetElapsedTime() for whatever reason
 playerHasBegunPlaying = false
 
 -- Manage the number of gun bullets on the screen
@@ -121,7 +121,6 @@ holdComboPositionY = nil
 
 
 local function gameSpeedSpeedUpIfNeeded()
-
 	if (playerHasBegunPlaying) then
 		gameStartTime = gameStartTime + 1
 	end
@@ -148,9 +147,8 @@ function gameSpeedReset()
 	playerHasBegunPlaying = false
 end
 
-
-local function initializeLevel( n )
-	for i,v in ipairs(bricks) do
+local function initializeLevel(n)
+	for i, v in ipairs(bricks) do
 		if v ~= nil then
 			v:remove()
 		end
@@ -163,7 +161,7 @@ local function initializeLevel( n )
 			-- print(i2, v2)
 			if brickVal ~= 0 then
 				local b = createBrick(row, col, brickVal)
-				table.insert( bricks, b )
+				table.insert(bricks, b)
 			end
 		end
 	end
@@ -188,7 +186,7 @@ function restartGame()
 	paddle = createPaddle(130, TOP_OF_PADDLE_Y + 6)
 
 	-- Extra balls
-	for i,v in ipairs(balls) do
+	for i, v in ipairs(balls) do
 		v:remove()
 	end
 	-- Create all balls on standby
@@ -198,7 +196,7 @@ function restartGame()
 	levelNeedsInitialization = true
 
 	-- delete all floating pills
-	for i,v in ipairs(pills) do
+	for i, v in ipairs(pills) do
 		v:remove()
 	end
 
@@ -208,7 +206,7 @@ function restartGame()
 	timeWhenLastBulletWasShot = -99999
 
 	-- delete all floating bullets
-	for i,v in ipairs(bullets) do
+	for i, v in ipairs(bullets) do
 		v:remove()
 	end
 	bullets = {}
@@ -219,11 +217,11 @@ function nextLevel()
 	currentLevel += 1
 	levelNeedsInitialization = true
 
-	if (currentGameState == GAME_STATES.LEVEL1 
-		or currentGameState == GAME_STATES.LEVEL2 
-		or currentGameState == GAME_STATES.LEVEL3
-		or currentGameState == GAME_STATES.LEVEL4
-	   ) then
+	if (currentGameState == GAME_STATES.LEVEL1
+			or currentGameState == GAME_STATES.LEVEL2
+			or currentGameState == GAME_STATES.LEVEL3
+			or currentGameState == GAME_STATES.LEVEL4
+		) then
 		currentGameState += 1
 	elseif currentGameState == GAME_STATES.LEVEL5 then
 		currentGameState = GAME_STATES.THEEND
@@ -237,20 +235,18 @@ end
 -- ------------------------------
 -- ------------------------------
 function playdate.update()
-
 	-- If we are in an active level then do the following
 	if (
-		currentGameState == GAME_STATES.LEVEL1 
-		or currentGameState == GAME_STATES.LEVEL2 
-		or currentGameState == GAME_STATES.LEVEL3
-		or currentGameState == GAME_STATES.LEVEL4
-		or currentGameState == GAME_STATES.LEVEL5
-	   ) then
+			currentGameState == GAME_STATES.LEVEL1
+			or currentGameState == GAME_STATES.LEVEL2
+			or currentGameState == GAME_STATES.LEVEL3
+			or currentGameState == GAME_STATES.LEVEL4
+			or currentGameState == GAME_STATES.LEVEL5
+		) then
 		-- Shoot bullets if you have the Gun
 		if playdate.buttonJustPressed("A") then
 			-- Don't shoot if you have a ball stuck to you right now ( @TODO )
 			if (paddle.hasGun) then
-
 				local now = playdate.getCurrentTimeMilliseconds()
 
 				local delay = (now - timeWhenLastBulletWasShot)
@@ -263,7 +259,6 @@ function playdate.update()
 
 				-- Add this bullet to the global list of bullets
 				-- WE don't know how to manage this table and remove so leave out for now ... @TODO table.insert(bullets, b)
-				
 			end
 		end
 
@@ -274,13 +269,12 @@ function playdate.update()
 		createBricksIfNeeded()
 
 		gfx.sprite.update()
-		
+
 		drawSidePanel()
-	
+
 		gameSpeedSpeedUpIfNeeded()
 
 		return
-
 	elseif (currentGameState == GAME_STATES.GAMEOVER) then
 		displayGameOverScreen()
 		return
@@ -304,13 +298,13 @@ function playdate.keyPressed(key)
 		powerUp("MLTI")
 	elseif (key == "w") then
 		powerUp("GUN")
-	elseif (key =="e") then
+	elseif (key == "e") then
 		powerUp("STKY")
-	elseif (key =="r") then
+	elseif (key == "r") then
 		powerUp("SHORT")
-	elseif (key =="t") then
+	elseif (key == "t") then
 		powerUp("SLOW")
-	elseif (key =="y") then
+	elseif (key == "y") then
 		powerUp("1UP")
 	end
 end
@@ -323,7 +317,7 @@ end
 local menu = playdate.getSystemMenu()
 
 local menuItem, error = menu:addMenuItem("Restart Game", function()
-    restartGame()
+	restartGame()
 end)
 
 -- local checkmarkMenuItem, error = menu:addCheckmarkMenuItem("Item 2", true, function(value)
@@ -340,5 +334,3 @@ restartGame()
 -- ball = createBall(130,220,0,0)
 local startMusic = playdate.sound.sampleplayer.new('sounds/8BitRetroSFXPack1_Traditional_GameStarting08.wav')
 startMusic:play()
-
-
