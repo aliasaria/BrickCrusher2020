@@ -1,5 +1,7 @@
 local gfx <const> = playdate.graphics
 
+local cityscapeBackground = gfx.image.new('images/backgrounds/cityscape_background.png')
+
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 
@@ -8,11 +10,19 @@ local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
 
 function displayHomeScreen()
+	cityscapeBackground:draw(0, 0)
+
+	local paddingTop = 100
+
 	gfx.setFont(minimonofont)
 	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("HOME SCREEN!", 90, SCREEN_HEIGHT / 2 - 30)
+	gfx.fillRect(5, paddingTop, 280, 24)
+	gfx.setColor(playdate.graphics.kColorWhite)
+	gfx.drawText("BRICKCRUSHER 2000", 10, paddingTop + 5)
+
+	gfx.fillRect(180, 220, 125, 20)
+	gfx.setFont(font)
+	gfx.drawText("PRESS B TO START", 192, 227)
 
 	if playdate.buttonJustPressed("B") then
 		currentGameState = GAME_STATES.LEVEL1

@@ -2,7 +2,6 @@
 
 ### HIGH
 
-- Real Home Screen
 - Way less bricks in lower levels -- too hard
 - Create first 5 Levels and screens between them
 - When you finish a level the balls don't reset (they are just floating where they were before)
@@ -18,6 +17,7 @@
 - Use timers for places where we are currently capturing the time (I didn't know they existed https://sdk.play.date/1.12.1/Inside%20Playdate.html#C-timer)
 - Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
 - Use total bounces to calculate speed, instead of time elapsed
+- Store high scores
 
 ---
 
@@ -84,3 +84,4 @@
 ✅- Fake custscenes
 ✅- At top speed, the ball sometimes goes through the paddle
 ✅-- Don't shoot if the ball is stuck to paddle
+✅-- Real Home Screen
