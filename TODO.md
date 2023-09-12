@@ -9,6 +9,7 @@
 - Better end game
 - Say something on death
 - You should not be able to sit sticky and shoot as much as you want. Either have a shoot timer, or prevent guns + sticky or something...
+- BUG: level ends before bricks are gone -- something with brickCount?
 
 ---
 
@@ -18,6 +19,7 @@
 - Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
 - Use total bounces to calculate speed, instead of time elapsed
 - Store high scores
+- BUG: Flip doesn't affect the crank
 
 ---
 
