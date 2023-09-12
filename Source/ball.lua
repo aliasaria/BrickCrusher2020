@@ -277,3 +277,23 @@ function resetMainBall()
 		balls[1].isStuck = true
 	end
 end
+
+function resetAllBalls()
+	for i = 2, MAX_NUMBER_OF_BALLS do
+		local b = balls[i]
+		b:setVisible(false)
+		b:setUpdatesEnabled(false)
+		b.isAlive = false
+		b:moveTo(paddle.x, TOP_OF_PADDLE_Y)
+	end
+
+	if balls[1] ~= nil then
+		balls[1]:setVisible(true)
+		balls[1]:setUpdatesEnabled(true)
+		balls[1].isAlive = true
+		balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
+		balls[1].dx = 2
+		activeBalls = 1
+		balls[1].isStuck = true
+	end
+end

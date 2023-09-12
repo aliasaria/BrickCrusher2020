@@ -171,6 +171,7 @@ local function createBricksIfNeeded()
 	if (levelNeedsInitialization == true) then
 		levelNeedsInitialization = false
 		initializeLevel(currentLevel)
+		resetAllBalls()
 	end
 end
 
