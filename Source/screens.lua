@@ -28,6 +28,8 @@ function displayHomeScreen()
 		currentGameState = GAME_STATES.LEVEL1
 	end
 
+	gfx.setColor(playdate.graphics.kColorBlack)
+
 	drawSidePanel()
 end
 
