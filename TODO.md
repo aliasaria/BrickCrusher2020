@@ -83,3 +83,4 @@
 ✅- Fake Homescreen
 ✅- Fake custscenes
 ✅- At top speed, the ball sometimes goes through the paddle
+✅-- Don't shoot if the ball is stuck to paddle

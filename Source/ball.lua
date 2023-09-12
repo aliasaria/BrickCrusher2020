@@ -155,10 +155,6 @@ function createBall(x, y, dx_in, dy_in)
 				end
 			end
 		end
-
-
-
-
 		-----------------------
 
 		-- self:moveBy(dx, dy)
@@ -185,44 +181,11 @@ function createBall(x, y, dx_in, dy_in)
 
 				hitBrick(collision.other)
 			end
-
-			-- if (collision.other.spriteType == SpriteTypes.PADDLE) then
-			-- local whereOnPaddle = ( (ball.x - collision.otherRect.x) / collision.other.width)
-			-- whereOnPaddle is between 0 and 1 which is a percent of the position on the paddle
-			-- where 0 is fully to the left, and 1.0 is fully to the right. It can be less than 0
-			-- or more than 1 if it hits the far edge.
-			-- print (whereOnPaddle)
-			--      .2 .4 .5 .6 .8
-			--      |  |  |  |  |
-			--    <===============>
-			-- if     whereOnPaddle < 0.2 	then dx = -8
-			-- elseif whereOnPaddle < 0.4  then dx = -4
-			-- elseif whereOnPaddle < 0.6  then dx = 2
-			-- elseif whereOnPaddle < 0.8  then dx = 4
-			-- else   						     dx = 8
-			-- end
-
-			-- print("where: (" .. whereOnPaddle .. "," .. whereOnPaddle2 .. ")")
-
-			-- ball.dx = (whereOnPaddle - 0.5) * 16
-
-			-- if (ball.dx > 0)
-			-- 	then ball.dx = math.floor(ball.dx)
-			-- 	else ball.dx = math.ceil(ball.dx)
-			-- end
-
-			-- if (ball.dx == 0) then ball.dx = 0.5 end
-
-			-- if (paddle.isSticky) then
-			-- 	ball.dy = 0
-			-- 	ball:moveTo(ball.x, TOP_OF_PADDLE_Y)
-			-- 	paddle.isStuck = true
-			-- else
-			-- 	-- ball.dy = -math.abs(ball.dy)
-			-- end
-			-- end
 		end
-		-- print(ball.dx .. ', ' .. ball.dy)
+
+		if (ball.x > SCREEN_WIDTH) then
+			ball.x = SCREEN_WIDTH
+		end
 	end
 
 	function ball:reset(x, y, dx_in, dy_in)
