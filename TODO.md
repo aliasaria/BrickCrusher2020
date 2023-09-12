@@ -7,7 +7,6 @@
 - Create 25 levels
 - Better end game
 - Say something on death
-- You should not be able to sit sticky and shoot as much as you want. Either have a shoot timer, or prevent guns + sticky or something...
 - BUG: level ends before bricks are gone -- something with brickCount?
 
 ---
@@ -87,3 +86,4 @@
 ✅-- Don't shoot if the ball is stuck to paddle
 ✅-- Real Home Screen
 ✅-- When you finish a level the balls don't reset (they are just floating where they were before)
+✅-- You should not be able to sit sticky and shoot as much as you want. Either have a shoot timer, or prevent guns + sticky or something...

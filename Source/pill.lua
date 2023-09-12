@@ -91,6 +91,9 @@ function powerUp(type)
 	elseif (type == "SLOW") then
 		gameSpeedReset()
 	elseif (type == "STKY") then
+		if paddle.hasGun then
+			paddle:removeGun()
+		end
 		paddle.isSticky = true
 	elseif (type == "MLTI") then
 		-- You can't be sticky with multi because that's too much to handle

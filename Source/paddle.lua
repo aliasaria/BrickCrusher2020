@@ -11,6 +11,7 @@ function createPaddle(x, y)
 
 	paddle.spriteType = SpriteTypes.PADDLE
 	paddle.hasGun = false
+	paddle.isLong = false
 
 	paddle:setCollideRect(0, 4, w, h - 3)
 	paddle:moveTo(x, y)
@@ -18,6 +19,7 @@ function createPaddle(x, y)
 
 	function paddle:grow()
 		self:removeAllPowerUps()
+		paddle.isLong = true
 		playerImage = gfx.image.new('images/paddle_long')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
@@ -26,11 +28,24 @@ function createPaddle(x, y)
 
 	function paddle:addGun()
 		self:removeAllPowerUps()
+		balls:shootBalls()
 		self.hasGun = true
 		local gunImage = gfx.image.new('images/paddle_w_gun')
 		paddle:moveTo(self.x, y)
 		paddle:setImage(gunImage)
 		w, h = gunImage:getSize()
+		paddle:setCollideRect(0, 4, w, h - 3)
+	end
+
+	function paddle:removeGun()
+		self.hasGun = false
+
+		-- We can assume the paddle is short because you can't be long with
+		-- a Gun. So don't call this function, unless you're sure the paddle
+		-- has a gun
+		local playerImage = gfx.image.new('images/paddle1')
+		paddle:setImage(playerImage)
+		w, h = playerImage:getSize()
 		paddle:setCollideRect(0, 4, w, h - 3)
 	end
 
