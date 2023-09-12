@@ -244,7 +244,7 @@ function playdate.update()
 			or currentGameState == GAME_STATES.LEVEL5
 		) then
 		-- Shoot bullets if you have the Gun
-		if playdate.buttonJustPressed("A") then
+		if playdate.buttonJustPressed("A") or playdate.buttonIsPressed("UP") then
 			-- Don't shoot if you have a ball stuck to you right now ( @TODO )
 			if (paddle.hasGun) then
 				local now = playdate.getCurrentTimeMilliseconds()
@@ -262,7 +262,7 @@ function playdate.update()
 			end
 		end
 
-		if playdate.buttonJustPressed("B") then
+		if playdate.buttonJustPressed("B") or playdate.buttonIsPressed("DOWN") then
 			balls:shootBalls()
 		end
 
