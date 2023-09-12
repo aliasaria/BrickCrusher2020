@@ -27,7 +27,8 @@
   - Bomb
   - Laser (can go through metal?)
   - Something else?
-  - Backup wall below the paddle that breaks after it is hit but can save you one time
+  - SHEILD: Backup wall below the paddle that breaks after it is hit but can save you one time
+  - Double paddle mode -- paddle turns into two paddles
 
 ## Bugs
 
@@ -45,9 +46,8 @@
 - probably need to split bullet into two bullets
 - Should speed progress if you are stuck to paddle -- you could be shooting. Maybe we should stop time even so
 - Manually calculating pill collisions will allow us to remove collisions with paddle completely, saving computation
-- Double paddle mode -- paddle turns into two paddles
 - Bricks should come down as time passes (but only go so far)
-- Specify where pills are stored
+- Specify where pills are stofred, not random
 - Animate paddle's movement, even though it can move by large #'s, just to make it smoother? Or will this create lag?
 
 ---

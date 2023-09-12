@@ -307,6 +307,8 @@ function playdate.keyPressed(key)
 		powerUp("SLOW")
 	elseif (key == "y") then
 		powerUp("1UP")
+	elseif (key == ".") then
+		nextLevel()
 	end
 end
 
