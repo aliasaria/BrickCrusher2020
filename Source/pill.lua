@@ -15,6 +15,7 @@ function createPill(x, y)
 	pill:moveTo(x, y)
 	pill:add()
 
+	pill:setTag(SpriteTypes.PILL)
 
 	function pill:collisionResponse(other)
 		if (other.spriteType == SpriteTypes.PADDLE) then

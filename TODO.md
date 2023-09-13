@@ -6,7 +6,6 @@
 - Better end game
 - Say something on death
 - Graphic for the front panel that shows up in the menu
-- Bullets and Pills keep going after a level ends
 
 ---
 
@@ -90,3 +89,4 @@
 ✅-- You should not be able to sit sticky and shoot as much as you want. Either have a shoot timer, or prevent guns + sticky or something...
 ✅-- Create first 5 Levels
 ✅-- Way less bricks in lower levels -- too hard
+✅-- Bullets and Pills keep going after a level ends

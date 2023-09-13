@@ -41,7 +41,9 @@ MAX_NUMBER_OF_BALLS = 4
 SpriteTypes = {
 	PADDLE = 1,
 	BALL = 2,
-	BRICK = 3
+	BRICK = 3,
+	PILL = 4,
+	BULLET = 5
 }
 
 -- The game goes through these states in order
@@ -171,11 +173,21 @@ local function initializeLevel(n)
 	end
 end
 
+function removeAllPillsAndBullets()
+	gfx.sprite.performOnAllSprites(function(sprite)
+		if (sprite:getTag() == SpriteTypes.PILL or sprite:getTag() == SpriteTypes.BULLET) then
+			sprite:remove()
+		end
+	end)
+end
+
 local function createBricksIfNeeded()
 	if (levelNeedsInitialization == true) then
 		levelNeedsInitialization = false
 		initializeLevel(currentLevel)
 		resetAllBalls()
+		removeAllPillsAndBullets()
+		gameSpeedReset()
 	end
 end
 
@@ -201,9 +213,7 @@ function restartGame()
 	levelNeedsInitialization = true
 
 	-- delete all floating pills
-	for i, v in ipairs(pills) do
-		v:remove()
-	end
+	removeAllPillsAndBullets()
 
 	gameSpeedReset()
 

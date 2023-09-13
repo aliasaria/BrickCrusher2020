@@ -146,6 +146,7 @@ function playerFire()
 	s:setImage(img)
 	s:moveTo(paddle.x, paddle.y)
 	s:setCollideRect(0, 0, imgw, imgh)
+	s:setTag(SpriteTypes.BULLET)
 	bulletsOnScreenCount += 1
 
 	timeWhenLastBulletWasShot = playdate.getCurrentTimeMilliseconds()
