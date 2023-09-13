@@ -8,6 +8,8 @@
 - Better end game
 - Say something on death
 - BUG: level ends before bricks are gone -- something with brickCount?
+- Graphic for the front panel that shows up in the menu
+- Bullets and Pills keep going after a level ends
 
 ---
 
