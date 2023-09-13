@@ -58,7 +58,11 @@ GAME_STATES = {
 	LEVEL4          = 8,
 	LEVEL5_CUTSCENE = 9,
 	LEVEL5          = 10,
-	THEEND          = 11
+	LEVEL6_CUTSCENE = 11,
+	LEVEL6          = 12,
+	LEVEL7_CUTSCENE = 13,
+	LEVEL7          = 14,
+	THEEND          = 15
 }
 
 -- If this is true, the ball will never die, it will just bounce back
@@ -222,11 +226,13 @@ function nextLevel()
 			or currentGameState == GAME_STATES.LEVEL2
 			or currentGameState == GAME_STATES.LEVEL3
 			or currentGameState == GAME_STATES.LEVEL4
+			or currentGameState == GAME_STATES.LEVEL5
+			or currentGameState == GAME_STATES.LEVEL6
 		) then
 		currentGameState += 1
-	elseif currentGameState == GAME_STATES.LEVEL5 then
+	elseif currentGameState == GAME_STATES.LEVEL7 then
 		currentGameState = GAME_STATES.THEEND
-		currentLevel = 5
+		currentLevel = 7
 	end
 end
 
@@ -243,6 +249,8 @@ function playdate.update()
 			or currentGameState == GAME_STATES.LEVEL3
 			or currentGameState == GAME_STATES.LEVEL4
 			or currentGameState == GAME_STATES.LEVEL5
+			or currentGameState == GAME_STATES.LEVEL6
+			or currentGameState == GAME_STATES.LEVEL7
 		) then
 		-- Shoot bullets if you have the Gun
 		if playdate.buttonJustPressed("A") or playdate.buttonIsPressed("UP") then
@@ -285,13 +293,16 @@ function playdate.update()
 	elseif (currentGameState == GAME_STATES.LEVEL2_CUTSCENE
 			or currentGameState == GAME_STATES.LEVEL3_CUTSCENE
 			or currentGameState == GAME_STATES.LEVEL4_CUTSCENE
-			or currentGameState == GAME_STATES.LEVEL5_CUTSCENE) then
+			or currentGameState == GAME_STATES.LEVEL5_CUTSCENE
+			or currentGameState == GAME_STATES.LEVEL6_CUTSCENE
+			or currentGameState == GAME_STATES.LEVEL7_CUTSCENE) then
 		displayCutScene(currentLevel)
 	elseif (currentGameState == GAME_STATES.THEEND) then
 		displayTheEnd()
 	end
 end
 
+-- CHEAT CODES
 -- Remove in production -- this hack let's us fake getting a pill
 -- for testing
 function playdate.keyPressed(key)

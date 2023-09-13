@@ -2,12 +2,9 @@
 
 ### HIGH
 
-- Way less bricks in lower levels -- too hard
-- Create first 5 Levels and screens between them
-- Create 25 levels
+- Create the cutscenes
 - Better end game
 - Say something on death
-- BUG: level ends before bricks are gone -- something with brickCount?
 - Graphic for the front panel that shows up in the menu
 - Bullets and Pills keep going after a level ends
 
@@ -20,6 +17,7 @@
 - Use total bounces to calculate speed, instead of time elapsed
 - Store high scores
 - BUG: Flip doesn't affect the crank
+- Create 25 levels
 
 ---
 
@@ -37,6 +35,7 @@
 - Ball can go through the very right side of the paddle if it is right at the edge
 - was able to get a ball to bounce side to side and never come down
 - Right now we have an issue that if you shoot, and then restart level, the gun shots keep propagating
+- BUG: level ends before bricks are gone -- something with brickCount? -- does this still happen?
 
 ## Consider / Ideas
 
@@ -89,3 +88,5 @@
 ✅-- Real Home Screen
 ✅-- When you finish a level the balls don't reset (they are just floating where they were before)
 ✅-- You should not be able to sit sticky and shoot as much as you want. Either have a shoot timer, or prevent guns + sticky or something...
+✅-- Create first 5 Levels
+✅-- Way less bricks in lower levels -- too hard
