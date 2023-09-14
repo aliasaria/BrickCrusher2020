@@ -1,0 +1,19 @@
+<svg id="Playdate-platform-icon-inverted.svg_Playdate-platform-icon-inverted.png" data-name="Playdate-platform-icon-inverted.svg, Playdate-platform-icon-inverted.png" xmlns="http://www.w3.org/2000/svg" width="112.562" height="93.063" viewBox="0 0 112.562 93.063">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ffc833;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #312f28;
+      }
+    </style>
+  </defs>
+  <path id="playdate" class="cls-1" d="M437.819,111.531l-56.058,9.908a11.665,11.665,0,0,1-13.371-9.669L357.931,52.32A11.687,11.687,0,0,1,367.2,38.651l56.058-9.908a11.664,11.664,0,0,1,13.372,9.669l10.458,59.45A11.687,11.687,0,0,1,437.819,111.531Zm29.2-61.828-15.739,2.782L454.7,71.958a4,4,0,1,1-7.869,1.391l-4.113-23.417h0L440.637,38.1a4,4,0,0,1,3.241-4.639l3.935-.7h0l15.739-2.782a4,4,0,0,1,4.628,3.249l2.082,11.832A4,4,0,0,1,467.021,49.7Z" transform="translate(-357.75 -28.563)"/>
+  <path id="screen" class="cls-2" d="M368.39,111.77L357.931,52.32m62.981-10.99a4,4,0,0,0-4.628-3.249l-47.218,8.346a4,4,0,0,0-3.241,4.639l5.551,31.553A4,4,0,0,0,376,85.867l47.218-8.346a4,4,0,0,0,3.241-4.64Z" transform="translate(-357.75 -28.563)"/>
+</svg>

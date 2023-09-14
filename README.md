@@ -2,6 +2,12 @@
 
 ![BrickCrusher Image](art/screenshot.png)
 
+## Download
+
+Wnat to play? You can download BrickCrusher2020 by clicking here:
+
+[![BrickCrusher Image](art/Playdate-badges/Playdate-badge-download.svg)](https://aliasaria.itch.io/brickcrusher-2020-for-playdate)
+
 ## Development
 
 Download the Playdate SDK https://play.date/dev/ (tested on v1.12.3 on macOS) and install.
