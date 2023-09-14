@@ -5,7 +5,7 @@ local gfx <const> = playdate.graphics
 
 local cityscapeBackground = gfx.image.new('images/backgrounds/cityscape_background.png')
 local city1 = gfx.image.new('images/backgrounds/city1.png')
-local city2 = gfx.image.new('images/backgrounds/city2.png')
+-- local city2 = gfx.image.new('images/backgrounds/city3.png')
 
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')

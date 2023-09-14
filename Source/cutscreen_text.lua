@@ -1,8 +1,8 @@
 CUTSCREEN_TEXT = {
     "No text at start yet",
-    "Welcome to Bricktown, BrickCrusher. We're so glad you're here.",
-    "Now that you're here, we can finally get to work.",
-    "You see, we've been having a bit of a problem with our bricks.",
+    "Welcome to BrickPlanet! We need your help to clear the rubble.",
+    "Oh no. You came just in time. The evil BRICKALONS are attacking. Help!",
+    "Their leader, BRICKMALEON escaped! He plans to crush our city.",
     "They're just too big! We need you to crush them down to size.",
     "You can use the arrow keys to move your crusher around.",
     "Press the space bar to crush the bricks.",

@@ -123,7 +123,7 @@ PANEL_START = SCREEN_WIDTH
 holdComboPositionX = nil
 holdComboPositionY = nil
 
-local city1 = gfx.image.new('images/backgrounds/city1.png')
+local cityBackground = gfx.image.new('images/backgrounds/city3.png')
 
 
 local function gameSpeedSpeedUpIfNeeded()
@@ -185,7 +185,7 @@ local function initializeLevel(n)
 		function(x, y, width, height)
 			-- x,y,width,height is the updated area in sprite-local coordinates
 			-- The clip rect is already set to this area, so we don't need to set it ourselves
-			city1:drawFaded(0, 0, 0.3, gfx.image.kDitherTypeScreen)
+			cityBackground:drawFaded(0, 0, 0.3, gfx.image.kDitherTypeScreen)
 		end
 	)
 end
