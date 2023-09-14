@@ -1,8 +1,8 @@
 CUTSCENE_TEXT = {
-    "No text at start of game yet. This is ignored.",
-    "Welcome to BrickPlanet! We need your help to clear the rubble.\fWe have a big mess from the last Brikalon attack\fAnd this is another page of text!",
-    "Oh no. You came just in time. The evil BRICKALONS are attacking. Help!",
-    "Their leader, BRICKMALEON escaped! He plans to crush our city.",
+    "Welcome to Planet Brika, a peaceful planet of brick people.\fWe appreciate your help in defending our planet.\fLet's test out your systems on the following bricks.",
+    "Looking good! We need your help to clear rubble.\fWe have a big mess from the last Brikalon attack\f",
+    "Great job, BrickCrusher2020! You're a pro. Now we just ...\fhuh? ...\fOH NO!!! ...\fYou came just in time!!! ...\fThe evil BRICKALONS must have detected your presense.\fPlease help defend our planet from their merciless attacks.\fBut watch out. Their ship is protected by impenetrable metal bricks.",
+    "You destroyed their ship!\fHowever, their leader, BRICKMALEON escaped! He plans to crush our city.\fHelp us!!!!!",
     "They're just too big! We need you to crush them down to size.",
     "You can use the arrow keys to move your crusher around.",
     "Press the space bar to crush the bricks.",
