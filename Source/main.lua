@@ -47,22 +47,23 @@ SpriteTypes = {
 -- The game goes through these states in order
 -- the current state is stored in currentGameState
 GAME_STATES = {
-	GAMEOVER        = 0,
-	HOMESCREEN      = 1,
-	LEVEL1          = 2,
-	LEVEL2_CUTSCENE = 3,
-	LEVEL2          = 4,
-	LEVEL3_CUTSCENE = 5,
-	LEVEL3          = 6,
-	LEVEL4_CUTSCENE = 7,
-	LEVEL4          = 8,
-	LEVEL5_CUTSCENE = 9,
-	LEVEL5          = 10,
-	LEVEL6_CUTSCENE = 11,
-	LEVEL6          = 12,
-	LEVEL7_CUTSCENE = 13,
-	LEVEL7          = 14,
-	THEEND          = 15
+	GAMEOVER            = 0,
+	HOMESCREEN          = 1,
+	HOMESCREEN_CUTSCENE = 2,
+	LEVEL1              = 3,
+	LEVEL2_CUTSCENE     = 4,
+	LEVEL2              = 5,
+	LEVEL3_CUTSCENE     = 6,
+	LEVEL3              = 7,
+	LEVEL4_CUTSCENE     = 8,
+	LEVEL4              = 9,
+	LEVEL5_CUTSCENE     = 10,
+	LEVEL5              = 11,
+	LEVEL6_CUTSCENE     = 12,
+	LEVEL6              = 13,
+	LEVEL7_CUTSCENE     = 14,
+	LEVEL7              = 15,
+	THEEND              = 16
 }
 
 -- If this is true, the ball will never die, it will just bounce back
@@ -88,6 +89,8 @@ balls = {}
 score = 0
 currentLevel = 1
 currentGameState = GAME_STATES.HOMESCREEN
+-- the following global stores the game state type like "CUTSCENE" or "LEVEL"
+GAME_STATE_TYPE = "HOMESCREEN"
 currentPowerUP = "NONE"
 lives = 3
 
@@ -111,6 +114,7 @@ powerUpMessageFadeTimer = 0
 
 -- This is true at the start of a level, before the level is loaded
 local levelNeedsInitialization = true
+
 
 -- ------------------------------
 -- ------------------------------
@@ -188,6 +192,8 @@ local function initializeLevel(n)
 			cityBackground:drawFaded(0, 0, 0.3, gfx.image.kDitherTypeScreen)
 		end
 	)
+
+	GAME_STATE_TYPE = "LEVEL"
 end
 
 
@@ -216,6 +222,7 @@ end
 function restartGame()
 	score = 0
 	currentLevel = 1
+	GAME_STATE_TYPE = "HOMESCREEN"
 	currentPowerUP = "NONE"
 	currentGameState = GAME_STATES.HOMESCREEN
 	lives = 3
@@ -310,15 +317,7 @@ end
 -- ------------------------------
 function playdate.update()
 	-- If we are in an active level then do the following
-	if (
-			currentGameState == GAME_STATES.LEVEL1
-			or currentGameState == GAME_STATES.LEVEL2
-			or currentGameState == GAME_STATES.LEVEL3
-			or currentGameState == GAME_STATES.LEVEL4
-			or currentGameState == GAME_STATES.LEVEL5
-			or currentGameState == GAME_STATES.LEVEL6
-			or currentGameState == GAME_STATES.LEVEL7
-		) then
+	if (GAME_STATE_TYPE == "LEVEL") then
 		gameUpdate()
 		return
 	elseif (currentGameState == GAME_STATES.GAMEOVER) then
@@ -327,12 +326,7 @@ function playdate.update()
 	elseif (currentGameState == GAME_STATES.HOMESCREEN) then
 		displayHomeScreen()
 		return
-	elseif (currentGameState == GAME_STATES.LEVEL2_CUTSCENE
-			or currentGameState == GAME_STATES.LEVEL3_CUTSCENE
-			or currentGameState == GAME_STATES.LEVEL4_CUTSCENE
-			or currentGameState == GAME_STATES.LEVEL5_CUTSCENE
-			or currentGameState == GAME_STATES.LEVEL6_CUTSCENE
-			or currentGameState == GAME_STATES.LEVEL7_CUTSCENE) then
+	elseif (GAME_STATE_TYPE == "CUTSCENE") then
 		displayCutScene(currentLevel)
 	elseif (currentGameState == GAME_STATES.THEEND) then
 		displayTheEnd()
@@ -356,7 +350,9 @@ function playdate.keyPressed(key)
 	elseif (key == "y") then
 		powerUp("1UP")
 	elseif (key == ".") then
-		nextLevel()
+		if (GAME_STATE_TYPE == "LEVEL") then
+			nextLevel()
+		end
 	end
 end
 

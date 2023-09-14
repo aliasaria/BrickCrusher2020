@@ -1,8 +1,9 @@
 -- From  Neven Mrgan on playdate devforum
+-- This page writes a text box sprite to the screen, and animates it as if it's being typed.
 local gfx <const> = playdate.graphics
 
 local WIDTH = 320
-local HEIGHT = 140
+local HEIGHT = 120
 
 textbox = gfx.sprite.new()
 textbox:setSize(WIDTH, HEIGHT)
@@ -13,15 +14,31 @@ textbox.text = ""       -- this is blank for now; we can set it at any point
 textbox.currentChar = 1 -- we'll use these for the animation
 textbox.currentText = ""
 textbox.typing = true
+textbox.currentPageNumber = 1
+textbox.pages = {}
+textbox.finished = false
 
 local font = gfx.font.new('images/font/Mini Mono 2X')
 local smallfont = gfx.font.new('images/font/Mini Mono')
 
 function textbox:init(text)
-    self.text = text
+    -- self.text = text
     self.currentChar = 1
     self.currentText = ""
     self.typing = true
+    self.finished = false
+
+
+    -- split the text into pages based on \f delimeter
+    self.pages = {}
+    self.currentPage = ""
+    for line in string.gmatch(text, "[^\f]+") do
+        table.insert(self.pages, line)
+    end
+    self.text = self.pages[1]
+    self.currentPageNumber = 1
+
+    -- printTable(self.pages)
 end
 
 -- this function will calculate the string to be used.
@@ -39,8 +56,28 @@ function textbox:update()
 
     -- end typing
     if self.currentChar == #self.text then
-        self.currentChar = 1
-        self.typing = false
+        if (self.currentPageNumber < #self.pages) then
+            self.typing = false
+        else
+            self.currentChar = 1
+            self.typing = false
+            self.finished = true
+        end
+    end
+
+    if playdate.buttonJustPressed("A") then
+        if (self.typing == false and self.finished == false) then
+            -- If at page end, wait for press of A
+            self.currentPageNumber = self.currentPageNumber + 1
+            self.text = self.pages[self.currentPageNumber]
+            self.currentChar = 1
+            self.typing = true
+        else
+            if (self.typing == true) then
+                -- If typing, skip to end of text
+                self.currentChar = #self.text
+            end
+        end
     end
 end
 
@@ -52,21 +89,25 @@ function textbox:draw()
 
     -- draw the box				
     gfx.setColor(gfx.kColorWhite)
-    gfx.fillRect(0, 0, WIDTH, HEIGHT - 20)
+    gfx.fillRect(0, 0, WIDTH, HEIGHT)
 
     -- border
     gfx.setLineWidth(4)
     gfx.setColor(gfx.kColorBlack)
-    gfx.drawRect(0, 0, WIDTH, HEIGHT - 20)
+    gfx.drawRect(0, 0, WIDTH, HEIGHT)
 
     -- draw the text!
     gfx.setFont(font)
-    gfx.drawTextInRect(self.currentText, 10, 10, WIDTH - 20, HEIGHT - 20 - 20)
+    gfx.drawTextInRect(self.currentText, 10, 10, WIDTH - 20, HEIGHT - 20)
     -- print("drawing")
 
     gfx.setFont(smallfont)
-    if (self.typing == false) then
-        gfx.drawText("Press (A) to continue...", 10, HEIGHT - 14)
+    if (self.typing) then
+        gfx.drawText("(A) >", 270, HEIGHT - 14)
+    elseif self.finished == false then
+        gfx.drawText("(A) Next page...", 190, HEIGHT - 14)
+    else
+        gfx.drawText("(A) to start level", 170, HEIGHT - 14)
     end
 
     gfx.popContext()

@@ -1,6 +1,6 @@
-CUTSCREEN_TEXT = {
-    "No text at start yet",
-    "Welcome to BrickPlanet! We need your help to clear the rubble.",
+CUTSCENE_TEXT = {
+    "No text at start of game yet. This is ignored.",
+    "Welcome to BrickPlanet! We need your help to clear the rubble.\fWe have a big mess from the last Brikalon attack\fAnd this is another page of text!",
     "Oh no. You came just in time. The evil BRICKALONS are attacking. Help!",
     "Their leader, BRICKMALEON escaped! He plans to crush our city.",
     "They're just too big! We need you to crush them down to size.",

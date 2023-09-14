@@ -1,5 +1,5 @@
 import 'textbox.lua'
-import 'cutscreen_text.lua'
+import 'cutscene_text.lua'
 
 local gfx <const> = playdate.graphics
 
@@ -12,6 +12,8 @@ local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 
 local font = gfx.font.new('images/font/Mini Mono')
 local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
+
+local ScreenWidth = playdate.display.getWidth()
 
 
 function displayHomeScreen()
@@ -30,7 +32,9 @@ function displayHomeScreen()
 	gfx.drawText("PRESS A TO START", 134, 227)
 
 	if playdate.buttonJustPressed("A") then
-		currentGameState = GAME_STATES.LEVEL1
+		initCutscene(1)
+		currentGameState = GAME_STATES.HOMESCREEN_CUTSCENE
+		GAME_STATE_TYPE = "CUTSCENE"
 	end
 
 	gfx.setColor(playdate.graphics.kColorBlack)
@@ -65,34 +69,40 @@ function displayTheEnd()
 	drawSidePanel()
 end
 
+local xScroll = 1
+
 function initCutscene(level)
 	gfx.sprite.removeAll()
+	xScroll = 1
 
 	gfx.sprite.setBackgroundDrawingCallback(
 		function(x, y, width, height)
 			-- x,y,width,height is the updated area in sprite-local coordinates
 			-- The clip rect is already set to this area, so we don't need to set it ourselves
-			city1:draw(0, 0)
+			local slowerScroll = xScroll // 2 -- double slash is a rounded divide in Lua
+			city1:draw(slowerScroll, 0)
+			city1:draw(slowerScroll - ScreenWidth, 0)
 		end
 	)
 
-	textbox:init(CUTSCREEN_TEXT[level])
+	textbox:init(CUTSCENE_TEXT[level])
 	textbox:add()
+
+	GAME_STATE_TYPE = "CUTSCENE"
 end
 
 function displayCutScene(level)
-	city1:draw(0, 0)
-	gfx.setFont(minimonofont)
-	-- gfx.setColor(playdate.graphics.kColorWhite)
-	-- gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("I'm so glad you're here,\nBrickCrusher" .. level, 5, 5)
-
 	if playdate.buttonJustPressed("A") then
-		if (not textbox.typing) then
+		if (textbox.finished) then
 			textbox:remove()
 			currentGameState += 1
+			GAME_STATE_TYPE = "LEVEL"
 		end
+	end
+
+	xScroll += 1
+	if (xScroll < ScreenWidth * 2) then
+		playdate.graphics.sprite.redrawBackground()
 	end
 
 	gfx.sprite.update()

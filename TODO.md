@@ -2,11 +2,9 @@
 
 ### HIGH
 
-- Create the cutscenes
 - Better end game
 - Say something on death
 - Graphic for the front panel that shows up in the menu
-- Small is too hard to read on a real device
 
 ---
 
@@ -91,3 +89,5 @@
 ✅-- Create first 5 Levels
 ✅-- Way less bricks in lower levels -- too hard
 ✅-- Bullets and Pills keep going after a level ends
+✅-- Create the cutscenes
+✅--- Small is too hard to read on a real device
