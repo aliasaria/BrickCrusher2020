@@ -123,6 +123,8 @@ PANEL_START = SCREEN_WIDTH
 holdComboPositionX = nil
 holdComboPositionY = nil
 
+local city1 = gfx.image.new('images/backgrounds/city1.png')
+
 
 local function gameSpeedSpeedUpIfNeeded()
 	if (playerHasBegunPlaying) then
@@ -152,6 +154,8 @@ function gameSpeedReset()
 end
 
 local function initializeLevel(n)
+	gfx.sprite.removeAll()
+
 	for i, v in ipairs(bricks) do
 		if v ~= nil then
 			v:remove()
@@ -169,7 +173,23 @@ local function initializeLevel(n)
 			end
 		end
 	end
+
+	-- Reset core things
+	resetPaddle()
+	balls = createBalls()
+	resetAllBalls()
+	removeAllPillsAndBullets()
+	gameSpeedReset()
+
+	gfx.sprite.setBackgroundDrawingCallback(
+		function(x, y, width, height)
+			-- x,y,width,height is the updated area in sprite-local coordinates
+			-- The clip rect is already set to this area, so we don't need to set it ourselves
+			city1:drawFaded(0, 0, 0.3, gfx.image.kDitherTypeScreen)
+		end
+	)
 end
+
 
 function removeAllPillsAndBullets()
 	gfx.sprite.performOnAllSprites(function(sprite)
@@ -183,10 +203,14 @@ local function createBricksIfNeeded()
 	if (levelNeedsInitialization == true) then
 		levelNeedsInitialization = false
 		initializeLevel(currentLevel)
-		resetAllBalls()
-		removeAllPillsAndBullets()
-		gameSpeedReset()
 	end
+end
+
+function resetPaddle()
+	if (paddle ~= nil) then
+		paddle:remove()
+	end
+	paddle = createPaddle(130, TOP_OF_PADDLE_Y + 6)
 end
 
 function restartGame()
@@ -195,18 +219,16 @@ function restartGame()
 	currentPowerUP = "NONE"
 	currentGameState = GAME_STATES.HOMESCREEN
 	lives = 3
-	if (paddle ~= nil) then
-		paddle:remove()
-	end
-	paddle = createPaddle(130, TOP_OF_PADDLE_Y + 6)
 
+	resetPaddle()
 	-- Extra balls
 	for i, v in ipairs(balls) do
 		v:remove()
 	end
-	-- Create all balls on standby
-	balls = createBalls()
-	resetMainBall()
+
+	-- Create all balls on standby (moved to initializeLevel)
+	-- balls = createBalls()
+	-- resetMainBall()
 
 	levelNeedsInitialization = true
 
@@ -237,7 +259,9 @@ function nextLevel()
 			or currentGameState == GAME_STATES.LEVEL5
 			or currentGameState == GAME_STATES.LEVEL6
 		) then
+		-- Proceed to a cutscene
 		currentGameState += 1
+		initCutscene(currentLevel)
 	elseif currentGameState == GAME_STATES.LEVEL7 then
 		currentGameState = GAME_STATES.THEEND
 		currentLevel = 7

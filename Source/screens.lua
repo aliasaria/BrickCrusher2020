@@ -1,6 +1,11 @@
+import 'textbox.lua'
+import 'cutscreen_text.lua'
+
 local gfx <const> = playdate.graphics
 
 local cityscapeBackground = gfx.image.new('images/backgrounds/cityscape_background.png')
+local city1 = gfx.image.new('images/backgrounds/city1.png')
+local city2 = gfx.image.new('images/backgrounds/city2.png')
 
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
@@ -29,7 +34,6 @@ function displayHomeScreen()
 	end
 
 	gfx.setColor(playdate.graphics.kColorBlack)
-
 	-- drawSidePanel()
 end
 
@@ -61,18 +65,37 @@ function displayTheEnd()
 	drawSidePanel()
 end
 
-function displayCutScene(level)
-	gfx.setFont(minimonofont)
-	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("CUTSCENE LEVEL:" .. level, 20, SCREEN_HEIGHT / 2 - 30)
+function initCutscene(level)
+	gfx.sprite.removeAll()
 
-	if playdate.buttonJustPressed("B") then
-		currentGameState += 1
+	gfx.sprite.setBackgroundDrawingCallback(
+		function(x, y, width, height)
+			-- x,y,width,height is the updated area in sprite-local coordinates
+			-- The clip rect is already set to this area, so we don't need to set it ourselves
+			city1:draw(0, 0)
+		end
+	)
+
+	textbox:init(CUTSCREEN_TEXT[level])
+	textbox:add()
+end
+
+function displayCutScene(level)
+	city1:draw(0, 0)
+	gfx.setFont(minimonofont)
+	-- gfx.setColor(playdate.graphics.kColorWhite)
+	-- gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
+	gfx.setColor(playdate.graphics.kColorBlack)
+	gfx.drawText("I'm so glad you're here,\nBrickCrusher" .. level, 5, 5)
+
+	if playdate.buttonJustPressed("A") then
+		if (not textbox.typing) then
+			textbox:remove()
+			currentGameState += 1
+		end
 	end
 
-	drawSidePanel()
+	gfx.sprite.update()
 end
 
 function drawSidePanel()
