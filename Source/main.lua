@@ -23,8 +23,6 @@ local gfx <const> = playdate.graphics
 local s, ms = playdate.getSecondsSinceEpoch()
 math.randomseed(ms, s)
 
-local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
-
 -- ------------------------------
 -- ------------------------------
 -- Constants
@@ -246,6 +244,41 @@ function nextLevel()
 	end
 end
 
+-- This function is the meat of the game which is to be run in the main loop
+-- when we are in active gameplay
+function gameUpdate()
+	-- Shoot bullets if you have the Gun
+	if playdate.buttonJustPressed("A") or playdate.buttonIsPressed("UP") then
+		-- Don't shoot if you have a ball stuck to you right now ( @TODO )
+		if (paddle.hasGun) then
+			local now = playdate.getCurrentTimeMilliseconds()
+
+			local delay = (now - timeWhenLastBulletWasShot)
+
+			if (bulletsOnScreenCount > 1 or delay < 350) then
+				-- do nothing if there are too many bullets on the screen
+			else
+				local b = playerFire()
+			end
+
+			-- Add this bullet to the global list of bullets
+			-- WE don't know how to manage this table and remove so leave out for now ... @TODO table.insert(bullets, b)
+		end
+	end
+
+	if playdate.buttonJustPressed("B") or playdate.buttonIsPressed("DOWN") then
+		balls:shootBalls()
+	end
+
+	createBricksIfNeeded()
+
+	gfx.sprite.update()
+
+	drawSidePanel()
+
+	gameSpeedSpeedUpIfNeeded()
+end
+
 -- ------------------------------
 -- ------------------------------
 -- The main loop
@@ -262,37 +295,7 @@ function playdate.update()
 			or currentGameState == GAME_STATES.LEVEL6
 			or currentGameState == GAME_STATES.LEVEL7
 		) then
-		-- Shoot bullets if you have the Gun
-		if playdate.buttonJustPressed("A") or playdate.buttonIsPressed("UP") then
-			-- Don't shoot if you have a ball stuck to you right now ( @TODO )
-			if (paddle.hasGun) then
-				local now = playdate.getCurrentTimeMilliseconds()
-
-				local delay = (now - timeWhenLastBulletWasShot)
-
-				if (bulletsOnScreenCount > 1 or delay < 350) then
-					-- do nothing if there are too many bullets on the screen
-				else
-					local b = playerFire()
-				end
-
-				-- Add this bullet to the global list of bullets
-				-- WE don't know how to manage this table and remove so leave out for now ... @TODO table.insert(bullets, b)
-			end
-		end
-
-		if playdate.buttonJustPressed("B") or playdate.buttonIsPressed("DOWN") then
-			balls:shootBalls()
-		end
-
-		createBricksIfNeeded()
-
-		gfx.sprite.update()
-
-		drawSidePanel()
-
-		gameSpeedSpeedUpIfNeeded()
-
+		gameUpdate()
 		return
 	elseif (currentGameState == GAME_STATES.GAMEOVER) then
 		displayGameOverScreen()
@@ -355,6 +358,7 @@ end)
 -- ------------------
 playdate.display.setRefreshRate(30)
 restartGame()
--- ball = createBall(130,220,0,0)
+
+-- Play the startup music
 local startMusic = playdate.sound.sampleplayer.new('sounds/8BitRetroSFXPack1_Traditional_GameStarting08.wav')
 startMusic:play()

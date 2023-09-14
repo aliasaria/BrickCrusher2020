@@ -5,7 +5,7 @@ local cityscapeBackground = gfx.image.new('images/backgrounds/cityscape_backgrou
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 
-local font = gfx.font.new('images/font/blocky')
+local font = gfx.font.new('images/font/Mini Mono')
 local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
 
@@ -20,17 +20,17 @@ function displayHomeScreen()
 	gfx.setColor(playdate.graphics.kColorWhite)
 	gfx.drawText("BRICKCRUSHER 2000", 10, paddingTop + 5)
 
-	gfx.fillRect(180, 220, 125, 20)
+	gfx.fillRect(120, 220, 150, 20)
 	gfx.setFont(font)
-	gfx.drawText("PRESS B TO START", 192, 227)
+	gfx.drawText("PRESS A TO START", 134, 227)
 
-	if playdate.buttonJustPressed("B") then
+	if playdate.buttonJustPressed("A") then
 		currentGameState = GAME_STATES.LEVEL1
 	end
 
 	gfx.setColor(playdate.graphics.kColorBlack)
 
-	drawSidePanel()
+	-- drawSidePanel()
 end
 
 function displayGameOverScreen()
