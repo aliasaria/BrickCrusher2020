@@ -6,6 +6,7 @@
 - Better end game
 - Say something on death
 - Graphic for the front panel that shows up in the menu
+- Small is too hard to read on a real device
 
 ---
 
@@ -16,7 +17,6 @@
 - Use total bounces to calculate speed, instead of time elapsed
 - Store high scores
 - BUG: Flip doesn't affect the crank
-- Create 25 levels
 
 ---
 
@@ -28,12 +28,12 @@
   - Something else?
   - SHEILD: Backup wall below the paddle that breaks after it is hit but can save you one time
   - Double paddle mode -- paddle turns into two paddles
+  - Tutorial?
 
 ## Bugs
 
 - Ball can go through the very right side of the paddle if it is right at the edge
 - was able to get a ball to bounce side to side and never come down
-- Right now we have an issue that if you shoot, and then restart level, the gun shots keep propagating
 - BUG: level ends before bricks are gone -- something with brickCount? -- does this still happen?
 
 ## Consider / Ideas
@@ -49,6 +49,7 @@
 - Bricks should come down as time passes (but only go so far)
 - Specify where pills are stofred, not random
 - Animate paddle's movement, even though it can move by large #'s, just to make it smoother? Or will this create lag?
+- Create 25 levels
 
 ---
 
