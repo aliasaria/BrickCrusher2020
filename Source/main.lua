@@ -210,6 +210,7 @@ end
 function resetPaddle()
 	if (paddle ~= nil) then
 		paddle:remove()
+		paddle = nil
 	end
 	paddle = createPaddle(130, TOP_OF_PADDLE_Y + 6)
 end

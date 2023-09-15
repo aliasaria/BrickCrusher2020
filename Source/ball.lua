@@ -72,6 +72,7 @@ function createBall(x, y, dx_in, dy_in)
 			end
 
 			gameSpeedReset()
+			resetPaddle()
 			resetMainBall()
 		end
 	end
