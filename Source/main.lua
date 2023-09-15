@@ -118,7 +118,7 @@ powerUpMessageFadeTimer = 0
 -- This is true at the start of a level, before the level is loaded
 local levelNeedsInitialization = true
 
-
+DID_DIE = false -- every time a death happens turn this to true to show the death screen
 -- ------------------------------
 -- ------------------------------
 -- Side Panel
@@ -141,7 +141,7 @@ local function gameSpeedSpeedUpIfNeeded()
 		gameSpeed = math.ceil(NUMBER_OF_BALL_BOUNCES // 16) + 1
 	end
 
-	print(gameSpeed)
+	-- print(gameSpeed)
 end
 
 function gameSpeedReset()
@@ -313,6 +313,10 @@ end
 -- ------------------------------
 -- ------------------------------
 function playdate.update()
+	if (DID_DIE == true) then
+		deathScreenUpdate()
+		return
+	end
 	-- If we are in an active level then do the following
 	if (GAME_STATE_TYPE == "LEVEL") then
 		gameUpdate()

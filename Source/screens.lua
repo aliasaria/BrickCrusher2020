@@ -3,9 +3,8 @@ import 'cutscene_text.lua'
 
 local gfx <const> = playdate.graphics
 
-local cityscapeBackground = gfx.image.new('images/backgrounds/cityscape_background.png')
+local city4 = gfx.image.new('images/backgrounds/city4.png')
 local city1 = gfx.image.new('images/backgrounds/city1.png')
--- local city2 = gfx.image.new('images/backgrounds/city3.png')
 
 local heartImgFilled = gfx.image.new('images/heartFilled.png')
 local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
@@ -17,17 +16,20 @@ local ScreenWidth = playdate.display.getWidth()
 
 
 function homeScreenUpdate()
-	cityscapeBackground:draw(0, 0)
+	city4:draw(0, 0)
 
-	local paddingTop = 100
+	local paddingTop = 10
 
 	gfx.setFont(minimonofont)
 	gfx.setColor(playdate.graphics.kColorWhite)
 	gfx.fillRect(5, paddingTop, 280, 24)
 	gfx.setColor(playdate.graphics.kColorWhite)
 	gfx.drawText("BRICKCRUSHER 2000", 10, paddingTop + 5)
+	gfx.setFont(font)
+	gfx.fillRect(5, 40, 180, 18)
+	gfx.drawTextInRect("A Game by Ali Asaria", 5 + 5, 40 + 5, 180 - 5, 18 - 5)
 
-	gfx.fillRect(120, 220, 170, 20)
+	gfx.fillRect(120, 220, 180, 20)
 	gfx.setFont(font)
 	gfx.drawText("PRESS (A) TO START", 134, 227)
 
@@ -48,7 +50,7 @@ function gameOverScreenUpdate()
 	gfx.setColor(playdate.graphics.kColorBlack)
 	gfx.drawText("GAMEOVER!", 90, GAME_AREA_HEIGHT / 2 - 30)
 
-	if playdate.buttonJustPressed("B") then
+	if playdate.buttonJustPressed("A") then
 		restartGame()
 	end
 
@@ -197,4 +199,18 @@ function drawSidePanel()
 	end
 
 	-- gfx.drawText('BNC:' .. NUMBER_OF_BALL_BOUNCES, PANEL_START + 10, 32 + linespacing * 8)
+end
+
+function deathScreenUpdate()
+	gfx.setFont(minimonofont)
+	gfx.setColor(playdate.graphics.kColorWhite)
+	gfx.fillRect(70, GAME_AREA_HEIGHT / 2 - 20 - 30, 200, 130)
+	gfx.setColor(playdate.graphics.kColorBlack)
+	gfx.drawText("OUCH!", 90, GAME_AREA_HEIGHT / 2 - 30)
+
+	if playdate.buttonJustPressed("A") then
+		DID_DIE = false
+	end
+
+	drawSidePanel()
 end

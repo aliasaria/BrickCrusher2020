@@ -5,7 +5,6 @@
 - Better end game
 - Say something on death
 - Graphic for the front panel that shows up in the menu
-- You can still hold sticky and gun in situations
 
 ---
 
@@ -33,6 +32,7 @@
 - Ball can go through the very right side of the paddle if it is right at the edge
 - was able to get a ball to bounce side to side and never come down
 - BUG: level ends before bricks are gone -- something with brickCount? -- does this still happen?
+- You can still hold sticky and gun in situations DOUBLE CHECK IF THIS STILL HAPPENS
 
 ## Consider / Ideas
 

@@ -2,7 +2,7 @@ local gfx <const> = playdate.graphics
 
 function createPaddle(x, y)
 	local paddle = gfx.sprite.new()
-	local playerImage = gfx.image.new('images/paddle1')
+	local playerImage = gfx.image.new('images/paddle/paddle1')
 	local w, h = playerImage:getSize()
 	paddle.isSticky = false
 	paddle.movementFlip = 1 --if this is -1 then the motion flips
@@ -20,7 +20,7 @@ function createPaddle(x, y)
 	function paddle:grow()
 		self:removeAllPowerUps()
 		paddle.isLong = true
-		playerImage = gfx.image.new('images/paddle_long')
+		playerImage = gfx.image.new('images/paddle/paddle_long')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
 		paddle:setCollideRect(0, 4, w, h - 3)
@@ -30,7 +30,7 @@ function createPaddle(x, y)
 		self:removeAllPowerUps()
 		balls:shootBalls()
 		self.hasGun = true
-		local gunImage = gfx.image.new('images/paddle_w_gun')
+		local gunImage = gfx.image.new('images/paddle/paddle_w_gun')
 		paddle:moveTo(self.x, y)
 		paddle:setImage(gunImage)
 		w, h = gunImage:getSize()
@@ -43,14 +43,14 @@ function createPaddle(x, y)
 		-- We can assume the paddle is short because you can't be long with
 		-- a Gun. So don't call this function, unless you're sure the paddle
 		-- has a gun
-		local playerImage = gfx.image.new('images/paddle1')
+		local playerImage = gfx.image.new('images/paddle/paddle1')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
 		paddle:setCollideRect(0, 4, w, h - 3)
 	end
 
 	function paddle:removeAllPowerUps()
-		local playerImage = gfx.image.new('images/paddle1')
+		local playerImage = gfx.image.new('images/paddle/paddle1')
 		paddle:setImage(playerImage)
 		w, h = playerImage:getSize()
 		paddle:setCollideRect(0, 4, w, h - 3)
