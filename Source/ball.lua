@@ -79,8 +79,8 @@ function createBall(x, y, dx_in, dy_in)
 		-- Bounce off edges of screen
 		--
 		-- Right
-		if (ball.x + ball.width / 2 >= SCREEN_WIDTH) then
-			ball.x = SCREEN_WIDTH - ball.width / 2
+		if (ball.x + ball.width / 2 >= GAME_AREA_WIDTH) then
+			ball.x = GAME_AREA_WIDTH - ball.width / 2
 			ball.dx = -math.abs(ball.dx)
 		end
 		-- Left
@@ -94,7 +94,7 @@ function createBall(x, y, dx_in, dy_in)
 			ball.y = 0 + ball.width / 2
 		end
 		-- Bottom
-		if (ball.y >= SCREEN_HEIGHT + 10) then
+		if (ball.y >= GAME_AREA_HEIGHT + 10) then
 			if (DEBUG) then
 				ball.dy = -(math.abs(ball.dy))
 			else
@@ -184,8 +184,8 @@ function createBall(x, y, dx_in, dy_in)
 			end
 		end
 
-		if (ball.x > SCREEN_WIDTH) then
-			ball.x = SCREEN_WIDTH
+		if (ball.x > GAME_AREA_WIDTH) then
+			ball.x = GAME_AREA_WIDTH
 		end
 	end
 

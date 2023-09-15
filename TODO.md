@@ -15,7 +15,6 @@
 - Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
 - Use total bounces to calculate speed, instead of time elapsed
 - Store high scores
-- BUG: Flip doesn't affect the crank
 
 ---
 
@@ -28,6 +27,7 @@
   - SHEILD: Backup wall below the paddle that breaks after it is hit but can save you one time
   - Double paddle mode -- paddle turns into two paddles
   - Tutorial?
+- When showing powerup text, draw white background behind so we can read it
 
 ## Bugs
 
@@ -91,4 +91,5 @@
 ✅-- Way less bricks in lower levels -- too hard
 ✅-- Bullets and Pills keep going after a level ends
 ✅-- Create the cutscenes
-✅--- Small is too hard to read on a real device
+✅-- Small is too hard to read on a real device
+✅-- BUG: Flip doesn't affect the crank

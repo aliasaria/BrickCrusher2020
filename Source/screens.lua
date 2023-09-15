@@ -16,7 +16,7 @@ local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 local ScreenWidth = playdate.display.getWidth()
 
 
-function displayHomeScreen()
+function homeScreenUpdate()
 	cityscapeBackground:draw(0, 0)
 
 	local paddingTop = 100
@@ -41,12 +41,12 @@ function displayHomeScreen()
 	-- drawSidePanel()
 end
 
-function displayGameOverScreen()
+function gameOverScreenUpdate()
 	gfx.setFont(minimonofont)
 	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
+	gfx.fillRect(70, GAME_AREA_HEIGHT / 2 - 20 - 30, 200, 130)
 	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("GAMEOVER!", 90, SCREEN_HEIGHT / 2 - 30)
+	gfx.drawText("GAMEOVER!", 90, GAME_AREA_HEIGHT / 2 - 30)
 
 	if playdate.buttonJustPressed("B") then
 		restartGame()
@@ -55,12 +55,12 @@ function displayGameOverScreen()
 	drawSidePanel()
 end
 
-function displayTheEnd()
+function theEndUpdate()
 	gfx.setFont(minimonofont)
 	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, SCREEN_HEIGHT / 2 - 20 - 30, 200, 130)
+	gfx.fillRect(70, GAME_AREA_HEIGHT / 2 - 20 - 30, 200, 130)
 	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("YOU HAVE WON!", 90, SCREEN_HEIGHT / 2 - 30)
+	gfx.drawText("YOU HAVE WON!", 90, GAME_AREA_HEIGHT / 2 - 30)
 
 	if playdate.buttonJustPressed("B") then
 		restartGame()
@@ -91,7 +91,7 @@ function initCutscene(level)
 	GAME_STATE_TYPE = "CUTSCENE"
 end
 
-function displayCutScene(level)
+function cutSceneUpdate(level)
 	if playdate.buttonJustPressed("A") then
 		if (textbox.finished) then
 			textbox:remove()
@@ -113,7 +113,7 @@ function drawSidePanel()
 
 	-- Draw Border
 	gfx.setLineWidth(3)
-	gfx.drawLine(PANEL_START, 0, PANEL_START, SCREEN_HEIGHT)
+	gfx.drawLine(PANEL_START, 0, PANEL_START, GAME_AREA_HEIGHT)
 
 	-- Draw line where the paddle is
 	-- gfx.setLineWidth(1)

@@ -28,7 +28,9 @@ math.randomseed(ms, s)
 -- Constants
 -- ------------------------------
 -- ------------------------------
-SCREEN_WIDTH = 310
+GAME_AREA_WIDTH = 310
+GAME_AREA_HEIGHT = playdate.display.getHeight()
+SCREEN_WIDTH = playdate.display.getWidth()
 SCREEN_HEIGHT = playdate.display.getHeight()
 
 BALL_ORIGINAL_DY = 2
@@ -122,7 +124,7 @@ local levelNeedsInitialization = true
 -- ------------------------------
 -- ------------------------------
 
-PANEL_START = SCREEN_WIDTH
+PANEL_START = GAME_AREA_WIDTH
 
 holdComboPositionX = nil
 holdComboPositionY = nil
@@ -322,15 +324,15 @@ function playdate.update()
 		gameUpdate()
 		return
 	elseif (currentGameState == GAME_STATES.GAMEOVER) then
-		displayGameOverScreen()
+		gameOverScreenUpdate()
 		return
 	elseif (currentGameState == GAME_STATES.HOMESCREEN) then
-		displayHomeScreen()
+		homeScreenUpdate()
 		return
 	elseif (GAME_STATE_TYPE == "CUTSCENE") then
-		displayCutScene(currentLevel)
+		cutSceneUpdate(currentLevel)
 	elseif (currentGameState == GAME_STATES.THEEND) then
-		displayTheEnd()
+		theEndUpdate()
 	end
 end
 

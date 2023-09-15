@@ -110,8 +110,8 @@ function createPaddle(x, y)
 
 		-- print('paddle pos: '..self.x..","..self.y)
 
-		if self.x + dx > SCREEN_WIDTH - w / 2 then
-			dx = (SCREEN_WIDTH - w / 2) - self.x
+		if self.x + dx > GAME_AREA_WIDTH - w / 2 then
+			dx = (GAME_AREA_WIDTH - w / 2) - self.x
 			-- self:moveTo(SCREEN_WIDTH - w/2, self.y)
 		end
 
