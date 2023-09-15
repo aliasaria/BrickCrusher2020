@@ -96,12 +96,13 @@ GAME_STATE_TYPE = "HOMESCREEN"
 currentPowerUP = "NONE"
 lives = 3
 
-brickCount = 0 -- total number of bricks on the screen
+brickCount = 0             -- total number of bricks on the screen
+
+NUMBER_OF_BALL_BOUNCES = 0 -- used to track the number of bounces for managing ball speed
 
 -- Game goes faster and faster as time passes, but is limited
 gameSpeed = 1
 gameStartTime = 1 -- we do not use playdate.resetElapsedTime() for whatever reason
-playerHasBegunPlaying = false
 
 -- Manage the number of gun bullets on the screen
 bullets = {}
@@ -133,19 +134,14 @@ local cityBackground = gfx.image.new('images/backgrounds/city3.png')
 
 
 local function gameSpeedSpeedUpIfNeeded()
-	if (playerHasBegunPlaying) then
-		gameStartTime = gameStartTime + 1
-	end
-
 	-- Don't let the game go faster than the max speed of 5
 	if (gameSpeed >= 5) then
 		gameSpeed = 5
 	else
-		gameSpeed = math.ceil(gameStartTime / 750)
+		gameSpeed = math.ceil(NUMBER_OF_BALL_BOUNCES // 16) + 1
 	end
 
-	-- local verticalMoveSpeed = BALL_ORIGINAL_DY * (1+( (gameSpeed-1) / 2))
-	-- print(gameSpeed .. ' -> ' .. verticalMoveSpeed)
+	print(gameSpeed)
 end
 
 function gameSpeedReset()
@@ -154,9 +150,6 @@ function gameSpeedReset()
 	if (DEBUG) then
 		gameSpeed = 5
 	end
-
-	gameStartTime = 1
-	playerHasBegunPlaying = false
 end
 
 local function initializeLevel(n)

@@ -7,7 +7,7 @@ end
 
 
 hitSound = playdate.sound.sampleplayer.new('sounds/Wall_Light_Double_Switch_Off-004.wav')
-thudSound = playdate.sound.sampleplayer.new('sounds/PUNCH_PERCUSSIVE_HEAVY_06.wav')
+-- thudSound = playdate.sound.sampleplayer.new('sounds/PUNCH_PERCUSSIVE_HEAVY_06.wav')
 
 lastHitTime = playdate.getCurrentTimeMilliseconds()
 lastComboTime = nil

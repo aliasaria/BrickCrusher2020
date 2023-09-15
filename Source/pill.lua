@@ -117,6 +117,7 @@ function powerUp(type)
 
 			balls[i]:setVisible(true)
 			balls[i]:setUpdatesEnabled(true)
+			balls[i]:setCollisionsEnabled(true)
 			balls[i].isAlive = true
 			-- balls[i].x = hix
 			-- balls[i].y = hiy

@@ -13,7 +13,6 @@
 
 - Use timers for places where we are currently capturing the time (I didn't know they existed https://sdk.play.date/1.12.1/Inside%20Playdate.html#C-timer)
 - Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
-- Use total bounces to calculate speed, instead of time elapsed
 - Store high scores
 
 ---
@@ -93,3 +92,4 @@
 ✅-- Create the cutscenes
 ✅-- Small is too hard to read on a real device
 ✅-- BUG: Flip doesn't affect the crank
+✅-- Use total bounces to calculate speed, instead of time elapsed

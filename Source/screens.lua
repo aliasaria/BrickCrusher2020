@@ -195,4 +195,6 @@ function drawSidePanel()
 		gfx.drawText(currentPowerUP, paddle.x - 4, paddle.y - 25)
 		powerUpMessageFadeTimer = powerUpMessageFadeTimer - 1
 	end
+
+	-- gfx.drawText('BNC:' .. NUMBER_OF_BALL_BOUNCES, PANEL_START + 10, 32 + linespacing * 8)
 end

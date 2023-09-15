@@ -101,13 +101,6 @@ function createPaddle(x, y)
 
 		dx += acceleratedChange * self.movementFlip
 
-		-- If the player has moved at all, consider the game to be
-		-- started, and the game speed timer will start to tick
-		if (dx ~= 0) then
-			playerHasBegunPlaying = true
-		end
-
-
 		-- print('paddle pos: '..self.x..","..self.y)
 
 		if self.x + dx > GAME_AREA_WIDTH - w / 2 then

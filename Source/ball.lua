@@ -18,6 +18,7 @@ function createBall(x, y, dx_in, dy_in)
 	ball.OldY = y
 
 	ball.isAlive = false
+	ball:setCollisionsEnabled(false)
 
 	ball.spriteType = SpriteTypes.BALL
 
@@ -60,6 +61,7 @@ function createBall(x, y, dx_in, dy_in)
 		self:setUpdatesEnabled(false)
 		-- self:moveTo(paddle.x,TOP_OF_PADDLE_Y)
 		self.isAlive = false
+		self:setCollisionsEnabled(false)
 
 		if activeBalls < 1 then
 			lives = lives - 1
@@ -82,16 +84,19 @@ function createBall(x, y, dx_in, dy_in)
 		if (ball.x + ball.width / 2 >= GAME_AREA_WIDTH) then
 			ball.x = GAME_AREA_WIDTH - ball.width / 2
 			ball.dx = -math.abs(ball.dx)
+			NUMBER_OF_BALL_BOUNCES += 1
 		end
 		-- Left
 		if (ball.x - ball.width / 2 <= 0) then
 			ball.x = 0 + ball.width / 2
 			ball.dx = math.abs(ball.dx)
+			NUMBER_OF_BALL_BOUNCES += 1
 		end
 		-- Top
 		if (ball.y <= 0 + ball.width / 2) then
 			ball.dy = math.abs(ball.dy)
 			ball.y = 0 + ball.width / 2
+			NUMBER_OF_BALL_BOUNCES += 1
 		end
 		-- Bottom
 		if (ball.y >= GAME_AREA_HEIGHT + 10) then
@@ -182,6 +187,8 @@ function createBall(x, y, dx_in, dy_in)
 
 				hitBrick(collision.other)
 			end
+
+			NUMBER_OF_BALL_BOUNCES += 1
 		end
 
 		if (ball.x > GAME_AREA_WIDTH) then
@@ -203,11 +210,13 @@ end
 
 function createBalls()
 	local balls = {}
+	NUMBER_OF_BALL_BOUNCES = 0
 
 	for i = 1, MAX_NUMBER_OF_BALLS do
 		local b = createBall(330, 100 + i * 10, 0, 0)
 		b:setVisible(false)
 		b:setUpdatesEnabled(false)
+		b:setCollisionsEnabled(false)
 		b.isAlive = false
 		-- b:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 		balls[i] = b
@@ -215,6 +224,7 @@ function createBalls()
 
 	balls[1]:setVisible(true)
 	balls[1]:setUpdatesEnabled(true)
+	balls[1]:setCollisionsEnabled(true)
 	balls[1].isAlive = true
 	balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 	activeBalls = 1
@@ -247,11 +257,6 @@ function createBalls()
 	end
 
 	function balls:shootBalls()
-		-- Whenever we reset the speed we set this to false
-		-- and we wait until the player moves or shoots to
-		-- "start the timer"
-		playerHasBegunPlaying = true
-
 		for i, ball in ipairs(balls) do
 			if ball.isAlive then
 				if (ball.isStuck) then
@@ -271,12 +276,15 @@ function resetMainBall()
 	if balls[1] ~= nil then
 		balls[1]:setVisible(true)
 		balls[1]:setUpdatesEnabled(true)
+		balls[1]:setCollisionsEnabled(true)
 		balls[1].isAlive = true
 		balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 		balls[1].dx = 2
 		activeBalls = 1
 		balls[1].isStuck = true
 	end
+
+	NUMBER_OF_BALL_BOUNCES = 0
 end
 
 function resetAllBalls()
@@ -284,6 +292,7 @@ function resetAllBalls()
 		local b = balls[i]
 		b:setVisible(false)
 		b:setUpdatesEnabled(false)
+		b:setCollisionsEnabled(false)
 		b.isAlive = false
 		b:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 	end
@@ -291,10 +300,13 @@ function resetAllBalls()
 	if balls[1] ~= nil then
 		balls[1]:setVisible(true)
 		balls[1]:setUpdatesEnabled(true)
+		balls[1]:setCollisionsEnabled(true)
 		balls[1].isAlive = true
 		balls[1]:moveTo(paddle.x, TOP_OF_PADDLE_Y)
 		balls[1].dx = 2
 		activeBalls = 1
 		balls[1].isStuck = true
 	end
+
+	NUMBER_OF_BALL_BOUNCES = 0
 end
