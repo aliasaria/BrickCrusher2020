@@ -27,9 +27,9 @@ function displayHomeScreen()
 	gfx.setColor(playdate.graphics.kColorWhite)
 	gfx.drawText("BRICKCRUSHER 2000", 10, paddingTop + 5)
 
-	gfx.fillRect(120, 220, 150, 20)
+	gfx.fillRect(120, 220, 170, 20)
 	gfx.setFont(font)
-	gfx.drawText("PRESS A TO START", 134, 227)
+	gfx.drawText("PRESS (A) TO START", 134, 227)
 
 	if playdate.buttonJustPressed("A") then
 		initCutscene(1)

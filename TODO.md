@@ -5,6 +5,7 @@
 - Better end game
 - Say something on death
 - Graphic for the front panel that shows up in the menu
+- You can still hold sticky and gun in situations
 
 ---
 

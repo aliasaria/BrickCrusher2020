@@ -279,7 +279,7 @@ end
 -- when we are in active gameplay
 function gameUpdate()
 	-- Shoot bullets if you have the Gun
-	if playdate.buttonJustPressed("A") or playdate.buttonIsPressed("UP") then
+	if playdate.buttonJustPressed("B") or playdate.buttonIsPressed("UP") then
 		-- Don't shoot if you have a ball stuck to you right now ( @TODO )
 		if (paddle.hasGun) then
 			local now = playdate.getCurrentTimeMilliseconds()
@@ -297,7 +297,7 @@ function gameUpdate()
 		end
 	end
 
-	if playdate.buttonJustPressed("B") or playdate.buttonIsPressed("DOWN") then
+	if playdate.buttonJustPressed("A") or playdate.buttonIsPressed("DOWN") then
 		balls:shootBalls()
 	end
 
