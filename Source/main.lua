@@ -271,6 +271,7 @@ function nextLevel()
 		initCutscene(currentLevel)
 	elseif currentGameState == GAME_STATES.LEVEL7 then
 		currentGameState = GAME_STATES.THEEND
+		GAME_STATE_TYPE = "ENDSCREEN"
 		currentLevel = 7
 	end
 end
