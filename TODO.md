@@ -11,7 +11,6 @@
 - Use timers for places where we are currently capturing the time (I didn't know they existed https://sdk.play.date/1.12.1/Inside%20Playdate.html#C-timer)
 - Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
 - Store high scores
-- If you get multiball things get way too fast (are balls interacting with each other?)
 
 ---
 
@@ -24,7 +23,7 @@
   - SHEILD: Backup wall below the paddle that breaks after it is hit but can save you one time
   - Double paddle mode -- paddle turns into two paddles
   - Tutorial?
-- When showing powerup text, draw white background behind so we can read it
+- If you get multiball things get way too fast (are balls interacting with each other?) maybe time should not increase linearly with bounces
 
 ## Bugs
 
@@ -44,7 +43,7 @@
 - Should speed progress if you are stuck to paddle -- you could be shooting. Maybe we should stop time even so
 - Manually calculating pill collisions will allow us to remove collisions with paddle completely, saving computation
 - Bricks should come down as time passes (but only go so far)
-- Specify where pills are stofred, not random
+- Specify where pills are stored, not random
 - Animate paddle's movement, even though it can move by large #'s, just to make it smoother? Or will this create lag?
 - Create 25 levels
 
@@ -95,3 +94,4 @@
 ✅-- Better end game
 ✅-- Say something on death
 ✅-- Allow using Up and Down to advance text
+✅-- When showing powerup text, draw white background behind so we can read it

@@ -19,6 +19,8 @@ lastComboPositionY = 0
 comboPositionX = 0
 comboPositionY = 0
 
+CHANCE_OF_GETTING_A_PILL = 6 -- 1 in 6 chance of getting a pill
+
 function hitBrick(brick)
 	-- createExplosion(brick.x, brick.y)
 
@@ -59,7 +61,7 @@ function hitBrick(brick)
 	killBrickIfDead(brick)
 
 
-	if math.random(6) == 1 then
+	if math.random(CHANCE_OF_GETTING_A_PILL) == 1 then
 		local p = createPill(brick.x, brick.y)
 		table.insert(pills, p)
 	end

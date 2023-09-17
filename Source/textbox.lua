@@ -114,11 +114,11 @@ function textbox:draw()
 
     gfx.setFont(smallfont)
     if (self.typing) then
-        gfx.drawText("(A) >", 250, HEIGHT - 14)
+        gfx.drawText("(A) >", 250, HEIGHT - 12)
     elseif self.finished == false then
-        gfx.drawText("(A) Next page...", 160, HEIGHT - 14)
+        gfx.drawText("(A) Next page...", 160, HEIGHT - 12)
     else
-        gfx.drawText("(A) to continue", 150, HEIGHT - 14)
+        gfx.drawText("(A) to continue", 163, HEIGHT - 12)
     end
 
     gfx.popContext()

@@ -173,8 +173,11 @@ function drawSidePanel()
 		gfx.drawText(lastComboSize .. ' COMBO!', lastComboPositionX, lastComboPositionY)
 	end
 
+	-- This is drawn in the main game, not the side panel. Should be somewhere else @TODO
 	if (powerUpMessageFadeTimer > 0) then
-		gfx.drawText(currentPowerUP, paddle.x - 4, paddle.y - 25)
+		gfx.setColor(playdate.graphics.kColorWhite)
+		gfx.fillRect(paddle.x - 4 - 2, paddle.y - 25 - 2, 44, 12)
+		gfx.drawTextInRect(currentPowerUP, paddle.x - 4, paddle.y - 25, 44, 12, 0, "", kTextAlignment.center)
 		powerUpMessageFadeTimer = powerUpMessageFadeTimer - 1
 	end
 
