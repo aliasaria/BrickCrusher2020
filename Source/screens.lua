@@ -14,6 +14,14 @@ local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
 local ScreenWidth = playdate.display.getWidth()
 
+--Advance Menu Button
+--If this is true, then either A or the Downbutton is being pressed
+local function advanceMenu()
+	if (playdate.buttonJustPressed("A") or playdate.buttonJustPressed("DOWN")) then
+		return true
+	end
+	return false
+end
 
 function homeScreenUpdate()
 	city4:draw(0, 0)
@@ -33,7 +41,7 @@ function homeScreenUpdate()
 	gfx.setFont(font)
 	gfx.drawText("PRESS (A) TO START", 134, 227)
 
-	if playdate.buttonJustPressed("A") then
+	if advanceMenu() then
 		initCutscene(1)
 		currentGameState = GAME_STATES.HOMESCREEN_CUTSCENE
 		GAME_STATE_TYPE = "CUTSCENE"
@@ -66,7 +74,7 @@ function initCutscene(level)
 end
 
 function cutSceneUpdate(level)
-	if playdate.buttonJustPressed("A") then
+	if advanceMenu() then
 		if (textbox.finished) then
 			textbox:remove()
 			currentGameState += 1
@@ -184,7 +192,7 @@ function deathScreenInit()
 end
 
 function deathScreenUpdate()
-	if playdate.buttonJustPressed("A") then
+	if advanceMenu() then
 		if (textbox.finished) then
 			textbox:remove()
 			DID_DIE = false
@@ -208,7 +216,7 @@ function gameOverInit()
 end
 
 function gameOverScreenUpdate()
-	if playdate.buttonJustPressed("A") then
+	if advanceMenu() then
 		if (textbox.finished) then
 			textbox:remove()
 			restartGame()
@@ -246,7 +254,7 @@ function youWinInit()
 end
 
 function youWinUpdate()
-	if playdate.buttonJustPressed("A") then
+	if advanceMenu() then
 		if (textbox.finished) then
 			textbox:remove()
 			restartGame()

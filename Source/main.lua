@@ -293,7 +293,10 @@ function gameUpdate()
 	end
 
 	if playdate.buttonJustPressed("A") or playdate.buttonIsPressed("DOWN") then
-		balls:shootBalls()
+		-- check if method exists first because balls might not be initialized
+		if (balls.shootBalls) then
+			balls:shootBalls()
+		end
 	end
 
 	createBricksIfNeeded()

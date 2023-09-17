@@ -11,6 +11,7 @@
 - Use timers for places where we are currently capturing the time (I didn't know they existed https://sdk.play.date/1.12.1/Inside%20Playdate.html#C-timer)
 - Save state of game on suspend resume https://sdk.play.date/1.12.1/Inside%20Playdate.html#saving-state
 - Store high scores
+- If you get multiball things get way too fast (are balls interacting with each other?)
 
 ---
 
@@ -93,3 +94,4 @@
 ✅-- Use total bounces to calculate speed, instead of time elapsed
 ✅-- Better end game
 ✅-- Say something on death
+✅-- Allow using Up and Down to advance text

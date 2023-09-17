@@ -23,6 +23,15 @@ textbox.finished = false
 local font = gfx.font.new('images/font/Mini Mono 2X')
 local smallfont = gfx.font.new('images/font/Mini Mono')
 
+--Advance Menu Button
+--If this is true, then either A or the Downbutton is being pressed
+local function advanceMenu()
+    if (playdate.buttonJustPressed("A") or playdate.buttonJustPressed("DOWN")) then
+        return true
+    end
+    return false
+end
+
 function textbox:init(text)
     -- self.text = text
     self.currentChar = 1
@@ -67,7 +76,7 @@ function textbox:update()
         end
     end
 
-    if playdate.buttonJustPressed("A") then
+    if advanceMenu() then
         if (self.typing == false and self.finished == false) then
             -- If at page end, wait for press of A
             self.currentPageNumber = self.currentPageNumber + 1
