@@ -2,5 +2,6 @@ name=BrickCrusher2020
 author=Ali Asaria
 description=BrickCrusher for Playdate
 bundleID=ca.aliasaria.BrickCrusher2020
+version=1.0
 imagePath=system/
-buildNumber=13
+buildNumber=14
