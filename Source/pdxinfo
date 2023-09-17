@@ -4,4 +4,4 @@ description=BrickCrusher for Playdate
 bundleID=ca.aliasaria.BrickCrusher2020
 version=1.0.0
 imagePath=system/
-buildNumber=17
+buildNumber=18
