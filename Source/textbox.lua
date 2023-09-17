@@ -2,14 +2,16 @@
 -- This page writes a text box sprite to the screen, and animates it as if it's being typed.
 local gfx <const> = playdate.graphics
 
-local WIDTH = 320
+PANEL_START = 310
+
+local WIDTH = PANEL_START - 15
 local HEIGHT = 120
 
 textbox = gfx.sprite.new()
 textbox:setSize(WIDTH, HEIGHT)
 textbox:setCenter(0, 0)
 textbox:moveTo(10, 10)
-textbox:setZIndex(900)
+textbox:setZIndex(2000)
 textbox.text = ""       -- this is blank for now; we can set it at any point
 textbox.currentChar = 1 -- we'll use these for the animation
 textbox.currentText = ""
@@ -103,11 +105,11 @@ function textbox:draw()
 
     gfx.setFont(smallfont)
     if (self.typing) then
-        gfx.drawText("(A) >", 270, HEIGHT - 14)
+        gfx.drawText("(A) >", 250, HEIGHT - 14)
     elseif self.finished == false then
-        gfx.drawText("(A) Next page...", 190, HEIGHT - 14)
+        gfx.drawText("(A) Next page...", 160, HEIGHT - 14)
     else
-        gfx.drawText("(A) to start level", 170, HEIGHT - 14)
+        gfx.drawText("(A) to continue", 150, HEIGHT - 14)
     end
 
     gfx.popContext()

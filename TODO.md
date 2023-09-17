@@ -2,8 +2,6 @@
 
 ### HIGH
 
-- Better end game
-- Say something on death
 - Graphic for the front panel that shows up in the menu
 
 ---
@@ -93,3 +91,5 @@
 ✅-- Small is too hard to read on a real device
 ✅-- BUG: Flip doesn't affect the crank
 ✅-- Use total bounces to calculate speed, instead of time elapsed
+✅-- Better end game
+✅-- Say something on death

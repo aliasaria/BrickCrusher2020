@@ -43,34 +43,6 @@ function homeScreenUpdate()
 	-- drawSidePanel()
 end
 
-function gameOverScreenUpdate()
-	gfx.setFont(minimonofont)
-	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, GAME_AREA_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("GAMEOVER!", 90, GAME_AREA_HEIGHT / 2 - 30)
-
-	if playdate.buttonJustPressed("A") then
-		restartGame()
-	end
-
-	drawSidePanel()
-end
-
-function theEndUpdate()
-	gfx.setFont(minimonofont)
-	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, GAME_AREA_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("YOU HAVE WON!", 90, GAME_AREA_HEIGHT / 2 - 30)
-
-	if playdate.buttonJustPressed("B") then
-		restartGame()
-	end
-
-	drawSidePanel()
-end
-
 local xScroll = 1
 
 function initCutscene(level)
@@ -201,16 +173,91 @@ function drawSidePanel()
 	-- gfx.drawText('BNC:' .. NUMBER_OF_BALL_BOUNCES, PANEL_START + 10, 32 + linespacing * 8)
 end
 
-function deathScreenUpdate()
-	gfx.setFont(minimonofont)
-	gfx.setColor(playdate.graphics.kColorWhite)
-	gfx.fillRect(70, GAME_AREA_HEIGHT / 2 - 20 - 30, 200, 130)
-	gfx.setColor(playdate.graphics.kColorBlack)
-	gfx.drawText("OUCH!", 90, GAME_AREA_HEIGHT / 2 - 30)
+-- This gets called if you lose a life but still have lives left
+function deathScreenInit()
+	removeAllPillsAndBullets()
 
+	textbox:init(OUCH_TEXT)
+	textbox:add()
+
+	DID_DIE = true
+end
+
+function deathScreenUpdate()
 	if playdate.buttonJustPressed("A") then
-		DID_DIE = false
+		if (textbox.finished) then
+			textbox:remove()
+			DID_DIE = false
+		end
 	end
 
+	gfx.sprite.update()
+	drawSidePanel()
+end
+
+-- You lose screen
+function gameOverInit()
+	gfx.sprite.removeAll()
+
+	removeAllPillsAndBullets()
+
+	textbox:init(GAME_OVER_TEXT)
+	textbox:add()
+	currentGameState = GAME_STATES.GAMEOVER
+	GAME_STATE_TYPE = "GAMEOVER"
+end
+
+function gameOverScreenUpdate()
+	if playdate.buttonJustPressed("A") then
+		if (textbox.finished) then
+			textbox:remove()
+			restartGame()
+		end
+	end
+
+	gfx.sprite.update()
+	drawSidePanel()
+end
+
+--You win credits screen
+function youWinInit()
+	gfx.sprite.removeAll()
+	xScroll = 1
+
+
+	removeAllPillsAndBullets()
+
+	textbox:init(YOU_WIN_TEXT)
+	textbox:add()
+
+	currentGameState = GAME_STATES.THEEND
+	GAME_STATE_TYPE = "ENDSCREEN"
+	currentLevel = 7
+
+	gfx.sprite.setBackgroundDrawingCallback(
+		function(x, y, width, height)
+			-- x,y,width,height is the updated area in sprite-local coordinates
+			-- The clip rect is already set to this area, so we don't need to set it ourselves
+			local slowerScroll = xScroll // 2 -- double slash is a rounded divide in Lua
+			city1:draw(slowerScroll, 0)
+			city1:draw(slowerScroll - ScreenWidth, 0)
+		end
+	)
+end
+
+function youWinUpdate()
+	if playdate.buttonJustPressed("A") then
+		if (textbox.finished) then
+			textbox:remove()
+			restartGame()
+		end
+	end
+
+	xScroll += 1
+	if (xScroll < ScreenWidth * 2) then
+		playdate.graphics.sprite.redrawBackground()
+	end
+
+	gfx.sprite.update()
 	drawSidePanel()
 end

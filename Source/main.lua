@@ -222,7 +222,6 @@ function restartGame()
 	currentPowerUP = "NONE"
 	currentGameState = GAME_STATES.HOMESCREEN
 	lives = 3
-
 	resetPaddle()
 	-- Extra balls
 	for i, v in ipairs(balls) do
@@ -266,9 +265,8 @@ function nextLevel()
 		currentGameState += 1
 		initCutscene(currentLevel)
 	elseif currentGameState == GAME_STATES.LEVEL7 then
-		currentGameState = GAME_STATES.THEEND
-		GAME_STATE_TYPE = "ENDSCREEN"
-		currentLevel = 7
+		-- Proceed to the end screen
+		youWinInit()
 	end
 end
 
@@ -330,7 +328,7 @@ function playdate.update()
 	elseif (GAME_STATE_TYPE == "CUTSCENE") then
 		cutSceneUpdate(currentLevel)
 	elseif (currentGameState == GAME_STATES.THEEND) then
-		theEndUpdate()
+		youWinUpdate()
 	end
 end
 

@@ -67,10 +67,9 @@ function createBall(x, y, dx_in, dy_in)
 			lives = lives - 1
 
 			if lives < 0 then
-				currentGameState = GAME_STATES.GAMEOVER
-				GAME_STATE_TYPE = "GAMEOVER"
+				gameOverInit()
 			else
-				DID_DIE = true
+				deathScreenInit()
 			end
 
 			gameSpeedReset()
