@@ -2,7 +2,7 @@
 
 ### HIGH
 
-- Graphic for the front panel that shows up in the menu
+- Draw side panel separator is sometimes a white line and sometimes black
 
 ---
 
@@ -95,3 +95,4 @@
 ✅-- Say something on death
 ✅-- Allow using Up and Down to advance text
 ✅-- When showing powerup text, draw white background behind so we can read it
+✅-- Graphic for the front panel that shows up in the menu
