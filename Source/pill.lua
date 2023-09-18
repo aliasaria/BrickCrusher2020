@@ -1,4 +1,4 @@
-local gfx <const> = playdate.graphics
+local gfx = playdate.graphics
 
 function createPill(x, y)
 	local pill = gfx.sprite.new()
@@ -65,7 +65,7 @@ function createPill(x, y)
 			end
 		end
 
-		pill.frame += 0.2
+		pill.frame = pill.frame + 0.2
 		if pill.frame > animationLength then
 			pill.frame = 1
 		end
@@ -75,7 +75,7 @@ function createPill(x, y)
 	return pill
 end
 
-local powerUpSound = playdate.sound.sampleplayer.new('sounds/MenuSound_DDM23.1_Wav.wav')
+local powerUpSound = nil; -- playdate.sound.sampleplayer.new('sounds/MenuSound_DDM23.1_Wav.wav')
 function powerUp(type)
 	currentPowerUP = type
 

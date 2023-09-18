@@ -1,6 +1,6 @@
 -- From  Neven Mrgan on playdate devforum
 -- This page writes a text box sprite to the screen, and animates it as if it's being typed.
-local gfx <const> = playdate.graphics
+local gfx = playdate.graphics
 
 PANEL_START = 310
 

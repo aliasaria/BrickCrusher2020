@@ -1,22 +1,25 @@
+
 -- ------------------------------
 -- ------------------------------
 -- Imports
 -- ------------------------------
 -- ------------------------------
-import 'CoreLibs/graphics'
-import 'CoreLibs/sprites'
--- import 'CoreLibs/animation'
--- import 'CoreLibs/input'
+@@"playbit/header.lua"
+@@IMPORT("CoreLibs/graphics")
+@@IMPORT("scripts/playbit-intro")
 
-import 'ball.lua'
-import 'paddle.lua'
-import 'ball.lua'
-import 'pill.lua'
-import 'levels.lua'
-import 'bricks.lua'
-import 'screens.lua'
 
-local gfx <const> = playdate.graphics
+@@IMPORT( 'ball')
+@@IMPORT( 'paddle')
+@@IMPORT( 'pill')
+@@IMPORT( 'levels')
+@@IMPORT( 'bricks')
+@@IMPORT( 'screens')
+
+@@IMPORT( "textbox")
+@@IMPORT( "cutscene_text")
+
+local gfx = playdate.graphics
 
 -- playdate.inputHandlers.push(playdate.input)
 
@@ -138,7 +141,7 @@ local function gameSpeedSpeedUpIfNeeded()
 	if (gameSpeed >= 5) then
 		gameSpeed = 5
 	else
-		gameSpeed = math.ceil(NUMBER_OF_BALL_BOUNCES // 16) + 1
+		gameSpeed = math.ceil(NUMBER_OF_BALL_BOUNCES / 16) + 1
 	end
 
 	-- print(gameSpeed)
@@ -251,7 +254,7 @@ end
 
 -- Call this function to advance to the next level
 function nextLevel()
-	currentLevel += 1
+	currentLevel = currentLevel+ 1
 	levelNeedsInitialization = true
 
 	if (currentGameState == GAME_STATES.LEVEL1
@@ -262,7 +265,7 @@ function nextLevel()
 			or currentGameState == GAME_STATES.LEVEL6
 		) then
 		-- Proceed to a cutscene
-		currentGameState += 1
+		currentGameState = currentGameState+ 1
 		initCutscene(currentLevel)
 	elseif currentGameState == GAME_STATES.LEVEL7 then
 		-- Proceed to the end screen

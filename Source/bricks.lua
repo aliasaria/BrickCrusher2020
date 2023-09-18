@@ -1,4 +1,4 @@
-local gfx <const> = playdate.graphics
+local gfx = playdate.graphics
 
 local brickImages = {}
 for i = 1, 6 do
@@ -6,7 +6,7 @@ for i = 1, 6 do
 end
 
 
-hitSound = playdate.sound.sampleplayer.new('sounds/Wall_Light_Double_Switch_Off-004.wav')
+hitSound = nil -- playdate.sound.sampleplayer.new('sounds/Wall_Light_Double_Switch_Off-004.wav')
 -- thudSound = playdate.sound.sampleplayer.new('sounds/PUNCH_PERCUSSIVE_HEAVY_06.wav')
 
 lastHitTime = playdate.getCurrentTimeMilliseconds()
@@ -32,17 +32,17 @@ function hitBrick(brick)
 	end
 
 	hitSound:play()
-	brick.brickType -= 1
-	score += 1
+	brick.brickType = brick.brickType - 1
+	score = score + 1
 
 	local hitTime = playdate.getCurrentTimeMilliseconds()
 	if (hitTime - lastHitTime) < 250 then
-		comboCounter += 1
+		comboCounter = comboCounter + 1
 		comboPositionX = brick.x
 		comboPositionY = brick.y
 	else
 		if (comboCounter > 1) then
-			score += comboCounter * 5
+			score = score + comboCounter * 5
 			lastComboPositionX = brick.x
 			lastComboPositionY = brick.y
 			-- print(brick.x .. ", " .. brick.y)
@@ -83,7 +83,7 @@ end
 function killBrickIfDead(brick)
 	if brick.brickType < 1 then
 		brick:remove()
-		brickCount -= 1
+		brickCount = brickCount - 1
 
 		if brickCount == 0 then
 			nextLevel()
@@ -102,7 +102,7 @@ function createBrick(x, y, brickType)
 
 	if (type(brickType) == "number") then
 		brickImg = brickImages[brickType]
-		brickCount += 1
+		brickCount = brickCount + 1
 	else
 		brickImg = gfx.image.new('images/brick/brick-metal')
 	end

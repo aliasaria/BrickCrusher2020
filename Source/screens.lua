@@ -1,7 +1,4 @@
-import 'textbox.lua'
-import 'cutscene_text.lua'
-
-local gfx <const> = playdate.graphics
+local gfx = playdate.graphics
 
 local city4 = gfx.image.new('images/backgrounds/city4.png')
 local city1 = gfx.image.new('images/backgrounds/city1.png')
@@ -12,7 +9,7 @@ local heartImgEmpty = gfx.image.new('images/heartEmpty.png')
 local font = gfx.font.new('images/font/Mini Mono')
 local minimonofont = gfx.font.new('images/font/Mini Mono 2X')
 
-local ScreenWidth = playdate.display.getWidth()
+local ScreenWidth = 400 --playdate.display.getWidth()
 
 --Advance Menu Button
 --If this is true, then either A or the Downbutton is being pressed
@@ -77,12 +74,12 @@ function cutSceneUpdate(level)
 	if advanceMenu() then
 		if (textbox.finished) then
 			textbox:remove()
-			currentGameState += 1
+			currentGameState = currentGameState + 1
 			GAME_STATE_TYPE = "LEVEL"
 		end
 	end
 
-	xScroll += 1
+	xScroll = xScroll + 1
 	if (xScroll < ScreenWidth * 2) then
 		playdate.graphics.sprite.redrawBackground()
 	end
@@ -264,7 +261,7 @@ function youWinUpdate()
 		end
 	end
 
-	xScroll += 1
+	xScroll = xScroll + 1
 	if (xScroll < ScreenWidth * 2) then
 		playdate.graphics.sprite.redrawBackground()
 	end

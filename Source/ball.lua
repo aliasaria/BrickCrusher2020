@@ -1,4 +1,4 @@
-local gfx <const> = playdate.graphics
+local gfx = playdate.graphics
 
 function createBall(x, y, dx_in, dy_in)
 	local ball = gfx.sprite.new()
@@ -86,19 +86,19 @@ function createBall(x, y, dx_in, dy_in)
 		if (ball.x + ball.width / 2 >= GAME_AREA_WIDTH) then
 			ball.x = GAME_AREA_WIDTH - ball.width / 2
 			ball.dx = -math.abs(ball.dx)
-			NUMBER_OF_BALL_BOUNCES += 1
+			NUMBER_OF_BALL_BOUNCES = NUMBER_OF_BALL_BOUNCES + 1
 		end
 		-- Left
 		if (ball.x - ball.width / 2 <= 0) then
 			ball.x = 0 + ball.width / 2
 			ball.dx = math.abs(ball.dx)
-			NUMBER_OF_BALL_BOUNCES += 1
+			NUMBER_OF_BALL_BOUNCES = NUMBER_OF_BALL_BOUNCES + 1
 		end
 		-- Top
 		if (ball.y <= 0 + ball.width / 2) then
 			ball.dy = math.abs(ball.dy)
 			ball.y = 0 + ball.width / 2
-			NUMBER_OF_BALL_BOUNCES += 1
+			NUMBER_OF_BALL_BOUNCES = NUMBER_OF_BALL_BOUNCES + 1
 		end
 		-- Bottom
 		if (ball.y >= GAME_AREA_HEIGHT + 10) then
@@ -190,7 +190,7 @@ function createBall(x, y, dx_in, dy_in)
 				hitBrick(collision.other)
 			end
 
-			NUMBER_OF_BALL_BOUNCES += 1
+			NUMBER_OF_BALL_BOUNCES = NUMBER_OF_BALL_BOUNCES + 1
 		end
 
 		if (ball.x > GAME_AREA_WIDTH) then

@@ -1,0 +1,7 @@
+{
+  "playdate.source": "Source",
+  "playdate.output": "Output.pdx",
+  // Optionally set sdkPath if not PLAYDATE_SDK_PATH is configured.
+  "playdate.sdkPath": "/Users/ali/Developer/PlaydateSDK",
+  "Lua.workspace.library": ["/path/to/PlaydateSDK/CoreLibs"],
+}

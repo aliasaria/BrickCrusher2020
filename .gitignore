@@ -41,3 +41,5 @@ luac.out
 *.pdx
 
 .vscode
+
+_love2d

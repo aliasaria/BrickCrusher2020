@@ -1,4 +1,4 @@
-local gfx <const> = playdate.graphics
+local gfx = playdate.graphics
 
 function createPaddle(x, y)
 	local paddle = gfx.sprite.new()
@@ -99,7 +99,7 @@ function createPaddle(x, y)
 		local change, acceleratedChange = playdate.getCrankChange()
 		-- print (acceleratedChange)
 
-		dx += acceleratedChange * self.movementFlip
+		dx = dx + acceleratedChange * self.movementFlip
 
 		-- print('paddle pos: '..self.x..","..self.y)
 
@@ -140,7 +140,7 @@ function playerFire()
 	s:moveTo(paddle.x, paddle.y)
 	s:setCollideRect(0, 0, imgw, imgh)
 	s:setTag(SpriteTypes.BULLET)
-	bulletsOnScreenCount += 1
+	bulletsOnScreenCount = bulletsOnScreenCount + 1
 
 	timeWhenLastBulletWasShot = playdate.getCurrentTimeMilliseconds()
 
@@ -156,7 +156,7 @@ function playerFire()
 		-- If past the top of the screen, remove the bullet sprite
 		if newY < -imgh then
 			s:remove()
-			bulletsOnScreenCount -= 1
+			bulletsOnScreenCount = bulletsOnScreenCount - 1
 		else
 			-- s:moveTo(s.x, newY)
 			local actualX, actualY, collisions, length = s:moveWithCollisions(s.x, newY)
@@ -179,7 +179,7 @@ function playerFire()
 
 		if (didCollisionHappen) then
 			s:remove()
-			bulletsOnScreenCount -= 1
+			bulletsOnScreenCount = bulletsOnScreenCount - 1
 		end
 	end
 
