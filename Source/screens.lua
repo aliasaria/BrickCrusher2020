@@ -95,6 +95,7 @@ function drawSidePanel()
 
 	-- Draw Border
 	gfx.setLineWidth(3)
+	gfx.setColor(playdate.graphics.kColorBlack)
 	gfx.drawLine(PANEL_START, 0, PANEL_START, GAME_AREA_HEIGHT)
 
 	-- Draw line where the paddle is
@@ -179,6 +180,7 @@ function drawSidePanel()
 		gfx.fillRect(paddle.x - 4 - 2, paddle.y - 25 - 2, 44, 12)
 		gfx.drawTextInRect(currentPowerUP, paddle.x - 4, paddle.y - 25, 44, 12, 0, "", kTextAlignment.center)
 		powerUpMessageFadeTimer = powerUpMessageFadeTimer - 1
+		gfx.setColor(playdate.graphics.kColorBlack)
 	end
 
 	-- gfx.drawText('BNC:' .. NUMBER_OF_BALL_BOUNCES, PANEL_START + 10, 32 + linespacing * 8)
